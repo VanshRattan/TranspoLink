@@ -1,0 +1,548 @@
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { useSearchParams } from 'react-router-dom';
+import { 
+  Truck, 
+  MapPin, 
+  Calendar, 
+  Package, 
+  Star, 
+  Filter, 
+  Search,
+  Phone,
+  Mail,
+  Shield,
+  ArrowUpDown,
+  DollarSign,
+  Navigation
+} from 'lucide-react';
+
+const AvailableTrucks = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedType, setSelectedType] = useState('all');
+  const [selectedLocation, setSelectedLocation] = useState('all');
+  const [sortBy, setSortBy] = useState('price-low');
+  
+  // Get search parameters from URL (from homepage search)
+  const fromLocation = searchParams.get('from') || '';
+  const toLocation = searchParams.get('to') || '';
+  const searchDate = searchParams.get('date') || '';
+  const searchCargoType = searchParams.get('cargoType') || '';
+
+  const truckTypes = [
+    { id: 'all', name: 'All Types' },
+    { id: 'box', name: 'Box Truck' },
+    { id: 'flatbed', name: 'Flatbed' },
+    { id: 'refrigerated', name: 'Refrigerated' },
+    { id: 'tanker', name: 'Tanker' },
+    { id: 'container', name: 'Container' }
+  ];
+
+  const locations = [
+    { id: 'all', name: 'All Locations' },
+    { id: 'new-york', name: 'New York' },
+    { id: 'los-angeles', name: 'Los Angeles' },
+    { id: 'chicago', name: 'Chicago' },
+    { id: 'houston', name: 'Houston' },
+    { id: 'phoenix', name: 'Phoenix' }
+  ];
+
+  const sortOptions = [
+    { id: 'price-low', name: 'Price: Low to High', icon: <DollarSign className="w-4 h-4" /> },
+    { id: 'price-high', name: 'Price: High to Low', icon: <DollarSign className="w-4 h-4" /> },
+    { id: 'date-earliest', name: 'Date: Earliest First', icon: <Calendar className="w-4 h-4" /> },
+    { id: 'date-latest', name: 'Date: Latest First', icon: <Calendar className="w-4 h-4" /> },
+    { id: 'rating', name: 'Highest Rating', icon: <Star className="w-4 h-4" /> }
+  ];
+
+  const trucks = [
+    {
+      id: 1,
+      driver: "John Smith",
+      company: "Smith Transport Co.",
+      type: "Box Truck",
+      capacity: "10,000 lbs",
+      dimensions: "24' x 8' x 8'",
+      location: "New York, NY",
+      destination: "Los Angeles, CA",
+      availableDate: "2024-01-15",
+      price: 2500,
+      priceDisplay: "$2,500",
+      rating: 4.8,
+      reviews: 127,
+      verified: true,
+      insurance: true,
+      phone: "+1 (555) 123-4567",
+      email: "john@smithtransport.com",
+      image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=300&fit=crop"
+    },
+    {
+      id: 2,
+      driver: "Maria Garcia",
+      company: "Garcia Logistics",
+      type: "Refrigerated",
+      capacity: "15,000 lbs",
+      dimensions: "26' x 8' x 8'",
+      location: "Los Angeles, CA",
+      destination: "Chicago, IL",
+      availableDate: "2024-01-18",
+      price: 3200,
+      priceDisplay: "$3,200",
+      rating: 4.9,
+      reviews: 89,
+      verified: true,
+      insurance: true,
+      phone: "+1 (555) 234-5678",
+      email: "maria@garcialogistics.com",
+      image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400&h=300&fit=crop"
+    },
+    {
+      id: 3,
+      driver: "Mike Johnson",
+      company: "Johnson Hauling",
+      type: "Flatbed",
+      capacity: "20,000 lbs",
+      dimensions: "48' x 8.5'",
+      location: "Chicago, IL",
+      destination: "Houston, TX",
+      availableDate: "2024-01-20",
+      price: 2800,
+      priceDisplay: "$2,800",
+      rating: 4.7,
+      reviews: 156,
+      verified: true,
+      insurance: true,
+      phone: "+1 (555) 345-6789",
+      email: "mike@johnsonhauling.com",
+      image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=300&fit=crop"
+    },
+    {
+      id: 4,
+      driver: "Sarah Wilson",
+      company: "Wilson Freight",
+      type: "Container",
+      capacity: "25,000 lbs",
+      dimensions: "40' x 8' x 8.5'",
+      location: "Houston, TX",
+      destination: "Phoenix, AZ",
+      availableDate: "2024-01-22",
+      price: 3500,
+      priceDisplay: "$3,500",
+      rating: 4.6,
+      reviews: 203,
+      verified: true,
+      insurance: true,
+      phone: "+1 (555) 456-7890",
+      email: "sarah@wilsonfreight.com",
+      image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=300&fit=crop"
+    },
+    {
+      id: 5,
+      driver: "David Brown",
+      company: "Brown Express",
+      type: "Tanker",
+      capacity: "30,000 lbs",
+      dimensions: "32' x 8' x 8'",
+      location: "Phoenix, AZ",
+      destination: "Denver, CO",
+      availableDate: "2024-01-25",
+      price: 4200,
+      priceDisplay: "$4,200",
+      rating: 4.8,
+      reviews: 178,
+      verified: true,
+      insurance: true,
+      phone: "+1 (555) 567-8901",
+      email: "david@brownexpress.com",
+      image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=300&fit=crop"
+    },
+    {
+      id: 6,
+      driver: "Lisa Chen",
+      company: "Chen Transport",
+      type: "Box Truck",
+      capacity: "12,000 lbs",
+      dimensions: "26' x 8' x 8'",
+      location: "Denver, CO",
+      destination: "Seattle, WA",
+      availableDate: "2024-01-28",
+      price: 3800,
+      priceDisplay: "$3,800",
+      rating: 4.9,
+      reviews: 145,
+      verified: true,
+      insurance: true,
+      phone: "+1 (555) 678-9012",
+      email: "lisa@chentransport.com",
+      image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=300&fit=crop"
+    }
+  ];
+
+  // Filter trucks based on search parameters and filters
+  const filteredTrucks = trucks.filter(truck => {
+    const matchesSearch = searchTerm === '' || 
+      truck.driver.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      truck.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      truck.type.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesType = selectedType === 'all' || truck.type.toLowerCase().includes(selectedType);
+    const matchesLocation = selectedLocation === 'all' || truck.location.toLowerCase().includes(selectedLocation);
+    
+    // Filter by homepage search parameters
+    const matchesFrom = !fromLocation || truck.location.toLowerCase().includes(fromLocation.toLowerCase());
+    const matchesTo = !toLocation || truck.destination.toLowerCase().includes(toLocation.toLowerCase());
+    const matchesDate = !searchDate || truck.availableDate === searchDate;
+    
+    return matchesSearch && matchesType && matchesLocation && matchesFrom && matchesTo && matchesDate;
+  });
+
+  // Sort trucks based on selected sort option
+  const sortedTrucks = [...filteredTrucks].sort((a, b) => {
+    switch (sortBy) {
+      case 'price-low':
+        return a.price - b.price;
+      case 'price-high':
+        return b.price - a.price;
+      case 'date-earliest':
+        return new Date(a.availableDate) - new Date(b.availableDate);
+      case 'date-latest':
+        return new Date(b.availableDate) - new Date(a.availableDate);
+      case 'rating':
+        return b.rating - a.rating;
+      default:
+        return 0;
+    }
+  });
+
+  // Update search parameters when filters change
+  const updateSearchParams = (newParams) => {
+    const current = Object.fromEntries(searchParams.entries());
+    const updated = { ...current, ...newParams };
+    setSearchParams(updated);
+  };
+
+  const handleSearchChange = (field, value) => {
+    if (field === 'searchTerm') {
+      setSearchTerm(value);
+    } else if (field === 'selectedType') {
+      setSelectedType(value);
+      updateSearchParams({ type: value });
+    } else if (field === 'selectedLocation') {
+      setSelectedLocation(value);
+      updateSearchParams({ location: value });
+    } else if (field === 'sortBy') {
+      setSortBy(value);
+      updateSearchParams({ sort: value });
+    }
+  };
+
+  // Clear all filters
+  const clearFilters = () => {
+    setSearchTerm('');
+    setSelectedType('all');
+    setSelectedLocation('all');
+    setSortBy('price-low');
+    setSearchParams({});
+  };
+
+  return (
+    <div className="pt-16 min-h-screen bg-gray-50">
+      {/* Header Section */}
+      <section className="bg-white py-12 border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center"
+          >
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Available Trucks
+            </h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Find the perfect truck for your cargo. All drivers are verified and insured.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Search and Filter Section */}
+      <section className="bg-white py-8 border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+            {/* Search Term */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Search</label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <input
+                  type="text"
+                  placeholder="Search drivers, companies..."
+                  value={searchTerm}
+                  onChange={(e) => handleSearchChange('searchTerm', e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-transparent"
+                />
+              </div>
+            </div>
+
+            {/* Truck Type Filter */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Truck Type</label>
+              <select
+                value={selectedType}
+                onChange={(e) => handleSearchChange('selectedType', e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-transparent"
+              >
+                {truckTypes.map((type) => (
+                  <option key={type.id} value={type.id}>
+                    {type.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Location Filter */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Location</label>
+              <select
+                value={selectedLocation}
+                onChange={(e) => handleSearchChange('selectedLocation', e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-transparent"
+              >
+                {locations.map((location) => (
+                  <option key={location.id} value={location.id}>
+                    {location.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Sort By */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Sort By</label>
+              <select
+                value={sortBy}
+                onChange={(e) => handleSearchChange('sortBy', e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-transparent"
+              >
+                {sortOptions.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Clear Filters Button */}
+            <div>
+              <button
+                onClick={clearFilters}
+                className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200"
+              >
+                Clear Filters
+              </button>
+            </div>
+          </div>
+
+          {/* Show search parameters from homepage */}
+          {(fromLocation || toLocation || searchDate || searchCargoType) && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="mt-4 p-4 bg-primary-green bg-opacity-10 rounded-lg border border-primary-green"
+            >
+              <div className="flex items-center gap-2 text-primary-green font-medium">
+                <Filter className="w-4 h-4" />
+                <span>Search Results for:</span>
+              </div>
+              <div className="mt-2 flex flex-wrap gap-4 text-sm">
+                {fromLocation && (
+                  <span className="bg-white px-3 py-1 rounded-full border">
+                    From: {fromLocation}
+                  </span>
+                )}
+                {toLocation && (
+                  <span className="bg-white px-3 py-1 rounded-full border">
+                    To: {toLocation}
+                  </span>
+                )}
+                {searchDate && (
+                  <span className="bg-white px-3 py-1 rounded-full border">
+                    Date: {searchDate}
+                  </span>
+                )}
+                {searchCargoType && (
+                  <span className="bg-white px-3 py-1 rounded-full border">
+                    Cargo: {searchCargoType}
+                  </span>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </div>
+      </section>
+
+      {/* Results Section */}
+      <section className="py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Results Count */}
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-2xl font-semibold text-gray-900">
+              {sortedTrucks.length} Truck{sortedTrucks.length !== 1 ? 's' : ''} Available
+            </h2>
+            <div className="text-gray-600">
+              Showing {sortedTrucks.length} of {trucks.length} results
+            </div>
+          </div>
+
+          {/* Trucks Grid */}
+          {sortedTrucks.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {sortedTrucks.map((truck, index) => (
+                <motion.div
+                  key={truck.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden"
+                >
+                  {/* Truck Image */}
+                  <div className="relative h-48 bg-gray-200">
+                    <img
+                      src={truck.image}
+                      alt={`${truck.type} truck`}
+                      className="w-full h-full object-cover"
+                    />
+                    {truck.verified && (
+                      <div className="absolute top-3 right-3 bg-primary-green text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                        <Shield className="w-3 h-3" />
+                        Verified
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Truck Details */}
+                  <div className="p-6">
+                    {/* Driver and Company */}
+                    <div className="mb-4">
+                      <h3 className="text-xl font-semibold text-gray-900 mb-1">
+                        {truck.driver}
+                      </h3>
+                      <p className="text-gray-600">{truck.company}</p>
+                    </div>
+
+                    {/* Route Information - Prominently Displayed */}
+                    <div className="mb-4 p-3 bg-gray-50 rounded-lg border-l-4 border-primary-green">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium text-gray-700">Route</span>
+                        <span className="text-xs text-gray-500">Available: {truck.availableDate}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-900">
+                        <MapPin className="w-4 h-4 text-primary-green" />
+                        <span className="font-medium">{truck.location}</span>
+                        <ArrowUpDown className="w-4 h-4 text-gray-400" />
+                        <span className="font-medium">{truck.destination}</span>
+                      </div>
+                    </div>
+
+                    {/* Truck Specifications */}
+                    <div className="space-y-2 mb-4">
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <Truck className="w-4 h-4" />
+                        <span>{truck.type}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <Package className="w-4 h-4" />
+                        <span>{truck.capacity} • {truck.dimensions}</span>
+                      </div>
+                    </div>
+
+                    {/* Rating and Price */}
+                    <div className="flex justify-between items-center mb-4">
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-4 h-4 ${
+                                i < Math.floor(truck.rating)
+                                  ? 'text-yellow-400 fill-current'
+                                  : 'text-gray-300'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-sm text-gray-600">
+                          {truck.rating} ({truck.reviews})
+                        </span>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-primary-green">
+                          {truck.priceDisplay}
+                        </div>
+                        <div className="text-xs text-gray-500">Total Price</div>
+                      </div>
+                    </div>
+
+                    {/* Contact Buttons */}
+                    <div className="flex gap-2">
+                      <button className="flex-1 bg-primary-green text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center justify-center gap-2">
+                        <Phone className="w-4 h-4" />
+                        Call
+                      </button>
+                      <button className="flex-1 bg-primary-orange text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors duration-200 flex items-center justify-center gap-2">
+                        <Mail className="w-4 h-4" />
+                        Email
+                      </button>
+                    </div>
+
+                    {/* Navigation Button */}
+                    <div className="mt-3">
+                      <button 
+                        onClick={() => {
+                          const pickupLocation = encodeURIComponent(truck.location);
+                          const destination = encodeURIComponent(truck.destination);
+                          const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${pickupLocation}&destination=${destination}&travelmode=driving`;
+                          window.open(googleMapsUrl, '_blank');
+                        }}
+                        className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2"
+                      >
+                        <Navigation className="w-4 h-4" />
+                        Get Directions
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-center py-16"
+            >
+              <Truck className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                No trucks found
+              </h3>
+              <p className="text-gray-600 mb-6">
+                Try adjusting your search criteria or check back later for new listings.
+              </p>
+              <button
+                onClick={clearFilters}
+                className="bg-primary-green text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors duration-200"
+              >
+                Clear All Filters
+              </button>
+            </motion.div>
+          )}
+        </div>
+      </section>
+    </div>
+  );
+};
+
+export default AvailableTrucks; 

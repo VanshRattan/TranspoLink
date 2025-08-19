@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary-green: #1A4D2E;
+    --primary-orange: #FF7F50;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-green text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-green focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    @apply bg-primary-orange text-white px-6 py-3 rounded-lg font-medium hover:bg-orange-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-orange focus:ring-offset-2;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-primary-green text-primary-green px-6 py-3 rounded-lg font-medium hover:bg-primary-green hover:text-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-green focus:ring-offset-2;
+  }
+  
+  .card {
+    @apply bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 p-6;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-transparent transition-colors duration-200;
+  }
+  
+  .gradient-bg {
+    background: linear-gradient(135deg, #1A4D2E 0%, #2d5a3f 100%);
+  }
+  
+  .gradient-text {
+    background: linear-gradient(135deg, #1A4D2E 0%, #FF7F50 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+} 
