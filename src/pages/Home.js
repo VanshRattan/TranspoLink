@@ -9,10 +9,7 @@ import {
   Calendar, 
   Search,
   Shield, 
-  Star, 
   ArrowRight,
-  CheckCircle,
-  Globe,
   Box,
   Navigation
 } from 'lucide-react';
@@ -38,24 +35,16 @@ const Home = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     
+    const searchParams = new URLSearchParams();
+    if (searchData.from) searchParams.append('from', searchData.from);
+    if (searchData.to) searchParams.append('to', searchData.to);
+    if (searchData.date) searchParams.append('date', searchData.date);
+    if (searchData.cargoType) searchParams.append('cargoType', searchData.cargoType);
+
     // Navigate based on user role
     if (isAuthenticated && userType === 'driver') {
-      // Driver searches for goods
-      const searchParams = new URLSearchParams();
-      if (searchData.from) searchParams.append('from', searchData.from);
-      if (searchData.to) searchParams.append('to', searchData.to);
-      if (searchData.date) searchParams.append('date', searchData.date);
-      if (searchData.cargoType) searchParams.append('cargoType', searchData.cargoType);
-      
       navigate(`/goods?${searchParams.toString()}`);
     } else {
-      // Business owner or guest searches for trucks
-      const searchParams = new URLSearchParams();
-      if (searchData.from) searchParams.append('from', searchData.from);
-      if (searchData.to) searchParams.append('to', searchData.to);
-      if (searchData.date) searchParams.append('date', searchData.date);
-      if (searchData.cargoType) searchParams.append('cargoType', searchData.cargoType);
-      
       navigate(`/trucks?${searchParams.toString()}`);
     }
   };
@@ -88,28 +77,12 @@ const Home = () => {
   };
 
   const getSearchButtonText = () => {
-    if (isAuthenticated && userType === 'driver') {
-      return "Find Goods";
-    } else {
-      return "Find Trucks";
-    }
+    return isAuthenticated && userType === 'driver' ? "Find Goods" : "Find Trucks";
   };
 
-  const getSearchPlaceholder = () => {
-    if (isAuthenticated && userType === 'driver') {
-      return "Enter pickup city";
-    } else {
-      return "Enter pickup city";
-    }
-  };
+  const getSearchPlaceholder = () => "Enter pickup city";
 
-  const getDestinationPlaceholder = () => {
-    if (isAuthenticated && userType === 'driver') {
-      return "Enter delivery city";
-    } else {
-      return "Enter delivery city";
-    }
-  };
+  const getDestinationPlaceholder = () => "Enter delivery city";
 
   const getFeatures = () => {
     if (isAuthenticated && userType === 'driver') {
@@ -153,13 +126,6 @@ const Home = () => {
 
   const features = getFeatures();
 
-  const stats = [
-    { number: "10,000+", label: "Verified Drivers", icon: <Truck className="w-6 h-6" /> },
-    { number: "50,000+", label: "Successful Deliveries", icon: <CheckCircle className="w-6 h-6" /> },
-    { number: "4.8", label: "Average Rating", icon: <Star className="w-6 h-6" /> },
-    { number: "25+", label: "Cities Covered", icon: <Globe className="w-6 h-6" /> }
-  ];
-
   const cargoTypes = [
     "General Cargo",
     "Heavy Machinery", 
@@ -171,8 +137,6 @@ const Home = () => {
     "Retail Goods"
   ];
 
-
-
   return (
     <div className="pt-16">
       {/* Hero Section with Search Form */}
@@ -180,16 +144,10 @@ const Home = () => {
         {/* Background with transport illustration */}
         <div className="absolute inset-0 bg-gradient-to-br from-primary-green via-green-600 to-primary-orange">
           <div className="absolute inset-0 bg-black opacity-20"></div>
-          
-          {/* Transport illustration elements */}
           <div className="absolute top-20 left-10 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
           <div className="absolute top-40 right-20 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
           <div className="absolute bottom-40 left-1/4 w-20 h-20 bg-white/10 rounded-full blur-xl"></div>
-          
-          {/* Road/bridge illustration */}
           <div className="absolute bottom-1/3 left-0 right-0 h-2 bg-white/30 transform -skew-y-12"></div>
-          
-          {/* Truck and cargo illustrations */}
           <div className="absolute bottom-1/3 left-1/4 w-16 h-8 bg-white/80 rounded-lg transform -skew-y-12 flex items-center justify-center">
             <Truck className="w-8 h-6 text-primary-green" />
           </div>
@@ -246,7 +204,7 @@ const Home = () => {
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 flex items-center">
                       <MapPin className="w-4 h-4 mr-2 text-primary-green" />
-                      {isAuthenticated && userType === 'driver' ? 'Destination' : 'Destination'}
+                      Destination
                     </label>
                     <input
                       type="text"
@@ -336,36 +294,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.5 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="text-center"
-              >
-                <div className="w-16 h-16 bg-primary-green rounded-full flex items-center justify-center mx-auto mb-4">
-                  <div className="text-white">
-                    {stat.icon}
-                  </div>
-                </div>
-                <div className="text-3xl md:text-4xl font-bold text-primary-green mb-2">
-                  {stat.number}
-                </div>
-                <div className="text-gray-600 font-medium">
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -419,4 +347,4 @@ const Home = () => {
   );
 };
 
-export default Home; 
+export default Home;
