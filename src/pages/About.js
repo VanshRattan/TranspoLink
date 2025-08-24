@@ -1,42 +1,39 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Quote } from "lucide-react";
 
 const About = () => {
   const team = [
     {
-      name: "Alex Chen",
-      position: "Founder & CEO",
+      name: "Ankit Pandey",
       image:
         "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face",
-      bio: "Ex-Google engineer turned entrepreneur. Built 3 successful startups before TranspoLink.",
+      bio: "A dreamer at heart who loves turning bold ideas into meaningful realities.",
     },
     {
-      name: "Maya Patel",
-      position: "CTO & Co-founder",
+      name: "Vansh Rattan",
       image:
         "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=300&fit=crop&crop=face",
-      bio: "Former Facebook tech lead. Expert in scalable systems and AI/ML.",
+      bio: "Tech explorer who finds joy in learning, experimenting, and innovating.",
     },
     {
-      name: "Jake Rodriguez",
-      position: "Head of Growth",
+      name: "Aryan Sood",
       image:
         "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face",
-      bio: "Growth hacker extraordinaire. Grew previous startup to $10M ARR.",
+      bio: "Passionate about teamwork, problem-solving, and bringing structure to ideas.",
     },
     {
-      name: "Sarah Kim",
-      position: "Head of Operations",
+      name: "Aditya Chauhan",
       image:
         "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop&crop=face",
-      bio: "Operations ninja. Optimized processes that saved $2M annually.",
+      bio: "Believes growth comes from challenges and thrives on creating new opportunities.",
     },
   ];
 
   return (
-    <div className="pt-20 min-h-screen bg-gray-50">
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="pt-20 min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-100">
+      <section className="py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Title */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -62,20 +59,41 @@ const About = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white shadow-lg rounded-2xl p-6 text-center hover:shadow-2xl hover:scale-105 transition-transform duration-300"
+                className="relative backdrop-blur-md bg-white/70 rounded-2xl shadow-lg 
+                           p-6 hover:shadow-2xl hover:-translate-y-3 
+                           transition-all duration-500 border border-gray-200 
+                           hover:border-transparent hover:bg-gradient-to-br 
+                           hover:from-primary-green/10 hover:to-primary-orange/10"
               >
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-28 h-28 rounded-full mx-auto mb-4 object-cover ring-4 ring-primary-green ring-opacity-20 hover:ring-primary-orange transition-all duration-300"
-                />
-                <h3 className="text-xl font-semibold text-gray-900 mb-1">
+                {/* Decorative quote icon */}
+                <div className="absolute -top-4 -left-4 bg-primary-orange text-white p-2 rounded-full shadow-md">
+                  <Quote className="w-4 h-4" />
+                </div>
+
+                {/* Image */}
+                <div className="relative w-28 h-28 mx-auto mb-4">
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="w-28 h-28 rounded-full object-cover ring-4 ring-primary-green/20 
+                               transition-all duration-500 hover:ring-primary-orange/50"
+                  />
+                  {/* Animated ring pulse */}
+                  <span className="absolute inset-0 rounded-full border-2 border-primary-orange animate-ping opacity-20"></span>
+                </div>
+
+                {/* Name */}
+                <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">
                   {member.name}
                 </h3>
-                <p className="text-primary-green font-medium mb-3">
-                  {member.position}
+
+                {/* Bio */}
+                <p className="text-gray-600 text-sm leading-relaxed text-center">
+                  {member.bio}
                 </p>
-                <p className="text-gray-600 text-sm">{member.bio}</p>
+
+                {/* Decorative underline */}
+                <div className="mt-4 h-1 w-16 mx-auto bg-gradient-to-r from-primary-green to-primary-orange rounded-full"></div>
               </motion.div>
             ))}
           </div>
