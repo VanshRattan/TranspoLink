@@ -25,8 +25,7 @@ const Footer = () => {
               <span className="text-xl font-bold">TranspoLink</span>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
-              Connecting businesses with reliable transport services. 
-              Your trusted partner for efficient goods transportation across the country.
+              Smart moves for your business — fast, reliable, nationwide transport at your fingertips
             </p>
             <div className="flex space-x-4">
               <button className="text-gray-300 hover:text-primary-orange transition-colors duration-200">
@@ -95,15 +94,15 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <MapPin className="w-4 h-4 text-primary-orange" />
-                <span className="text-gray-300 text-sm">123 Transport Ave, City, State 12345</span>
+                <span className="text-gray-300 text-sm">Hostel A,Thapar University,147004</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-4 h-4 text-primary-orange" />
-                <span className="text-gray-300 text-sm">+1 (555) 123-4567</span>
+                <span className="text-gray-300 text-sm">+91 99310 82500</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-4 h-4 text-primary-orange" />
-                <span className="text-gray-300 text-sm">info@transpolink.com</span>
+                <span className="text-gray-300 text-sm">vanshrattan2006@gmail.com</span>
               </div>
             </div>
           </div>
@@ -113,7 +112,7 @@ const Footer = () => {
         <div className="border-t border-gray-700 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-300 text-sm">
-              © 2024 TranspoLink. All rights reserved.
+              © 2025 TranspoLink. All rights reserved.
             </p>
             <div className="flex space-x-6">
               <Link to="/privacy" className="text-gray-300 hover:text-primary-orange transition-colors duration-200 text-sm">
