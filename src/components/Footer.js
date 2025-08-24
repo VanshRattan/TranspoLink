@@ -94,7 +94,7 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <MapPin className="w-4 h-4 text-primary-orange" />
-                <span className="text-gray-300 text-sm">Hostel A,Thapar University,147004</span>
+                <span className="text-gray-300 text-sm">Hostel A, Thapar University, 147004</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-4 h-4 text-primary-orange" />
@@ -107,29 +107,9 @@ const Footer = () => {
             </div>
           </div>
         </div>
-
-        {/* Bottom Bar */}
-        <div className="border-t border-gray-700 mt-8 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-gray-300 text-sm">
-              © 2025 TranspoLink. All rights reserved.
-            </p>
-            <div className="flex space-x-6">
-              <Link to="/privacy" className="text-gray-300 hover:text-primary-orange transition-colors duration-200 text-sm">
-                Privacy Policy
-              </Link>
-              <Link to="/terms" className="text-gray-300 hover:text-primary-orange transition-colors duration-200 text-sm">
-                Terms of Service
-              </Link>
-              <Link to="/contact" className="text-gray-300 hover:text-primary-orange transition-colors duration-200 text-sm">
-                Support
-              </Link>
-            </div>
-          </div>
-        </div>
       </div>
     </footer>
   );
 };
 
-export default Footer; 
+export default Footer;
