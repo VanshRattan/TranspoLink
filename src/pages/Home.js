@@ -154,10 +154,10 @@ const Home = () => {
   const features = getFeatures();
 
   const stats = [
-    { number: "10,000+", label: "Verified Drivers", icon: <Truck className="w-6 h-6" /> },
-    { number: "50,000+", label: "Successful Deliveries", icon: <CheckCircle className="w-6 h-6" /> },
-    { number: "4.8", label: "Average Rating", icon: <Star className="w-6 h-6" /> },
-    { number: "25+", label: "Cities Covered", icon: <Globe className="w-6 h-6" /> }
+    { number: "0+", label: "Verified Drivers", icon: <Truck className="w-6 h-6" /> },
+    { number: "0+", label: "Successful Deliveries", icon: <CheckCircle className="w-6 h-6" /> },
+    { number: "0", label: "Average Rating", icon: <Star className="w-6 h-6" /> },
+    { number: "0+", label: "Cities Covered", icon: <Globe className="w-6 h-6" /> }
   ];
 
   const cargoTypes = [

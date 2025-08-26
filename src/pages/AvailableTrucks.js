@@ -1,221 +1,258 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { useSearchParams } from 'react-router-dom';
-import { 
-  Truck, 
-  MapPin, 
-  Calendar, 
-  Package, 
-  Star, 
-  Filter, 
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { useSearchParams } from "react-router-dom";
+import {
+  Truck,
+  MapPin,
+  Calendar,
+  Package,
+  Star,
+  Filter,
   Search,
   Phone,
   Mail,
   Shield,
   ArrowUpDown,
   DollarSign,
-  Navigation
-} from 'lucide-react';
+  Navigation,
+} from "lucide-react";
 
 const AvailableTrucks = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedType, setSelectedType] = useState('all');
-  const [selectedLocation, setSelectedLocation] = useState('all');
-  const [sortBy, setSortBy] = useState('price-low');
-  
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedType, setSelectedType] = useState("all");
+  const [selectedLocation, setSelectedLocation] = useState("all");
+  const [sortBy, setSortBy] = useState("price-low");
+
   // Get search parameters from URL (from homepage search)
-  const fromLocation = searchParams.get('from') || '';
-  const toLocation = searchParams.get('to') || '';
-  const searchDate = searchParams.get('date') || '';
-  const searchCargoType = searchParams.get('cargoType') || '';
+  const fromLocation = searchParams.get("from") || "";
+  const toLocation = searchParams.get("to") || "";
+  const searchDate = searchParams.get("date") || "";
+  const searchCargoType = searchParams.get("cargoType") || "";
 
   const truckTypes = [
-    { id: 'all', name: 'All Types' },
-    { id: 'box', name: 'Box Truck' },
-    { id: 'flatbed', name: 'Flatbed' },
-    { id: 'refrigerated', name: 'Refrigerated' },
-    { id: 'tanker', name: 'Tanker' },
-    { id: 'container', name: 'Container' }
+    { id: "all", name: "All Types" },
+    { id: "box", name: "Box Truck" },
+    { id: "flatbed", name: "Flatbed" },
+    { id: "refrigerated", name: "Refrigerated" },
+    { id: "tanker", name: "Tanker" },
+    { id: "container", name: "Container" },
   ];
-
   const locations = [
-    { id: 'all', name: 'All Locations' },
-    { id: 'new-york', name: 'New York' },
-    { id: 'los-angeles', name: 'Los Angeles' },
-    { id: 'chicago', name: 'Chicago' },
-    { id: 'houston', name: 'Houston' },
-    { id: 'phoenix', name: 'Phoenix' }
+    { id: "all", name: "All Locations" },
+    { id: "mumbai", name: "Mumbai" },
+    { id: "delhi", name: "Delhi" },
+    { id: "chennai", name: "Chennai" },
+    { id: "bangalore", name: "Bengaluru" },
+    { id: "hyderabad", name: "Hyderabad" },
   ];
-
   const sortOptions = [
-    { id: 'price-low', name: 'Price: Low to High', icon: <DollarSign className="w-4 h-4" /> },
-    { id: 'price-high', name: 'Price: High to Low', icon: <DollarSign className="w-4 h-4" /> },
-    { id: 'date-earliest', name: 'Date: Earliest First', icon: <Calendar className="w-4 h-4" /> },
-    { id: 'date-latest', name: 'Date: Latest First', icon: <Calendar className="w-4 h-4" /> },
-    { id: 'rating', name: 'Highest Rating', icon: <Star className="w-4 h-4" /> }
+    {
+      id: "price-low",
+      name: "Price: Low to High",
+      icon: <DollarSign className="w-4 h-4" />,
+    },
+    {
+      id: "price-high",
+      name: "Price: High to Low",
+      icon: <DollarSign className="w-4 h-4" />,
+    },
+    {
+      id: "date-earliest",
+      name: "Date: Earliest First",
+      icon: <Calendar className="w-4 h-4" />,
+    },
+    {
+      id: "date-latest",
+      name: "Date: Latest First",
+      icon: <Calendar className="w-4 h-4" />,
+    },
+    {
+      id: "rating",
+      name: "Highest Rating",
+      icon: <Star className="w-4 h-4" />,
+    },
   ];
 
   const trucks = [
     {
       id: 1,
-      driver: "John Smith",
-      company: "Smith Transport Co.",
+      driver: "Ravi Kumar",
+      company: "Kumar Transport Pvt. Ltd.",
       type: "Box Truck",
-      capacity: "10,000 lbs",
+      capacity: "10,000 kgs",
       dimensions: "24' x 8' x 8'",
-      location: "New York, NY",
-      destination: "Los Angeles, CA",
+      location: "Mumbai, Maharashtra",
+      destination: "Delhi, Delhi",
       availableDate: "2024-01-15",
-      price: 2500,
-      priceDisplay: "$2,500",
+      price: 45000,
+      priceDisplay: "₹45,000",
       rating: 4.8,
       reviews: 127,
       verified: true,
       insurance: true,
-      phone: "+1 (555) 123-4567",
-      email: "john@smithtransport.com",
-      image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=300&fit=crop"
+      phone: "+91 98765 43210",
+      email: "ravi.kumar@kumartransport.in",
+      image:
+        "https://images.unsplash.com/photo-1618238571957-035cbf8aaebe?w=400&h=300&fit=crop",
     },
     {
       id: 2,
-      driver: "Maria Garcia",
-      company: "Garcia Logistics",
+      driver: "Anita Singh",
+      company: "Singh Refrigerated Logistics",
       type: "Refrigerated",
-      capacity: "15,000 lbs",
+      capacity: "15,000 kgs",
       dimensions: "26' x 8' x 8'",
-      location: "Los Angeles, CA",
-      destination: "Chicago, IL",
+      location: "Chennai, Tamil Nadu",
+      destination: "Bengaluru, Karnataka",
       availableDate: "2024-01-18",
-      price: 3200,
-      priceDisplay: "$3,200",
+      price: 51000,
+      priceDisplay: "₹51,000",
       rating: 4.9,
       reviews: 89,
       verified: true,
       insurance: true,
-      phone: "+1 (555) 234-5678",
-      email: "maria@garcialogistics.com",
-      image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400&h=300&fit=crop"
+      phone: "+91 99887 66554",
+      email: "anita.singh@singhrefrigerated.in",
+      image:
+        "https://images.unsplash.com/photo-1618249271669-3539c5e591f4?w=400&h=300&fit=crop",
     },
     {
       id: 3,
-      driver: "Mike Johnson",
-      company: "Johnson Hauling",
+      driver: "Sunil Patel",
+      company: "Patel Hauling Services",
       type: "Flatbed",
-      capacity: "20,000 lbs",
+      capacity: "20,000 kgs",
       dimensions: "48' x 8.5'",
-      location: "Chicago, IL",
-      destination: "Houston, TX",
+      location: "Ahmedabad, Gujarat",
+      destination: "Pune, Maharashtra",
       availableDate: "2024-01-20",
-      price: 2800,
-      priceDisplay: "$2,800",
+      price: 47000,
+      priceDisplay: "₹47,000",
       rating: 4.7,
       reviews: 156,
       verified: true,
       insurance: true,
-      phone: "+1 (555) 345-6789",
-      email: "mike@johnsonhauling.com",
-      image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=300&fit=crop"
+      phone: "+91 97654 32109",
+      email: "sunil.patel@patelhauling.in",
+      image:
+        "https://images.unsplash.com/photo-1656016232251-bc49e0e7de72?w=400&h=300&fit=crop",
     },
     {
       id: 4,
-      driver: "Sarah Wilson",
-      company: "Wilson Freight",
+      driver: "Priya Sharma",
+      company: "Sharma Container Freight",
       type: "Container",
-      capacity: "25,000 lbs",
+      capacity: "25,000 kgs",
       dimensions: "40' x 8' x 8.5'",
-      location: "Houston, TX",
-      destination: "Phoenix, AZ",
+      location: "Kolkata, West Bengal",
+      destination: "Hyderabad, Telangana",
       availableDate: "2024-01-22",
-      price: 3500,
-      priceDisplay: "$3,500",
+      price: 53000,
+      priceDisplay: "₹53,000",
       rating: 4.6,
       reviews: 203,
       verified: true,
       insurance: true,
-      phone: "+1 (555) 456-7890",
-      email: "sarah@wilsonfreight.com",
-      image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=300&fit=crop"
+      phone: "+91 98712 34567",
+      email: "priya.sharma@sharmacontainer.in",
+      image:
+        "https://images.unsplash.com/photo-1642522539288-39cf41a059f7?w=400&h=300&fit=crop",
     },
     {
       id: 5,
-      driver: "David Brown",
-      company: "Brown Express",
+      driver: "Rohit Verma",
+      company: "Verma Tanker Services",
       type: "Tanker",
-      capacity: "30,000 lbs",
+      capacity: "30,000 kgs",
       dimensions: "32' x 8' x 8'",
-      location: "Phoenix, AZ",
-      destination: "Denver, CO",
+      location: "Jaipur, Rajasthan",
+      destination: "Surat, Gujarat",
       availableDate: "2024-01-25",
-      price: 4200,
-      priceDisplay: "$4,200",
+      price: 60000,
+      priceDisplay: "₹60,000",
       rating: 4.8,
       reviews: 178,
       verified: true,
       insurance: true,
-      phone: "+1 (555) 567-8901",
-      email: "david@brownexpress.com",
-      image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=300&fit=crop"
+      phone: "+91 95432 19876",
+      email: "rohit.verma@vermatanker.in",
+      image:
+        "https://images.unsplash.com/photo-1657932338664-824cc0aec19e?w=400&h=300&fit=crop",
     },
     {
       id: 6,
-      driver: "Lisa Chen",
-      company: "Chen Transport",
+      driver: "Neha Desai",
+      company: "Desai Transport Services",
       type: "Box Truck",
-      capacity: "12,000 lbs",
+      capacity: "12,000 kgs",
       dimensions: "26' x 8' x 8'",
-      location: "Denver, CO",
-      destination: "Seattle, WA",
+      location: "Lucknow, Uttar Pradesh",
+      destination: "Indore, Madhya Pradesh",
       availableDate: "2024-01-28",
-      price: 3800,
-      priceDisplay: "$3,800",
+      price: 48000,
+      priceDisplay: "₹48,000",
       rating: 4.9,
       reviews: 145,
       verified: true,
       insurance: true,
-      phone: "+1 (555) 678-9012",
-      email: "lisa@chentransport.com",
-      image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=300&fit=crop"
-    }
+      phone: "+91 99823 45678",
+      email: "neha.desai@desaitransport.in",
+      image:
+        "https://images.unsplash.com/photo-1603787104975-6e2ff8b3241d?w=400&h=300&fit=crop",
+    },
   ];
 
   // Filter trucks based on search parameters and filters
-  const filteredTrucks = trucks.filter(truck => {
-    const matchesSearch = searchTerm === '' || 
+  const filteredTrucks = trucks.filter((truck) => {
+    const matchesSearch =
+      searchTerm === "" ||
       truck.driver.toLowerCase().includes(searchTerm.toLowerCase()) ||
       truck.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
       truck.type.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesType = selectedType === 'all' || truck.type.toLowerCase().includes(selectedType);
-    const matchesLocation = selectedLocation === 'all' || truck.location.toLowerCase().includes(selectedLocation);
-    
-    // Filter by homepage search parameters
-    const matchesFrom = !fromLocation || truck.location.toLowerCase().includes(fromLocation.toLowerCase());
-    const matchesTo = !toLocation || truck.destination.toLowerCase().includes(toLocation.toLowerCase());
+
+    const matchesType =
+      selectedType === "all" || truck.type.toLowerCase().includes(selectedType);
+    const matchesLocation =
+      selectedLocation === "all" ||
+      truck.location.toLowerCase().includes(selectedLocation);
+
+    const matchesFrom =
+      !fromLocation ||
+      truck.location.toLowerCase().includes(fromLocation.toLowerCase());
+    const matchesTo =
+      !toLocation ||
+      truck.destination.toLowerCase().includes(toLocation.toLowerCase());
     const matchesDate = !searchDate || truck.availableDate === searchDate;
-    
-    return matchesSearch && matchesType && matchesLocation && matchesFrom && matchesTo && matchesDate;
+
+    return (
+      matchesSearch &&
+      matchesType &&
+      matchesLocation &&
+      matchesFrom &&
+      matchesTo &&
+      matchesDate
+    );
   });
 
   // Sort trucks based on selected sort option
   const sortedTrucks = [...filteredTrucks].sort((a, b) => {
     switch (sortBy) {
-      case 'price-low':
+      case "price-low":
         return a.price - b.price;
-      case 'price-high':
+      case "price-high":
         return b.price - a.price;
-      case 'date-earliest':
+      case "date-earliest":
         return new Date(a.availableDate) - new Date(b.availableDate);
-      case 'date-latest':
+      case "date-latest":
         return new Date(b.availableDate) - new Date(a.availableDate);
-      case 'rating':
+      case "rating":
         return b.rating - a.rating;
       default:
         return 0;
     }
   });
 
-  // Update search parameters when filters change
   const updateSearchParams = (newParams) => {
     const current = Object.fromEntries(searchParams.entries());
     const updated = { ...current, ...newParams };
@@ -223,26 +260,25 @@ const AvailableTrucks = () => {
   };
 
   const handleSearchChange = (field, value) => {
-    if (field === 'searchTerm') {
+    if (field === "searchTerm") {
       setSearchTerm(value);
-    } else if (field === 'selectedType') {
+    } else if (field === "selectedType") {
       setSelectedType(value);
       updateSearchParams({ type: value });
-    } else if (field === 'selectedLocation') {
+    } else if (field === "selectedLocation") {
       setSelectedLocation(value);
       updateSearchParams({ location: value });
-    } else if (field === 'sortBy') {
+    } else if (field === "sortBy") {
       setSortBy(value);
       updateSearchParams({ sort: value });
     }
   };
 
-  // Clear all filters
   const clearFilters = () => {
-    setSearchTerm('');
-    setSelectedType('all');
-    setSelectedLocation('all');
-    setSortBy('price-low');
+    setSearchTerm("");
+    setSelectedType("all");
+    setSelectedLocation("all");
+    setSortBy("price-low");
     setSearchParams({});
   };
 
@@ -261,7 +297,8 @@ const AvailableTrucks = () => {
               Available Trucks
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Find the perfect truck for your cargo. All drivers are verified and insured.
+              Find the perfect truck for your cargo. All drivers are verified
+              and insured.
             </p>
           </motion.div>
         </div>
@@ -273,25 +310,32 @@ const AvailableTrucks = () => {
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
             {/* Search Term */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Search</label>
+              <label className="text-sm font-medium text-gray-700">
+                Search
+              </label>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <input
                   type="text"
                   placeholder="Search drivers, companies..."
                   value={searchTerm}
-                  onChange={(e) => handleSearchChange('searchTerm', e.target.value)}
+                  onChange={(e) =>
+                    handleSearchChange("searchTerm", e.target.value)
+                  }
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-transparent"
                 />
               </div>
             </div>
-
             {/* Truck Type Filter */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Truck Type</label>
+              <label className="text-sm font-medium text-gray-700">
+                Truck Type
+              </label>
               <select
                 value={selectedType}
-                onChange={(e) => handleSearchChange('selectedType', e.target.value)}
+                onChange={(e) =>
+                  handleSearchChange("selectedType", e.target.value)
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-transparent"
               >
                 {truckTypes.map((type) => (
@@ -301,13 +345,16 @@ const AvailableTrucks = () => {
                 ))}
               </select>
             </div>
-
             {/* Location Filter */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Location</label>
+              <label className="text-sm font-medium text-gray-700">
+                Location
+              </label>
               <select
                 value={selectedLocation}
-                onChange={(e) => handleSearchChange('selectedLocation', e.target.value)}
+                onChange={(e) =>
+                  handleSearchChange("selectedLocation", e.target.value)
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-transparent"
               >
                 {locations.map((location) => (
@@ -317,13 +364,14 @@ const AvailableTrucks = () => {
                 ))}
               </select>
             </div>
-
             {/* Sort By */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Sort By</label>
+              <label className="text-sm font-medium text-gray-700">
+                Sort By
+              </label>
               <select
                 value={sortBy}
-                onChange={(e) => handleSearchChange('sortBy', e.target.value)}
+                onChange={(e) => handleSearchChange("sortBy", e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-transparent"
               >
                 {sortOptions.map((option) => (
@@ -333,7 +381,6 @@ const AvailableTrucks = () => {
                 ))}
               </select>
             </div>
-
             {/* Clear Filters Button */}
             <div>
               <button
@@ -344,8 +391,6 @@ const AvailableTrucks = () => {
               </button>
             </div>
           </div>
-
-          {/* Show search parameters from homepage */}
           {(fromLocation || toLocation || searchDate || searchCargoType) && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -390,13 +435,13 @@ const AvailableTrucks = () => {
           {/* Results Count */}
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-semibold text-gray-900">
-              {sortedTrucks.length} Truck{sortedTrucks.length !== 1 ? 's' : ''} Available
+              {sortedTrucks.length} Truck{sortedTrucks.length !== 1 ? "s" : ""}{" "}
+              Available
             </h2>
             <div className="text-gray-600">
               Showing {sortedTrucks.length} of {trucks.length} results
             </div>
           </div>
-
           {/* Trucks Grid */}
           {sortedTrucks.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -422,7 +467,6 @@ const AvailableTrucks = () => {
                       </div>
                     )}
                   </div>
-
                   {/* Truck Details */}
                   <div className="p-6">
                     {/* Driver and Company */}
@@ -432,12 +476,15 @@ const AvailableTrucks = () => {
                       </h3>
                       <p className="text-gray-600">{truck.company}</p>
                     </div>
-
-                    {/* Route Information - Prominently Displayed */}
+                    {/* Route Information */}
                     <div className="mb-4 p-3 bg-gray-50 rounded-lg border-l-4 border-primary-green">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium text-gray-700">Route</span>
-                        <span className="text-xs text-gray-500">Available: {truck.availableDate}</span>
+                        <span className="text-sm font-medium text-gray-700">
+                          Route
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          Available: {truck.availableDate}
+                        </span>
                       </div>
                       <div className="flex items-center gap-2 text-gray-900">
                         <MapPin className="w-4 h-4 text-primary-green" />
@@ -446,7 +493,6 @@ const AvailableTrucks = () => {
                         <span className="font-medium">{truck.destination}</span>
                       </div>
                     </div>
-
                     {/* Truck Specifications */}
                     <div className="space-y-2 mb-4">
                       <div className="flex items-center gap-2 text-gray-600">
@@ -455,10 +501,11 @@ const AvailableTrucks = () => {
                       </div>
                       <div className="flex items-center gap-2 text-gray-600">
                         <Package className="w-4 h-4" />
-                        <span>{truck.capacity} • {truck.dimensions}</span>
+                        <span>
+                          {truck.capacity} • {truck.dimensions}
+                        </span>
                       </div>
                     </div>
-
                     {/* Rating and Price */}
                     <div className="flex justify-between items-center mb-4">
                       <div className="flex items-center gap-2">
@@ -468,8 +515,8 @@ const AvailableTrucks = () => {
                               key={i}
                               className={`w-4 h-4 ${
                                 i < Math.floor(truck.rating)
-                                  ? 'text-yellow-400 fill-current'
-                                  : 'text-gray-300'
+                                  ? "text-yellow-400 fill-current"
+                                  : "text-gray-300"
                               }`}
                             />
                           ))}
@@ -485,7 +532,6 @@ const AvailableTrucks = () => {
                         <div className="text-xs text-gray-500">Total Price</div>
                       </div>
                     </div>
-
                     {/* Contact Buttons */}
                     <div className="flex gap-2">
                       <button className="flex-1 bg-primary-green text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center justify-center gap-2">
@@ -497,15 +543,18 @@ const AvailableTrucks = () => {
                         Email
                       </button>
                     </div>
-
                     {/* Navigation Button */}
                     <div className="mt-3">
-                      <button 
+                      <button
                         onClick={() => {
-                          const pickupLocation = encodeURIComponent(truck.location);
-                          const destination = encodeURIComponent(truck.destination);
+                          const pickupLocation = encodeURIComponent(
+                            truck.location
+                          );
+                          const destination = encodeURIComponent(
+                            truck.destination
+                          );
                           const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${pickupLocation}&destination=${destination}&travelmode=driving`;
-                          window.open(googleMapsUrl, '_blank');
+                          window.open(googleMapsUrl, "_blank");
                         }}
                         className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2"
                       >
@@ -529,7 +578,8 @@ const AvailableTrucks = () => {
                 No trucks found
               </h3>
               <p className="text-gray-600 mb-6">
-                Try adjusting your search criteria or check back later for new listings.
+                Try adjusting your search criteria or check back later for new
+                listings.
               </p>
               <button
                 onClick={clearFilters}
@@ -545,4 +595,4 @@ const AvailableTrucks = () => {
   );
 };
 
-export default AvailableTrucks; 
+export default AvailableTrucks;

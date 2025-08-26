@@ -30,7 +30,7 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission
+    // Implement actual form submission logic here (API, email, etc.)
     console.log('Contact form submitted:', formData);
     setIsSubmitted(true);
     setFormData({
@@ -47,17 +47,17 @@ const Contact = () => {
       icon: <Phone className="w-6 h-6" />,
       title: "Phone",
       details: [
-        "+1 (555) 123-4567",
-        "+1 (555) 987-6543"
+        "+91 91234 567800",
+        "+91 98765 432100"
       ],
-      description: "Call us Monday to Friday, 8 AM - 6 PM EST"
+      description: "Call us Monday to Friday, 9 AM - 6 PM IST"
     },
     {
       icon: <Mail className="w-6 h-6" />,
       title: "Email",
       details: [
-        "info@transpolink.com",
-        "support@transpolink.com"
+        "info@transpolink.in",
+        "support@transpolink.in"
       ],
       description: "We'll respond within 24 hours"
     },
@@ -65,8 +65,8 @@ const Contact = () => {
       icon: <MapPin className="w-6 h-6" />,
       title: "Office",
       details: [
-        "123 Transport Avenue",
-        "New York, NY 10001"
+        "Office 101, ABC Tech Park",
+        "Bangalore, Karnataka, 560001"
       ],
       description: "Visit us during business hours"
     },
@@ -74,8 +74,8 @@ const Contact = () => {
       icon: <Clock className="w-6 h-6" />,
       title: "Business Hours",
       details: [
-        "Monday - Friday: 8 AM - 6 PM EST",
-        "Saturday: 9 AM - 2 PM EST"
+        "Monday - Friday: 9:00 AM - 6:00 PM IST",
+        "Saturday: 10:00 AM - 2:00 PM IST"
       ],
       description: "24/7 emergency support available"
     }
@@ -84,19 +84,19 @@ const Contact = () => {
   const faqs = [
     {
       question: "How do I become a verified driver?",
-      answer: "To become a verified driver, you need to complete our registration process, provide required documentation, and pass our background check. Visit our driver registration page for detailed steps."
+      answer: "Complete our registration process with required documentation and background checks. Visit the driver registration page for full details."
     },
     {
-      question: "What types of goods can I transport?",
-      answer: "We support a wide range of goods including electronics, furniture, machinery, food & beverages, construction materials, and more. Some restrictions apply to hazardous materials."
+      question: "What goods can I transport?",
+      answer: "We support electronics, furniture, machinery, food & beverages, construction materials, and more. Hazardous goods have restrictions."
     },
     {
       question: "How is payment processed?",
-      answer: "Payments are processed securely through our platform. We offer multiple payment options including credit cards, bank transfers, and digital wallets. All transactions are protected by our insurance coverage."
+      answer: "Secure payments through credit cards, bank transfer, and UPI. All transactions are insured."
     },
     {
-      question: "What happens if there's a delay or damage?",
-      answer: "We have comprehensive insurance coverage and a dedicated support team to handle any issues. Contact our support team immediately if you experience any problems with your shipment."
+      question: "What if there's delay or damage?",
+      answer: "We have insurance coverage and a support team dedicated to resolving shipment issues promptly."
     }
   ];
 
@@ -115,8 +115,7 @@ const Contact = () => {
               Contact Us
             </h1>
             <p className="text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
-              Have questions or need assistance? We're here to help! Reach out to our team 
-              and we'll get back to you as soon as possible.
+              Have questions or need assistance? We're here to help! Reach out to our team and we'll get back to you as soon as possible.
             </p>
           </motion.div>
         </div>
@@ -136,8 +135,7 @@ const Contact = () => {
               Get in Touch
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Choose the best way to reach us. Our team is ready to assist you with any questions 
-              about our services.
+              Choose the best way to reach us. Our team is ready to assist you with any questions about our services.
             </p>
           </motion.div>
 
@@ -175,7 +173,7 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* Contact Form & Map */}
+      {/* Contact Form & Location */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -190,7 +188,7 @@ const Contact = () => {
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
                   Send us a Message
                 </h2>
-                
+
                 {isSubmitted ? (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
@@ -212,14 +210,15 @@ const Contact = () => {
                     </button>
                   </motion.div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form onSubmit={handleSubmit} className="space-y-6" noValidate>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="name">
                           Full Name *
                         </label>
                         <input
                           type="text"
+                          id="name"
                           value={formData.name}
                           onChange={(e) => handleInputChange('name', e.target.value)}
                           placeholder="Your full name"
@@ -228,11 +227,12 @@ const Contact = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="email">
                           Email Address *
                         </label>
                         <input
                           type="email"
+                          id="email"
                           value={formData.email}
                           onChange={(e) => handleInputChange('email', e.target.value)}
                           placeholder="your.email@example.com"
@@ -244,22 +244,24 @@ const Contact = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="phone">
                           Phone Number
                         </label>
                         <input
                           type="tel"
+                          id="phone"
                           value={formData.phone}
                           onChange={(e) => handleInputChange('phone', e.target.value)}
-                          placeholder="+1 (555) 123-4567"
+                          placeholder="+91 91234 567800"
                           className="input-field"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="subject">
                           Subject *
                         </label>
                         <select
+                          id="subject"
                           value={formData.subject}
                           onChange={(e) => handleInputChange('subject', e.target.value)}
                           className="input-field"
@@ -277,10 +279,11 @@ const Contact = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="message">
                         Message *
                       </label>
                       <textarea
+                        id="message"
                         value={formData.message}
                         onChange={(e) => handleInputChange('message', e.target.value)}
                         placeholder="Tell us how we can help you..."
@@ -302,7 +305,7 @@ const Contact = () => {
               </div>
             </motion.div>
 
-            {/* Map & Office Info */}
+            {/* Location & Office Info */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -319,7 +322,7 @@ const Contact = () => {
                   <div className="text-center">
                     <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-2" />
                     <p className="text-gray-600">Interactive Map</p>
-                    <p className="text-sm text-gray-500">123 Transport Avenue, New York, NY 10001</p>
+                    <p className="text-sm text-gray-500">Office 101, ABC Tech Park, Bangalore, Karnataka 560001</p>
                   </div>
                 </div>
               </div>
@@ -332,11 +335,11 @@ const Contact = () => {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center py-2 border-b border-gray-100">
                     <span className="font-medium">Monday - Friday</span>
-                    <span className="text-gray-600">8:00 AM - 6:00 PM EST</span>
+                    <span className="text-gray-600">9:00 AM - 6:00 PM IST</span>
                   </div>
                   <div className="flex justify-between items-center py-2 border-b border-gray-100">
                     <span className="font-medium">Saturday</span>
-                    <span className="text-gray-600">9:00 AM - 2:00 PM EST</span>
+                    <span className="text-gray-600">10:00 AM - 2:00 PM IST</span>
                   </div>
                   <div className="flex justify-between items-center py-2">
                     <span className="font-medium">Sunday</span>
@@ -411,7 +414,7 @@ const Contact = () => {
               Ready to Get Started?
             </h2>
             <p className="text-xl text-gray-200 max-w-2xl mx-auto">
-              Join thousands of businesses and drivers who trust TranspoLink for their 
+              Join thousands of businesses and drivers who trust TranspoLink for their
               transportation needs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -430,4 +433,4 @@ const Contact = () => {
   );
 };
 
-export default Contact; 
+export default Contact;

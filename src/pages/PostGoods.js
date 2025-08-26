@@ -100,7 +100,7 @@ const PostGoods = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission
+    // Here you would integrate with backend to post the data
     console.log('Form submitted:', formData);
     alert('Your transport request has been posted successfully!');
   };
@@ -115,7 +115,7 @@ const PostGoods = () => {
           type="text"
           value={formData.title}
           onChange={(e) => handleInputChange('title', e.target.value)}
-          placeholder="e.g., Electronics shipment from NYC to LA"
+          placeholder="e.g., Electronics shipment from Mumbai to Delhi"
           className="input-field"
           required
         />
@@ -155,7 +155,7 @@ const PostGoods = () => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Weight (lbs) *
+            Weight (kg) *
           </label>
           <input
             type="number"
@@ -164,13 +164,14 @@ const PostGoods = () => {
             placeholder="e.g., 5000"
             className="input-field"
             required
+            min={1}
           />
         </div>
       </div>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Dimensions (L x W x H)
+          Dimensions (L x W x H) (in feet)
         </label>
         <input
           type="text"
@@ -194,7 +195,7 @@ const PostGoods = () => {
             type="text"
             value={formData.pickupLocation}
             onChange={(e) => handleInputChange('pickupLocation', e.target.value)}
-            placeholder="e.g., New York, NY"
+            placeholder="e.g., Mumbai, Maharashtra"
             className="input-field"
             required
           />
@@ -208,7 +209,7 @@ const PostGoods = () => {
             type="text"
             value={formData.deliveryLocation}
             onChange={(e) => handleInputChange('deliveryLocation', e.target.value)}
-            placeholder="e.g., Los Angeles, CA"
+            placeholder="e.g., Delhi, Delhi"
             className="input-field"
             required
           />
@@ -291,13 +292,13 @@ const PostGoods = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Budget Range
+            Budget Range (₹ INR)
           </label>
           <input
             type="text"
             value={formData.budget}
             onChange={(e) => handleInputChange('budget', e.target.value)}
-            placeholder="e.g., $2,000 - $3,000"
+            placeholder="e.g., ₹20,000 - ₹30,000"
             className="input-field"
           />
         </div>
@@ -375,7 +376,7 @@ const PostGoods = () => {
             type="tel"
             value={formData.phone}
             onChange={(e) => handleInputChange('phone', e.target.value)}
-            placeholder="+1 (555) 123-4567"
+            placeholder="+91 98765 43210"
             className="input-field"
             required
           />
@@ -429,14 +430,14 @@ const PostGoods = () => {
         </div>
       </section>
 
-      {/* Form Section */}
+      {/* Form */}
       <section className="py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="card"
+            className="card bg-white p-8 rounded-lg shadow"
           >
             {/* Progress Steps */}
             <div className="mb-8">
@@ -444,8 +445,8 @@ const PostGoods = () => {
                 {steps.map((step, index) => (
                   <div key={step.number} className="flex items-center">
                     <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
-                      currentStep >= step.number 
-                        ? 'bg-primary-green border-primary-green text-white' 
+                      currentStep >= step.number
+                        ? 'bg-primary-green border-primary-green text-white'
                         : 'border-gray-300 text-gray-500'
                     }`}>
                       {currentStep > step.number ? (
@@ -471,7 +472,6 @@ const PostGoods = () => {
               </div>
             </div>
 
-            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-8">
               {renderCurrentStep()}
 
@@ -513,12 +513,12 @@ const PostGoods = () => {
             </form>
           </motion.div>
 
-          {/* Info Card */}
+          {/* Tips Card */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="mt-8 card bg-blue-50 border-blue-200"
+            className="mt-8 card bg-blue-50 border-blue-200 p-6 rounded-lg"
           >
             <div className="flex items-start space-x-3">
               <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
@@ -526,12 +526,12 @@ const PostGoods = () => {
                 <h3 className="text-lg font-semibold text-blue-900 mb-2">
                   Tips for Better Responses
                 </h3>
-                <ul className="text-blue-800 space-y-1 text-sm">
-                  <li>• Provide detailed descriptions of your goods</li>
-                  <li>• Include accurate weight and dimensions</li>
-                  <li>• Be specific about pickup and delivery requirements</li>
-                  <li>• Set a realistic budget range</li>
-                  <li>• Respond promptly to driver inquiries</li>
+                <ul className="text-blue-800 space-y-1 text-sm list-disc list-inside">
+                  <li>Provide detailed descriptions of your goods</li>
+                  <li>Include accurate weight and dimensions (in kg and feet)</li>
+                  <li>Be specific about pickup and delivery locations</li>
+                  <li>Set a realistic budget range in Indian Rupees (₹)</li>
+                  <li>Respond promptly to driver inquiries</li>
                 </ul>
               </div>
             </div>
@@ -542,4 +542,4 @@ const PostGoods = () => {
   );
 };
 
-export default PostGoods; 
+export default PostGoods;

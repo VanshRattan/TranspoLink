@@ -7,25 +7,25 @@ const About = () => {
     {
       name: "Ankit Pandey",
       image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face",
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300&h=300&fit=crop", // generic nature photo
       bio: "A dreamer at heart who loves turning bold ideas into meaningful realities.",
     },
     {
       name: "Vansh Rattan",
       image:
-        "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=300&fit=crop&crop=face",
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300&h=300&fit=crop", // same placeholder
       bio: "Tech explorer who finds joy in learning, experimenting, and innovating.",
     },
     {
       name: "Aryan Sood",
       image:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face",
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300&h=300&fit=crop",
       bio: "Passionate about teamwork, problem-solving, and bringing structure to ideas.",
     },
     {
       name: "Aditya Chauhan",
       image:
-        "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&h=300&fit=crop&crop=face",
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300&h=300&fit=crop",
       bio: "Believes growth comes from challenges and thrives on creating new opportunities.",
     },
   ];
@@ -76,7 +76,7 @@ const About = () => {
                     src={member.image}
                     alt={member.name}
                     className="w-28 h-28 rounded-full object-cover ring-4 ring-primary-green/20 
-                               transition-all duration-500 hover:ring-primary-orange/50"
+                              transition-all duration-500 hover:ring-primary-orange/50"
                   />
                   {/* Animated ring pulse */}
                   <span className="absolute inset-0 rounded-full border-2 border-primary-orange animate-ping opacity-20"></span>

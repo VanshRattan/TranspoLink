@@ -23,8 +23,8 @@ const AvailableGoods = () => {
   const [selectedCargoType, setSelectedCargoType] = useState('all');
   const [selectedLocation, setSelectedLocation] = useState('all');
   const [sortBy, setSortBy] = useState('date-earliest');
-  
-  // Get search parameters from URL (from homepage search)
+
+  // URL search params (from another page)
   const fromLocation = searchParams.get('from') || '';
   const toLocation = searchParams.get('to') || '';
   const searchDate = searchParams.get('date') || '';
@@ -43,11 +43,11 @@ const AvailableGoods = () => {
 
   const locations = [
     { id: 'all', name: 'All Locations' },
-    { id: 'new-york', name: 'New York' },
-    { id: 'los-angeles', name: 'Los Angeles' },
-    { id: 'chicago', name: 'Chicago' },
-    { id: 'houston', name: 'Houston' },
-    { id: 'phoenix', name: 'Phoenix' }
+    { id: 'mumbai', name: 'Mumbai' },
+    { id: 'delhi', name: 'Delhi' },
+    { id: 'bangalore', name: 'Bangalore' },
+    { id: 'chennai', name: 'Chennai' },
+    { id: 'kolkata', name: 'Kolkata' }
   ];
 
   const sortOptions = [
@@ -61,157 +61,164 @@ const AvailableGoods = () => {
   const goods = [
     {
       id: 1,
-      business: "TechCorp Solutions",
-      contact: "Sarah Johnson",
+      business: "Mumbai Electronics Co.",
+      contact: "Rajesh Kumar",
       cargoType: "Electronics",
-      weight: "2,500 lbs",
+      weight: "2,500 kg",
       dimensions: "8' x 6' x 4'",
-      pickupLocation: "New York, NY",
-      deliveryLocation: "Los Angeles, CA",
-      pickupDate: "2024-01-15",
-      deliveryDate: "2024-01-18",
-      price: 1800,
-      priceDisplay: "$1,800",
+      pickupLocation: "Mumbai, Maharashtra",
+      deliveryLocation: "Delhi, Delhi",
+      pickupDate: "2025-09-15",
+      deliveryDate: "2025-09-18",
+      price: 18000,
+      priceDisplay: "₹18,000",
       rating: 4.8,
       reviews: 45,
       verified: true,
       insurance: true,
-      phone: "+1 (555) 123-4567",
-      email: "sarah@techcorp.com",
+      phone: "+91 98765 43210",
+      email: "rajesh@mumbai-electronics.com",
       specialRequirements: "Temperature controlled, fragile handling",
-      image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=300&fit=crop"
+      image: "https://images.unsplash.com/photo-1542838687-28fd8aab946d?w=400&h=300&fit=crop"
     },
     {
       id: 2,
-      business: "Furniture World",
-      contact: "Mike Chen",
+      business: "Bangalore Furniture Works",
+      contact: "Anita Sharma",
       cargoType: "Furniture",
-      weight: "3,200 lbs",
+      weight: "3,200 kg",
       dimensions: "12' x 8' x 6'",
-      pickupLocation: "Los Angeles, CA",
-      deliveryLocation: "Chicago, IL",
-      pickupDate: "2024-01-18",
-      deliveryDate: "2024-01-22",
-      price: 2200,
-      priceDisplay: "$2,200",
+      pickupLocation: "Bangalore, Karnataka",
+      deliveryLocation: "Chennai, Tamil Nadu",
+      pickupDate: "2025-09-18",
+      deliveryDate: "2025-09-22",
+      price: 22000,
+      priceDisplay: "₹22,000",
       rating: 4.7,
       reviews: 32,
       verified: true,
       insurance: true,
-      phone: "+1 (555) 234-5678",
-      email: "mike@furnitureworld.com",
+      phone: "+91 87654 32109",
+      email: "anita@bangalore-furniture.com",
       specialRequirements: "White glove delivery, assembly required",
-      image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400&h=300&fit=crop"
+      image: "https://images.unsplash.com/photo-1567016544885-451baef1d37a?w=400&h=300&fit=crop"
     },
     {
       id: 3,
-      business: "Construction Supply Co.",
-      contact: "David Wilson",
+      business: "Delhi Construction Materials",
+      contact: "Vikram Singh",
       cargoType: "Construction Materials",
-      weight: "15,000 lbs",
+      weight: "15,000 kg",
       dimensions: "20' x 8' x 8'",
-      pickupLocation: "Chicago, IL",
-      deliveryLocation: "Houston, TX",
-      pickupDate: "2024-01-20",
-      deliveryDate: "2024-01-25",
-      price: 3500,
-      priceDisplay: "$3,500",
+      pickupLocation: "Delhi, Delhi",
+      deliveryLocation: "Kolkata, West Bengal",
+      pickupDate: "2025-09-20",
+      deliveryDate: "2025-09-25",
+      price: 35000,
+      priceDisplay: "₹35,000",
       rating: 4.9,
       reviews: 67,
       verified: true,
       insurance: true,
-      phone: "+1 (555) 345-6789",
-      email: "david@constructionsupply.com",
+      phone: "+91 99887 66554",
+      email: "vikram@delhi-construction.com",
       specialRequirements: "Heavy equipment, loading assistance needed",
-      image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=300&fit=crop"
+      image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=400&h=300&fit=crop"
     },
     {
       id: 4,
-      business: "AgriFresh Farms",
-      contact: "Lisa Rodriguez",
+      business: "Chennai AgriFresh Farms",
+      contact: "Lakshmi Menon",
       cargoType: "Agricultural Products",
-      weight: "8,500 lbs",
+      weight: "8,500 kg",
       dimensions: "16' x 8' x 8'",
-      pickupLocation: "Houston, TX",
-      deliveryLocation: "Phoenix, AZ",
-      pickupDate: "2024-01-22",
-      deliveryDate: "2024-01-26",
-      price: 2800,
-      priceDisplay: "$2,800",
+      pickupLocation: "Chennai, Tamil Nadu",
+      deliveryLocation: "Mumbai, Maharashtra",
+      pickupDate: "2025-09-22",
+      deliveryDate: "2025-09-26",
+      price: 28000,
+      priceDisplay: "₹28,000",
       rating: 4.6,
       reviews: 28,
       verified: true,
       insurance: true,
-      phone: "+1 (555) 456-7890",
-      email: "lisa@agrifresh.com",
+      phone: "+91 96543 21087",
+      email: "lakshmi@agrifresh-chennai.com",
       specialRequirements: "Refrigerated transport, quick delivery",
-      image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=300&fit=crop"
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop"
     },
     {
       id: 5,
-      business: "Industrial Machinery Inc.",
-      contact: "Robert Brown",
+      business: "Kolkata Industrial Machinery",
+      contact: "Rohan Das",
       cargoType: "Heavy Machinery",
-      weight: "25,000 lbs",
+      weight: "25,000 kg",
       dimensions: "40' x 10' x 12'",
-      pickupLocation: "Phoenix, AZ",
-      deliveryLocation: "Denver, CO",
-      pickupDate: "2024-01-25",
-      deliveryDate: "2024-01-30",
-      price: 5200,
-      priceDisplay: "$5,200",
+      pickupLocation: "Kolkata, West Bengal",
+      deliveryLocation: "Bangalore, Karnataka",
+      pickupDate: "2025-09-25",
+      deliveryDate: "2025-09-30",
+      price: 52000,
+      priceDisplay: "₹52,000",
       rating: 4.8,
       reviews: 89,
       verified: true,
       insurance: true,
-      phone: "+1 (555) 567-8901",
-      email: "robert@industrialmachinery.com",
+      phone: "+91 93456 78901",
+      email: "rohan@kolkata-machinery.com",
       specialRequirements: "Oversized load, escort required",
-      image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=300&fit=crop"
+      image: "https://images.unsplash.com/photo-1581091870621-08d12a1bb536?w=400&h=300&fit=crop"
     },
     {
       id: 6,
-      business: "Retail Express",
-      contact: "Jennifer Lee",
+      business: "Delhi Retail Express",
+      contact: "Sunita Rao",
       cargoType: "Retail Goods",
-      weight: "4,800 lbs",
+      weight: "4,800 kg",
       dimensions: "14' x 8' x 6'",
-      pickupLocation: "Denver, CO",
-      deliveryLocation: "Seattle, WA",
-      pickupDate: "2024-01-28",
-      deliveryDate: "2024-02-02",
-      price: 3200,
-      priceDisplay: "$3,200",
+      pickupLocation: "Delhi, Delhi",
+      deliveryLocation: "Chennai, Tamil Nadu",
+      pickupDate: "2025-09-28",
+      deliveryDate: "2025-10-02",
+      price: 32000,
+      priceDisplay: "₹32,000",
       rating: 4.7,
       reviews: 56,
       verified: true,
       insurance: true,
-      phone: "+1 (555) 678-9012",
-      email: "jennifer@retailexpress.com",
+      phone: "+91 98765 43211",
+      email: "sunita@delhi-retail.com",
       specialRequirements: "Secure packaging, tracking required",
-      image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=300&fit=crop"
+      image: "https://images.unsplash.com/photo-1528795655934-1d7d20df4cf1?w=400&h=300&fit=crop"
     }
   ];
 
-  // Filter goods based on search parameters and filters
+  // Filtering logic
   const filteredGoods = goods.filter(item => {
-    const matchesSearch = searchTerm === '' || 
-      item.business.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.contact.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.cargoType.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesCargoType = selectedCargoType === 'all' || item.cargoType.toLowerCase().includes(selectedCargoType);
-    const matchesLocation = selectedLocation === 'all' || item.pickupLocation.toLowerCase().includes(selectedLocation);
-    
-    // Filter by homepage search parameters
-    const matchesFrom = !fromLocation || item.pickupLocation.toLowerCase().includes(fromLocation.toLowerCase());
-    const matchesTo = !toLocation || item.deliveryLocation.toLowerCase().includes(toLocation.toLowerCase());
+    const term = searchTerm.toLowerCase();
+    const matchesSearch = term === '' ||
+      item.business.toLowerCase().includes(term) ||
+      item.contact.toLowerCase().includes(term) ||
+      item.cargoType.toLowerCase().includes(term);
+      
+    const matchesCargoType = selectedCargoType === 'all' ||
+      item.cargoType.toLowerCase().replace(/\s+/g, '-') === selectedCargoType;
+      
+    const matchesLocation = selectedLocation === 'all' ||
+      item.pickupLocation.toLowerCase().includes(selectedLocation);
+      
+    const matchesFrom = !fromLocation || 
+      item.pickupLocation.toLowerCase().includes(fromLocation.toLowerCase());
+      
+    const matchesTo = !toLocation || 
+      item.deliveryLocation.toLowerCase().includes(toLocation.toLowerCase());
+      
     const matchesDate = !searchDate || item.pickupDate === searchDate;
     
     return matchesSearch && matchesCargoType && matchesLocation && matchesFrom && matchesTo && matchesDate;
   });
 
-  // Sort goods based on selected sort option
+  // Sorting logic
   const sortedGoods = [...filteredGoods].sort((a, b) => {
     switch (sortBy) {
       case 'date-earliest':
@@ -219,9 +226,9 @@ const AvailableGoods = () => {
       case 'date-latest':
         return new Date(b.pickupDate) - new Date(a.pickupDate);
       case 'weight-low':
-        return parseInt(a.weight.replace(/,/g, '')) - parseInt(b.weight.replace(/,/g, ''));
+        return parseInt(a.weight.replace(/[^\d]/g, '')) - parseInt(b.weight.replace(/[^\d]/g, ''));
       case 'weight-high':
-        return parseInt(b.weight.replace(/,/g, '')) - parseInt(a.weight.replace(/,/g, ''));
+        return parseInt(b.weight.replace(/[^\d]/g, '')) - parseInt(a.weight.replace(/[^\d]/g, ''));
       case 'price-high':
         return b.price - a.price;
       default:
@@ -229,7 +236,6 @@ const AvailableGoods = () => {
     }
   });
 
-  // Update search parameters when filters change
   const updateSearchParams = (newParams) => {
     const current = Object.fromEntries(searchParams.entries());
     const updated = { ...current, ...newParams };
@@ -251,7 +257,6 @@ const AvailableGoods = () => {
     }
   };
 
-  // Clear all filters
   const clearFilters = () => {
     setSearchTerm('');
     setSelectedCargoType('all');
@@ -285,6 +290,7 @@ const AvailableGoods = () => {
       <section className="bg-white py-8 border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+
             {/* Search Term */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">Search</label>
@@ -359,7 +365,7 @@ const AvailableGoods = () => {
             </div>
           </div>
 
-          {/* Show search parameters from homepage */}
+          {/* Show search parameters from homepage if any */}
           {(fromLocation || toLocation || searchDate) && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -396,6 +402,7 @@ const AvailableGoods = () => {
       {/* Results Section */}
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
           {/* Results Count */}
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-semibold text-gray-900">
@@ -442,7 +449,7 @@ const AvailableGoods = () => {
                       <p className="text-gray-600">{item.contact}</p>
                     </div>
 
-                    {/* Route Information - Prominently Displayed */}
+                    {/* Route Information */}
                     <div className="mb-4 p-3 bg-gray-50 rounded-lg border-l-4 border-primary-green">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-medium text-gray-700">Route</span>
@@ -527,6 +534,7 @@ const AvailableGoods = () => {
                         Get Directions
                       </button>
                     </div>
+
                   </div>
                 </motion.div>
               ))}
@@ -553,6 +561,7 @@ const AvailableGoods = () => {
               </button>
             </motion.div>
           )}
+
         </div>
       </section>
     </div>
@@ -560,4 +569,3 @@ const AvailableGoods = () => {
 };
 
 export default AvailableGoods;
-
