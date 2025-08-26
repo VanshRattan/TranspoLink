@@ -11,6 +11,7 @@ import {
   MessageSquare
 } from 'lucide-react';
 
+
 const ClientDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -31,15 +32,15 @@ const ClientDashboard = () => {
     },
     { 
       title: "Total Spent", 
-      value: "$8,450", 
+      value: "₹6,80,450", 
       change: "+8%", 
       icon: <DollarSign className="w-6 h-6" />,
       color: "text-purple-600"
     },
     { 
       title: "Average Rating", 
-      value: "4.8", 
-      change: "+0.2", 
+      value: "4.7", 
+      change: "+0.1", 
       icon: <Star className="w-6 h-6" />,
       color: "text-yellow-600"
     }
@@ -48,57 +49,57 @@ const ClientDashboard = () => {
   const recentShipments = [
     {
       id: 1,
-      from: "New York, NY",
-      to: "Los Angeles, CA",
+      from: "Mumbai, MH",
+      to: "Delhi, DL",
       status: "Delivered",
-      date: "2024-01-15",
-      amount: "$2,500",
-      driver: "John Smith",
+      date: "2025-01-15",
+      amount: "₹1,80,000",
+      driver: "Rajesh Sharma",
       rating: 5,
-      cargo: "Electronics"
+      cargo: "Textiles"
     },
     {
       id: 2,
-      from: "Chicago, IL",
-      to: "Houston, TX",
+      from: "Bengaluru, KA",
+      to: "Chennai, TN",
       status: "In Transit",
-      date: "2024-01-18",
-      amount: "$1,800",
-      driver: "Maria Garcia",
+      date: "2025-01-18",
+      amount: "₹95,000",
+      driver: "Priya Nair",
       rating: 4,
-      cargo: "Furniture"
+      cargo: "Electronics"
     },
     {
       id: 3,
-      from: "Phoenix, AZ",
-      to: "Denver, CO",
+      from: "Hyderabad, TS",
+      to: "Pune, MH",
       status: "Scheduled",
-      date: "2024-01-25",
-      amount: "$2,200",
-      driver: "Mike Johnson",
+      date: "2025-01-25",
+      amount: "₹1,20,500",
+      driver: "Amit Verma",
       rating: 5,
-      cargo: "Construction Materials"
+      cargo: "Pharmaceuticals"
     }
   ];
 
   const upcomingBookings = [
     {
       id: 1,
-      from: "Seattle, WA",
-      to: "Portland, OR",
-      date: "2024-02-01",
-      driver: "Lisa Chen",
-      amount: "$1,500",
-      cargo: "Retail Goods"
+      from: "Ahmedabad, GJ",
+      to: "Surat, GJ",
+      date: "2025-02-01",
+      driver: "Neha Patel",
+      amount: "₹75,000",
+      cargo: "Garments"
     },
     {
       id: 2,
-      from: "Miami, FL",
-      to: "Atlanta, GA",
-      date: "2024-02-05",
-      driver: "David Brown",
-      amount: "$2,800",
-      cargo: "Agricultural Products"
+      from: "Kolkata, WB",
+      to: "Patna, BR",
+      date: "2025-02-05",
+      driver: "Anil Kumar",
+      amount: "₹1,40,000",
+      cargo: "Spices & Dry Goods"
     }
   ];
 
@@ -109,6 +110,7 @@ const ClientDashboard = () => {
     { id: 'invoices', name: 'Invoices', icon: <FileText className="w-4 h-4" /> },
     { id: 'support', name: 'Support', icon: <MessageSquare className="w-4 h-4" /> }
   ];
+
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -121,7 +123,7 @@ const ClientDashboard = () => {
 
   return (
     <div className="pt-16 min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* ---------- Header ---------- */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <motion.div
@@ -147,7 +149,7 @@ const ClientDashboard = () => {
         </div>
       </div>
 
-      {/* Tabs */}
+      {/* ---------- Tabs ---------- */}
       <div className="bg-white border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex space-x-8">
@@ -169,7 +171,7 @@ const ClientDashboard = () => {
         </div>
       </div>
 
-      {/* Content */}
+      {/* ---------- Dynamic Content (Overview, Shipments, Bookings, etc.) ---------- */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'overview' && (
           <motion.div
@@ -178,7 +180,7 @@ const ClientDashboard = () => {
             transition={{ duration: 0.6 }}
             className="space-y-8"
           >
-            {/* Stats Grid */}
+            {/* ✅ Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {stats.map((stat, index) => (
                 <motion.div
@@ -205,7 +207,7 @@ const ClientDashboard = () => {
               ))}
             </div>
 
-            {/* Recent Shipments */}
+            {/* ✅ Recent Shipments */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200">
               <div className="px-6 py-4 border-b border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-900">Recent Shipments</h3>
@@ -259,7 +261,7 @@ const ClientDashboard = () => {
               </div>
             </div>
 
-            {/* Upcoming Bookings */}
+            {/* ✅ Upcoming Bookings */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200">
               <div className="px-6 py-4 border-b border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-900">Upcoming Bookings</h3>
@@ -306,31 +308,32 @@ const ClientDashboard = () => {
           </motion.div>
         )}
 
+        {/* Empty states for other tabs */}
         {activeTab === 'shipments' && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">All Shipments</h3>
-            <p className="text-gray-500">Shipment history and tracking information will be displayed here.</p>
+            <p className="text-gray-500">Shipment history and tracking within India will be displayed here.</p>
           </div>
         )}
 
         {activeTab === 'bookings' && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">All Bookings</h3>
-            <p className="text-gray-500">Current and past bookings will be displayed here.</p>
+            <p className="text-gray-500">Current and past bookings in Indian routes will be displayed here.</p>
           </div>
         )}
 
         {activeTab === 'invoices' && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Invoices</h3>
-            <p className="text-gray-500">Billing and invoice information will be displayed here.</p>
+            <p className="text-gray-500">GST-compliant billing and invoice information will be displayed here.</p>
           </div>
         )}
 
         {activeTab === 'support' && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Support</h3>
-            <p className="text-gray-500">Customer support and help resources will be displayed here.</p>
+            <p className="text-gray-500">Customer support for Indian clients will be displayed here.</p>
           </div>
         )}
       </div>
@@ -339,4 +342,3 @@ const ClientDashboard = () => {
 };
 
 export default ClientDashboard;
-

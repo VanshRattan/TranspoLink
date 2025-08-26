@@ -18,14 +18,15 @@ import {
   Shield
 } from 'lucide-react';
 
+
 const DriverDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
 
   const stats = [
     {
       title: "Total Earnings",
-      value: "$12,450",
-      change: "+15%",
+      value: "₹9,80,450",
+      change: "+12%",
       trend: "up",
       icon: <DollarSign className="w-6 h-6" />
     },
@@ -38,15 +39,15 @@ const DriverDashboard = () => {
     },
     {
       title: "Completed This Month",
-      value: "12",
-      change: "+3",
+      value: "15",
+      change: "+4",
       trend: "up",
       icon: <CheckCircle className="w-6 h-6" />
     },
     {
       title: "Average Rating",
-      value: "4.8",
-      change: "+0.2",
+      value: "4.7",
+      change: "+0.1",
       trend: "up",
       icon: <Star className="w-6 h-6" />
     }
@@ -55,65 +56,65 @@ const DriverDashboard = () => {
   const activeShipments = [
     {
       id: 1,
-      customer: "ABC Electronics",
-      pickup: "New York, NY",
-      delivery: "Los Angeles, CA",
+      customer: "Reliance Retail",
+      pickup: "Mumbai, MH",
+      delivery: "Delhi, DL",
       status: "In Transit",
       progress: 65,
-      estimatedDelivery: "2024-01-18",
-      earnings: "$2,500",
-      contact: "+1 (555) 123-4567",
-      email: "contact@abcelectronics.com"
+      estimatedDelivery: "2025-08-28",
+      earnings: "₹1,20,000",
+      contact: "+91 98765 12345",
+      email: "logistics@reliance.com"
     },
     {
       id: 2,
-      customer: "Global Foods Inc.",
-      pickup: "Chicago, IL",
-      delivery: "Houston, TX",
+      customer: "ITC Foods",
+      pickup: "Kolkata, WB",
+      delivery: "Patna, BR",
       status: "Loading",
-      progress: 25,
-      estimatedDelivery: "2024-01-20",
-      earnings: "$1,800",
-      contact: "+1 (555) 234-5678",
-      email: "logistics@globalfoods.com"
+      progress: 20,
+      estimatedDelivery: "2025-08-30",
+      earnings: "₹85,000",
+      contact: "+91 99333 45678",
+      email: "dispatch@itcfoods.in"
     },
     {
       id: 3,
-      customer: "Fresh Produce Co.",
-      pickup: "Phoenix, AZ",
-      delivery: "Denver, CO",
+      customer: "Tata Chemicals",
+      pickup: "Ahmedabad, GJ",
+      delivery: "Pune, MH",
       status: "Scheduled",
       progress: 0,
-      estimatedDelivery: "2024-01-22",
-      earnings: "$2,200",
-      contact: "+1 (555) 345-6789",
-      email: "shipping@freshproduce.com"
+      estimatedDelivery: "2025-09-02",
+      earnings: "₹1,50,000",
+      contact: "+91 90220 78901",
+      email: "supply@tatachemicals.com"
     }
   ];
 
   const recentEarnings = [
     {
-      date: "2024-01-15",
-      customer: "ABC Electronics",
-      amount: "$2,500",
+      date: "2025-08-22",
+      customer: "Adani Agro",
+      amount: "₹75,000",
       status: "Completed"
     },
     {
-      date: "2024-01-12",
-      customer: "Tech Solutions",
-      amount: "$1,950",
+      date: "2025-08-18",
+      customer: "Flipkart Logistics",
+      amount: "₹98,500",
       status: "Completed"
     },
     {
-      date: "2024-01-10",
-      customer: "Industrial Parts Co.",
-      amount: "$3,200",
+      date: "2025-08-15",
+      customer: "Hindustan Unilever",
+      amount: "₹1,20,000",
       status: "Completed"
     },
     {
-      date: "2024-01-08",
-      customer: "Furniture Express",
-      amount: "$1,800",
+      date: "2025-08-10",
+      customer: "Big Bazaar",
+      amount: "₹65,000",
       status: "Completed"
     }
   ];
@@ -121,20 +122,20 @@ const DriverDashboard = () => {
   const upcomingDeliveries = [
     {
       id: 1,
-      customer: "ABC Electronics",
-      pickup: "New York, NY",
-      delivery: "Los Angeles, CA",
-      date: "2024-01-18",
-      time: "14:00",
+      customer: "Amazon India",
+      pickup: "Bengaluru, KA",
+      delivery: "Hyderabad, TS",
+      date: "2025-08-27",
+      time: "15:30",
       status: "In Transit"
     },
     {
       id: 2,
-      customer: "Global Foods Inc.",
-      pickup: "Chicago, IL",
-      delivery: "Houston, TX",
-      date: "2024-01-20",
-      time: "09:00",
+      customer: "Spice Trade Co.",
+      pickup: "Kochi, KL",
+      delivery: "Chennai, TN",
+      date: "2025-08-29",
+      time: "09:45",
       status: "Loading"
     }
   ];
@@ -158,7 +159,7 @@ const DriverDashboard = () => {
 
   return (
     <div className="pt-16 min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* -------- Header -------- */}
       <section className="gradient-bg text-white py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -172,7 +173,7 @@ const DriverDashboard = () => {
                 Driver Dashboard
               </h1>
               <p className="text-gray-200">
-                Welcome back, John Smith! Here's your transport overview.
+                Welcome back, Rajesh Kumar! Here's your transport overview.
               </p>
             </div>
             <div className="flex items-center space-x-4">
@@ -188,7 +189,7 @@ const DriverDashboard = () => {
         </div>
       </section>
 
-      {/* Stats Overview */}
+      {/* -------- Stats Overview -------- */}
       <section className="py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -227,9 +228,10 @@ const DriverDashboard = () => {
         </div>
       </section>
 
-      {/* Main Content */}
+      {/* -------- Main Content -------- */}
       <section className="py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
           {/* Tabs */}
           <div className="flex space-x-1 bg-white rounded-lg p-1 mb-8">
             {[
@@ -253,7 +255,7 @@ const DriverDashboard = () => {
             ))}
           </div>
 
-          {/* Tab Content */}
+          {/* Main Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Active Shipments */}
             <div className="lg:col-span-2">
@@ -273,7 +275,7 @@ const DriverDashboard = () => {
                 </div>
 
                 <div className="space-y-6">
-                  {activeShipments.map((shipment, index) => (
+                  {activeShipments.map((shipment) => (
                     <div key={shipment.id} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-center justify-between mb-4">
                         <div>
@@ -402,7 +404,7 @@ const DriverDashboard = () => {
                   Upcoming Deliveries
                 </h3>
                 <div className="space-y-3">
-                  {upcomingDeliveries.map((delivery, index) => (
+                  {upcomingDeliveries.map((delivery) => (
                     <div key={delivery.id} className="p-3 border border-gray-200 rounded-lg">
                       <div className="flex items-center justify-between mb-2">
                         <h4 className="font-medium text-gray-900">{delivery.customer}</h4>
@@ -428,4 +430,4 @@ const DriverDashboard = () => {
   );
 };
 
-export default DriverDashboard; 
+export default DriverDashboard;
