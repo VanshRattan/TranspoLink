@@ -13,6 +13,7 @@ export const useUser = () => {
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [language, setLanguage] = useState('en');
 
   // Check for existing user data on app load
   useEffect(() => {
@@ -21,6 +22,10 @@ export const UserProvider = ({ children }) => {
       const userData = JSON.parse(savedUser);
       setUser(userData);
       setIsAuthenticated(true);
+    }
+    const savedLang = localStorage.getItem('transpolink_lang');
+    if (savedLang === 'en' || savedLang === 'hi') {
+      setLanguage(savedLang);
     }
   }, []);
 
@@ -41,13 +46,53 @@ export const UserProvider = ({ children }) => {
     localStorage.setItem('transpolink_user', JSON.stringify(userData));
   };
 
+  const toggleLanguage = () => {
+    setLanguage(prev => {
+      const next = prev === 'en' ? 'hi' : 'en';
+      localStorage.setItem('transpolink_lang', next);
+      return next;
+    });
+  };
+
+  const translations = {
+    en: {
+      home: 'Home',
+      trucks: 'Available Trucks',
+      goods: 'Available Goods',
+      postGoods: 'Post Goods',
+      contact: 'Contact',
+      account: 'Account',
+      signOut: 'Sign Out',
+      driverDashboard: 'Driver Dashboard',
+      clientDashboard: 'Client Dashboard',
+      authCta: 'Sign In / Sign Up',
+    },
+    hi: {
+      home: 'होम',
+      trucks: 'उपलब्ध ट्रक',
+      goods: 'उपलब्ध सामान',
+      postGoods: 'सामान पोस्ट करें',
+      contact: 'संपर्क',
+      account: 'खाता',
+      signOut: 'साइन आउट',
+      driverDashboard: 'ड्राइवर डैशबोर्ड',
+      clientDashboard: 'क्लाइंट डैशबोर्ड',
+      authCta: 'साइन इन / साइन अप',
+    }
+  };
+
+  const t = (key) => translations[language]?.[key] || key;
+
   const value = {
     user,
     isAuthenticated,
     login,
     logout,
     updateUser,
-    userType: user?.userType || null
+    userType: user?.userType || null,
+    language,
+    toggleLanguage,
+    t
   };
 
   return (

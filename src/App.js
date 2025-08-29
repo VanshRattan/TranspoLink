@@ -10,10 +10,9 @@ import AvailableGoods from './pages/AvailableGoods';
 import PostGoods from './pages/PostGoods';
 import DriverDashboard from './pages/DriverDashboard';
 import ClientDashboard from './pages/ClientDashboard';
-import About from './pages/About';
 import Contact from './pages/Contact';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
+import Auth from './pages/Auth';
+import LiveTracking from './pages/LiveTracking';
 
 function App() {
   return (
@@ -29,10 +28,11 @@ function App() {
               <Route path="/post-goods" element={<PostGoods />} />
               <Route path="/driver-dashboard" element={<DriverDashboard />} />
               <Route path="/client-dashboard" element={<ClientDashboard />} />
-              <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/tracking" element={<LiveTracking />} />
+              <Route path="/login" element={<Auth />} />
+              <Route path="/signup" element={<Auth />} />
             </Routes>
           </AnimatePresence>
           <Footer />

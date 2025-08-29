@@ -19,7 +19,7 @@ import {
 
 const Home = () => {
   const navigate = useNavigate();
-  const { userType, isAuthenticated } = useUser();
+  const { userType, isAuthenticated, language } = useUser();
   const [searchData, setSearchData] = useState({
     from: '',
     to: '',
@@ -27,6 +27,56 @@ const Home = () => {
     cargoType: '',
     weight: ''
   });
+  
+  // All India major cities list for autocomplete
+  const indianCities = [
+    // North India
+    'Delhi', 'Mumbai', 'Kolkata', 'Chennai', 'Bangalore', 'Hyderabad', 'Ahmedabad', 'Pune',
+    'Jaipur', 'Lucknow', 'Kanpur', 'Nagpur', 'Indore', 'Thane', 'Bhopal', 'Visakhapatnam',
+    'Pimpri-Chinchwad', 'Patna', 'Vadodara', 'Ghaziabad', 'Ludhiana', 'Agra', 'Nashik',
+    'Faridabad', 'Meerut', 'Rajkot', 'Kalyan-Dombivali', 'Vasai-Virar', 'Varanasi',
+    'Srinagar', 'Aurangabad', 'Navi Mumbai', 'Solapur', 'Surat', 'Jabalpur', 'Gwalior',
+    'Coimbatore', 'Vijayawada', 'Jodhpur', 'Madurai', 'Raipur', 'Kota', 'Guwahati',
+    'Chandigarh', 'Mangalore', 'Bhubaneswar', 'Amritsar', 'Jalandhar', 'Patiala',
+    'Bathinda', 'Mohali', 'Hoshiarpur', 'Firozpur', 'Faridkot', 'Moga', 'Sangrur',
+    'Barnala', 'Mansa', 'Kapurthala', 'Tarn Taran', 'Gurdaspur', 'Pathankot',
+    'Rupnagar', 'Fatehgarh Sahib', 'Nawanshahr', 'Khanna', 'Phagwara', 'Rajpura',
+    'Zirakpur', 'Batala', 'Abohar', 'Sunam', 'Gobindgarh', 'Malerkotla', 'Nabha',
+    'Samana', 'Sirhind', 'Kharar',
+    // South India
+    'Kochi', 'Thiruvananthapuram', 'Kozhikode', 'Kollam', 'Thrissur', 'Palakkad',
+    'Malappuram', 'Kannur', 'Kottayam', 'Alappuzha', 'Mysore', 'Hubli-Dharwad',
+    'Belgaum', 'Bellary', 'Tumkur', 'Davangere', 'Bijapur', 'Gulbarga', 'Shimoga',
+    'Tiruchirappalli', 'Salem', 'Erode', 'Tiruppur', 'Vellore', 'Thoothukkudi',
+    'Dindigul', 'Thanjavur', 'Ranipet', 'Sivakasi', 'Karur', 'Udhagamandalam',
+    'Kumbakonam', 'Nagercoil', 'Kanchipuram', 'Kumbakonam', 'Tirunelveli',
+    // East India
+    'Bhubaneswar', 'Cuttack', 'Rourkela', 'Brahmapur', 'Sambalpur', 'Puri',
+    'Jamshedpur', 'Dhanbad', 'Ranchi', 'Bokaro Steel City', 'Deoghar', 'Hazaribagh',
+    'Giridih', 'Dumka', 'Phagwara', 'Siliguri', 'Darjeeling', 'Asansol', 'Durgapur',
+    'Bardhaman', 'Malda', 'Baharampur', 'Howrah', 'Kolkata', 'Kharagpur',
+    // West India
+    'Ahmedabad', 'Surat', 'Vadodara', 'Rajkot', 'Bhavnagar', 'Jamnagar', 'Gandhinagar',
+    'Junagadh', 'Anand', 'Bharuch', 'Mehsana', 'Morbi', 'Surendranagar', 'Gandhidham',
+    'Veraval', 'Porbandar', 'Bhuj', 'Palanpur', 'Godhra', 'Dahod', 'Navsari',
+    // Central India
+    'Bhopal', 'Indore', 'Jabalpur', 'Gwalior', 'Ujjain', 'Sagar', 'Dewas', 'Satna',
+    'Ratlam', 'Rewa', 'Murwara', 'Singrauli', 'Burhanpur', 'Khandwa', 'Chhindwara',
+    'Sehore', 'Vidisha', 'Raisen', 'Hoshangabad', 'Harda', 'Betul', 'Chhatarpur',
+    'Tikamgarh', 'Damoh', 'Panna', 'Sidhi', 'Shahdol', 'Anuppur', 'Dindori',
+    // North East India
+    'Guwahati', 'Dibrugarh', 'Silchar', 'Jorhat', 'Tinsukia', 'Tezpur', 'Nagaon',
+    'Bongaigaon', 'Goalpara', 'Barpeta', 'Dhubri', 'Kokrajhar', 'Baksa', 'Chirang',
+    'Udalguri', 'Darrang', 'Sonitpur', 'Lakhimpur', 'Dhemaji', 'Tinsukia', 'Dibrugarh',
+    'Sivasagar', 'Jorhat', 'Golaghat', 'Karbi Anglong', 'Dima Hasao', 'Karbi Anglong',
+    'Dima Hasao', 'Karbi Anglong', 'Dima Hasao', 'Karbi Anglong', 'Dima Hasao'
+  ];
+
+  const getCitySuggestions = (query) => {
+    const q = query.trim().toLowerCase();
+    if (q.length < 2) return [];
+    return indianCities.filter(c => c.toLowerCase().includes(q)).slice(0, 8);
+  };
 
   const handleSearchChange = (field, value) => {
     setSearchData(prev => ({
@@ -65,15 +115,15 @@ const Home = () => {
     if (isAuthenticated && userType === 'driver') {
       return (
         <>
-          Find goods going
-          <span className="block text-primary-orange">your way</span>
+          {language === 'hi' ? 'अपने मार्ग पर जा रहा माल खोजें' : 'Find goods going'}
+          <span className="block text-primary-orange">{language === 'hi' ? 'आपके रास्ते' : 'your way'}</span>
         </>
       );
     } else {
       return (
         <>
-          Find trucks going
-          <span className="block text-primary-orange">your way</span>
+          {language === 'hi' ? 'अपने मार्ग पर जा रहे ट्रक खोजें' : 'Find trucks going'}
+          <span className="block text-primary-orange">{language === 'hi' ? 'आपके रास्ते' : 'your way'}</span>
         </>
       );
     }
@@ -81,33 +131,33 @@ const Home = () => {
 
   const getHeroDescription = () => {
     if (isAuthenticated && userType === 'driver') {
-      return "Businesses post their goods, you find available cargo along your route. No more empty return trips - connect with businesses and earn money.";
+      return language === 'hi' ? 'व्यवसाय अपने सामान पोस्ट करते हैं, आप अपने मार्ग पर उपलब्ध कार्गो ढूंढते हैं। अब खाली वापसी यात्राएँ नहीं - व्यवसायों से जुड़ें और कमाई करें।' : "Businesses post their goods, you find available cargo along your route. No more empty return trips - connect with businesses and earn money.";
     } else {
-      return "Drivers post their routes, you book available space. No more empty return trips - connect with trucks traveling from your city to your destination.";
+      return language === 'hi' ? 'ड्राइवर अपने मार्ग पोस्ट करते हैं, आप उपलब्ध स्थान बुक करते हैं। अब खाली वापसी यात्राएँ नहीं - अपने शहर से गंतव्य तक जाने वाले ट्रकों से जुड़ें।' : "Drivers post their routes, you book available space. No more empty return trips - connect with trucks traveling from your city to your destination.";
     }
   };
 
   const getSearchButtonText = () => {
     if (isAuthenticated && userType === 'driver') {
-      return "Find Goods";
+      return language === 'hi' ? 'सामान खोजें' : "Find Goods";
     } else {
-      return "Find Trucks";
+      return language === 'hi' ? 'ट्रक खोजें' : "Find Trucks";
     }
   };
 
   const getSearchPlaceholder = () => {
     if (isAuthenticated && userType === 'driver') {
-      return "Enter pickup city";
+      return language === 'hi' ? 'पिकअप शहर दर्ज करें' : "Enter pickup city";
     } else {
-      return "Enter pickup city";
+      return language === 'hi' ? 'पिकअप शहर दर्ज करें' : "Enter pickup city";
     }
   };
 
   const getDestinationPlaceholder = () => {
     if (isAuthenticated && userType === 'driver') {
-      return "Enter delivery city";
+      return language === 'hi' ? 'डिलीवरी शहर दर्ज करें' : "Enter delivery city";
     } else {
-      return "Enter delivery city";
+      return language === 'hi' ? 'डिलीवरी शहर दर्ज करें' : "Enter delivery city";
     }
   };
 
@@ -116,36 +166,36 @@ const Home = () => {
       return [
         {
           icon: <Navigation className="w-12 h-12" />,
-          title: "Find goods on your route",
-          description: "See which businesses need goods transported along your planned route. Pick up cargo and earn money on your return trips."
+          title: language === 'hi' ? 'अपने मार्ग पर सामान खोजें' : "Find goods on your route",
+          description: language === 'hi' ? 'देखें किन व्यवसायों को आपके मार्ग पर सामान ले जाने की आवश्यकता है। वापसी यात्राओं में कार्गो उठाएँ और कमाई करें।' : "See which businesses need goods transported along your planned route. Pick up cargo and earn money on your return trips."
         },
         {
           icon: <Shield className="w-12 h-12" />,
-          title: "Trust verified businesses",
-          description: "All businesses are verified with insurance, payment guarantees, and customer reviews. Your earnings are secure."
+          title: language === 'hi' ? 'सत्यापित व्यवसायों पर भरोसा' : "Trust verified businesses",
+          description: language === 'hi' ? 'सभी व्यवसाय बीमा, भुगतान गारंटी और ग्राहक समीक्षाओं के साथ सत्यापित हैं। आपकी कमाई सुरक्षित है।' : "All businesses are verified with insurance, payment guarantees, and customer reviews. Your earnings are secure."
         },
         {
           icon: <Search className="w-12 h-12" />,
-          title: "Search, book and earn!",
-          description: "Find available goods on your route in minutes. No more empty return trips - everyone wins!"
+          title: language === 'hi' ? 'खोजें, बुक करें और कमाएँ!' : "Search, book and earn!",
+          description: language === 'hi' ? 'कुछ ही मिनटों में अपने मार्ग पर उपलब्ध सामान खोजें। अब खाली वापसी यात्राएँ नहीं - सभी को फायदा!' : "Find available goods on your route in minutes. No more empty return trips - everyone wins!"
         }
       ];
     } else {
       return [
         {
           icon: <Navigation className="w-12 h-12" />,
-          title: "Find trucks going your way",
-          description: "See which trucks are traveling from your city to your destination. Book available space and save on transport costs."
+          title: language === 'hi' ? 'अपने रास्ते जा रहे ट्रक खोजें' : "Find trucks going your way",
+          description: language === 'hi' ? 'देखें कौन से ट्रक आपके शहर से आपके गंतव्य तक जा रहे हैं। उपलब्ध स्थान बुक करें और परिवहन लागत बचाएँ।' : "See which trucks are traveling from your city to your destination. Book available space and save on transport costs."
         },
         {
           icon: <Shield className="w-12 h-12" />,
-          title: "Trust verified drivers",
-          description: "All drivers are verified with insurance, safety records, and customer reviews. Your goods are in safe hands."
+          title: language === 'hi' ? 'सत्यापित ड्राइवरों पर भरोसा' : "Trust verified drivers",
+          description: language === 'hi' ? 'सभी ड्राइवर बीमा, सुरक्षा रिकॉर्ड और ग्राहक समीक्षाओं के साथ सत्यापित हैं। आपका सामान सुरक्षित हाथों में है।' : "All drivers are verified with insurance, safety records, and customer reviews. Your goods are in safe hands."
         },
         {
           icon: <Search className="w-12 h-12" />,
-          title: "Search, book and ship!",
-          description: "Find available trucks on your route in minutes. No more empty return trips - everyone wins!"
+          title: language === 'hi' ? 'खोजें, बुक करें और शिप करें!' : "Search, book and ship!",
+          description: language === 'hi' ? 'कुछ ही मिनटों में अपने मार्ग पर उपलब्ध ट्रक खोजें। अब खाली वापसी यात्राएँ नहीं - सभी को फायदा!' : "Find available trucks on your route in minutes. No more empty return trips - everyone wins!"
         }
       ];
     }
@@ -154,21 +204,21 @@ const Home = () => {
   const features = getFeatures();
 
   const stats = [
-    { number: "0+", label: "Verified Drivers", icon: <Truck className="w-6 h-6" /> },
-    { number: "0+", label: "Successful Deliveries", icon: <CheckCircle className="w-6 h-6" /> },
-    { number: "0", label: "Average Rating", icon: <Star className="w-6 h-6" /> },
-    { number: "0+", label: "Cities Covered", icon: <Globe className="w-6 h-6" /> }
+    { number: "0+", label: language === 'hi' ? 'सत्यापित ड्राइवर' : "Verified Drivers", icon: <Truck className="w-6 h-6" /> },
+    { number: "0+", label: language === 'hi' ? 'सफल डिलीवरी' : "Successful Deliveries", icon: <CheckCircle className="w-6 h-6" /> },
+    { number: "0", label: language === 'hi' ? 'औसत रेटिंग' : "Average Rating", icon: <Star className="w-6 h-6" /> },
+    { number: "0+", label: language === 'hi' ? 'कवर किए गए शहर' : "Cities Covered", icon: <Globe className="w-6 h-6" /> }
   ];
 
   const cargoTypes = [
-    "General Cargo",
-    "Heavy Machinery", 
-    "Furniture",
-    "Electronics",
-    "Construction Materials",
-    "Agricultural Products",
-    "Industrial Equipment",
-    "Retail Goods"
+    language === 'hi' ? 'सामान्य कार्गो' : "General Cargo",
+    language === 'hi' ? 'भारी मशीनरी' : "Heavy Machinery", 
+    language === 'hi' ? 'फर्नीचर' : "Furniture",
+    language === 'hi' ? 'इलेक्ट्रॉनिक्स' : "Electronics",
+    language === 'hi' ? 'निर्माण सामग्री' : "Construction Materials",
+    language === 'hi' ? 'कृषि उत्पाद' : "Agricultural Products",
+    language === 'hi' ? 'औद्योगिक उपकरण' : "Industrial Equipment",
+    language === 'hi' ? 'खुदरा सामान' : "Retail Goods"
   ];
 
 
@@ -231,44 +281,74 @@ const Home = () => {
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 flex items-center">
                       <MapPin className="w-4 h-4 mr-2 text-primary-green" />
-                      {isAuthenticated && userType === 'driver' ? 'Starting Point' : 'Pickup Point'}
+                      {language === 'hi' ? 'पिकअप स्थान' : 'Pickup Location'}
                     </label>
-                    <input
-                      type="text"
-                      placeholder={getSearchPlaceholder()}
-                      value={searchData.from}
-                      onChange={(e) => handleSearchChange('from', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-transparent transition-colors duration-200"
-                    />
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder={getSearchPlaceholder()}
+                        value={searchData.from}
+                        onChange={(e) => handleSearchChange('from', e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-transparent transition-colors duration-200"
+                      />
+                      {getCitySuggestions(searchData.from).length > 0 && (
+                        <div className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-56 overflow-auto">
+                          {getCitySuggestions(searchData.from).map((city) => (
+                            <div
+                              key={`from-${city}`}
+                              className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                              onMouseDown={() => handleSearchChange('from', city)}
+                            >
+                              {city}, India
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* To */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 flex items-center">
                       <MapPin className="w-4 h-4 mr-2 text-primary-green" />
-                      {isAuthenticated && userType === 'driver' ? 'Destination' : 'Destination'}
+                      {language === 'hi' ? 'ड्रॉप स्थान' : 'Drop Location'}
                     </label>
-                    <input
-                      type="text"
-                      placeholder={getDestinationPlaceholder()}
-                      value={searchData.to}
-                      onChange={(e) => handleSearchChange('to', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-transparent transition-colors duration-200"
-                    />
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder={getDestinationPlaceholder()}
+                        value={searchData.to}
+                        onChange={(e) => handleSearchChange('to', e.target.value)}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-transparent transition-colors duration-200"
+                      />
+                      {getCitySuggestions(searchData.to).length > 0 && (
+                        <div className="absolute z-20 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-56 overflow-auto">
+                          {getCitySuggestions(searchData.to).map((city) => (
+                            <div
+                              key={`to-${city}`}
+                              className="px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                              onMouseDown={() => handleSearchChange('to', city)}
+                            >
+                              {city}, India
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
 
                   {/* Cargo Type */}
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 flex items-center">
                       <Package className="w-4 h-4 mr-2 text-primary-green" />
-                      Cargo Type
+                      {language === 'hi' ? 'कार्गो प्रकार' : 'Cargo Type'}
                     </label>
                     <select
                       value={searchData.cargoType}
                       onChange={(e) => handleSearchChange('cargoType', e.target.value)}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-transparent transition-colors duration-200"
                     >
-                      <option value="">Select cargo type</option>
+                      <option value="">{language === 'hi' ? 'कार्गो प्रकार चुनें' : 'Select cargo type'}</option>
                       {cargoTypes.map((type, index) => (
                         <option key={index} value={type}>{type}</option>
                       ))}
@@ -279,7 +359,7 @@ const Home = () => {
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 flex items-center">
                       <Calendar className="w-4 h-4 mr-2 text-primary-green" />
-                      {isAuthenticated && userType === 'driver' ? 'Pickup Date' : 'Loading Date'}
+                      {isAuthenticated && userType === 'driver' ? (language === 'hi' ? 'पिकअप तिथि' : 'Pickup Date') : (language === 'hi' ? 'लोडिंग तिथि' : 'Loading Date')}
                     </label>
                     <input
                       type="date"
@@ -377,29 +457,35 @@ const Home = () => {
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
               {isAuthenticated && userType === 'driver' 
-                ? 'Ready to find your next cargo?' 
-                : 'Ready to ship your goods?'}
+                ? (language === 'hi' ? 'क्या आप अपना अगला कार्गो खोजने के लिए तैयार हैं?' : 'Ready to find your next cargo?')
+                : (language === 'hi' ? 'क्या आप अपना सामान भेजने के लिए तैयार हैं?' : 'Ready to ship your goods?')}
             </h2>
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
               {isAuthenticated && userType === 'driver'
-                ? 'Join thousands of drivers who are already earning money by transporting goods along their routes.'
-                : 'Join thousands of businesses who are already saving money on transportation costs.'}
+                ? (language === 'hi' ? 'हजारों ड्राइवरों से जुड़ें जो अपने मार्ग पर सामान ले जाकर पहले से ही कमाई कर रहे हैं।' : 'Join thousands of drivers who are already earning money by transporting goods along their routes.')
+                : (language === 'hi' ? 'हजारों व्यवसायों से जुड़ें जो परिवहन लागत पर पहले से ही बचत कर रहे हैं।' : 'Join thousands of businesses who are already saving money on transportation costs.')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {!isAuthenticated ? (
                 <>
                   <Link
-                    to="/signup"
+                    to="/auth"
                     className="bg-primary-green text-white px-8 py-4 rounded-lg hover:bg-green-700 transition-colors duration-200 font-semibold text-lg flex items-center justify-center gap-2"
                   >
-                    Get Started
+                    {language === 'hi' ? 'शुरू करें' : 'Get Started'}
                     <ArrowRight className="w-5 h-5" />
                   </Link>
                   <Link
-                    to="/login"
+                    to="/auth"
                     className="bg-white text-primary-green border-2 border-primary-green px-8 py-4 rounded-lg hover:bg-primary-green hover:text-white transition-all duration-200 font-semibold text-lg"
                   >
-                    Sign In
+                    {language === 'hi' ? 'साइन इन' : 'Sign In'}
+                  </Link>
+                  <Link
+                    to="/tracking?id=DEMO123"
+                    className="bg-primary-orange text-white px-8 py-4 rounded-lg hover:bg-orange-600 transition-colors duration-200 font-semibold text-lg"
+                  >
+                    {language === 'hi' ? 'ट्रैकिंग देखें' : 'View Tracking'}
                   </Link>
                 </>
               ) : (
@@ -407,7 +493,7 @@ const Home = () => {
                   to={userType === 'driver' ? '/driver-dashboard' : '/client-dashboard'}
                   className="bg-primary-green text-white px-8 py-4 rounded-lg hover:bg-green-700 transition-colors duration-200 font-semibold text-lg flex items-center justify-center gap-2"
                 >
-                  Go to Dashboard
+                  {language === 'hi' ? 'डैशबोर्ड पर जाएँ' : 'Go to Dashboard'}
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               )}

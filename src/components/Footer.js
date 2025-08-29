@@ -67,11 +67,7 @@ const Footer = () => {
                   Driver Dashboard
                 </Link>
               </li>
-              <li>
-                <Link to="/about" className="text-gray-300 hover:text-primary-orange transition-colors duration-200 text-sm">
-                  About Us
-                </Link>
-              </li>
+              
             </ul>
           </div>
 
