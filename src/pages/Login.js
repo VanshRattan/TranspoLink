@@ -1,34 +1,20 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
-import { 
-  Mail, 
-  Lock, 
-  Eye, 
-  EyeOff, 
-  Truck, 
-  Building,
-  AlertCircle,
-  CheckCircle
-} from 'lucide-react';
+import { User, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 
 const Login = () => {
-  const navigate = useNavigate();
-  const { login } = useUser();
   const [formData, setFormData] = useState({
     email: '',
-    password: '',
-    userType: '',
-    rememberMe: false
+    password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
-
-  const userTypes = [
-    { id: 'business', label: 'Business Owner', icon: <Building className="w-5 h-5" />, description: 'I need to transport goods' },
-    { id: 'driver', label: 'Driver', icon: <Truck className="w-5 h-5" />, description: 'I provide transport services' }
-  ];
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const navigate = useNavigate();
+  const { login, language } = useUser();
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -46,161 +32,98 @@ const Login = () => {
 
   const validateForm = () => {
     const newErrors = {};
-
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
+    
+    if (!formData.email.trim()) {
+      newErrors.email = language === 'hi' ? 'ईमेल आवश्यक है' : 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = language === 'hi' ? 'कृपया एक वैध ईमेल पता दर्ज करें' : 'Please enter a valid email address';
     }
-
+    
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = language === 'hi' ? 'पासवर्ड आवश्यक है' : 'Password is required';
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+      newErrors.password = language === 'hi' ? 'पासवर्ड कम से कम 6 अक्षर का होना चाहिए' : 'Password must be at least 6 characters';
     }
-
-    if (!formData.userType) {
-      newErrors.userType = 'Please select your user type';
-    }
-
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      // Simulate login - in real app, this would be an API call
-      const userData = {
+    
+    if (!validateForm()) return;
+    
+    setIsLoading(true);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // For demo purposes, create a mock user
+      const mockUser = {
+        id: '1',
         email: formData.email,
-        userType: formData.userType,
-        name: formData.email.split('@')[0], // Simple name generation
-        id: Date.now().toString()
+        userType: 'business', // Default to business for demo
+        name: 'Demo User'
       };
       
-      // Login using context
-      login(userData);
-      
-      // Redirect based on user type
-      if (formData.userType === 'driver') {
-        navigate('/driver-dashboard');
-      } else if (formData.userType === 'business') {
-        navigate('/client-dashboard');
-      }
+      login(mockUser);
+      navigate('/');
+    } catch (error) {
+      console.error('Login failed:', error);
+      setErrors({ general: language === 'hi' ? 'लॉगिन विफल हुआ' : 'Login failed' });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        {/* Back Button */}
+        <div className="mb-6">
+          <Link
+            to="/"
+            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            {language === 'hi' ? 'वापस जाएँ' : 'Back to Home'}
+          </Link>
+        </div>
+
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="flex justify-center"
-        >
-          <div className="w-12 h-12 bg-gradient-to-r from-primary-green to-primary-orange rounded-lg flex items-center justify-center">
-            <Truck className="w-6 h-6 text-white" />
-          </div>
-        </motion.div>
-        <motion.h2
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="mt-6 text-center text-3xl font-extrabold text-gray-900"
-        >
-          Sign in to your account
-        </motion.h2>
-        <motion.p
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mt-2 text-center text-sm text-gray-600"
+          className="text-center"
         >
-          Or{' '}
-          <Link
-            to="/signup"
-            className="font-medium text-primary-green hover:text-green-500 transition-colors duration-200"
-          >
-            create a new account
-          </Link>
-        </motion.p>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">
+            {language === 'hi' ? 'अपने खाते में साइन इन करें' : 'Sign in to your account'}
+          </h2>
+          <p className="text-gray-600">
+            {language === 'hi' ? 'TranspoLink में आपका स्वागत है' : 'Welcome back to TranspoLink'}
+          </p>
+        </motion.div>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.3 }}
-        className="mt-8 sm:mx-auto sm:w-full sm:max-w-md"
-      >
-        <div className="bg-white py-8 px-4 shadow-xl rounded-xl sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            {/* User Type Selection */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
-                I am a...
-              </label>
-              <div className="grid grid-cols-1 gap-3">
-                {userTypes.map((type) => (
-                  <label
-                    key={type.id}
-                    className={`relative flex cursor-pointer rounded-lg border p-4 shadow-sm focus:outline-none transition-all duration-200 ${
-                      formData.userType === type.id
-                        ? 'border-primary-green ring-2 ring-primary-green ring-opacity-50 bg-green-50'
-                        : 'border-gray-300 hover:border-gray-400'
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="userType"
-                      value={type.id}
-                      checked={formData.userType === type.id}
-                      onChange={(e) => handleInputChange('userType', e.target.value)}
-                      className="sr-only"
-                    />
-                    <div className="flex items-center">
-                      <div className="flex-shrink-0">
-                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                          formData.userType === type.id
-                            ? 'border-primary-green bg-primary-green'
-                            : 'border-gray-300'
-                        }`}>
-                          {formData.userType === type.id && (
-                            <div className="w-2 h-2 rounded-full bg-white"></div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="ml-3 flex flex-col">
-                        <span className={`block text-sm font-medium ${
-                          formData.userType === type.id ? 'text-primary-green' : 'text-gray-900'
-                        }`}>
-                          {type.label}
-                        </span>
-                        <span className="block text-sm text-gray-500">
-                          {type.description}
-                        </span>
-                      </div>
-                    </div>
-                    {formData.userType === type.id && (
-                      <CheckCircle className="absolute top-4 right-4 h-5 w-5 text-primary-green" />
-                    )}
-                  </label>
-                ))}
-              </div>
-              {errors.userType && (
-                <div className="mt-2 flex items-center gap-2 text-red-600 text-sm">
-                  <AlertCircle className="w-4 h-4" />
-                  {errors.userType}
-                </div>
-              )}
-            </div>
-
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-white py-8 px-6 shadow-lg rounded-lg"
+        >
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                {language === 'hi' ? 'ईमेल पता' : 'Email Address'}
               </label>
-              <div className="mt-1 relative">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-gray-400" />
+                </div>
                 <input
                   id="email"
                   name="email"
@@ -209,29 +132,26 @@ const Login = () => {
                   required
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
-                  className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-transparent transition-colors duration-200 ${
+                  className={`block w-full pl-10 pr-3 py-3 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-colors duration-200 ${
                     errors.email ? 'border-red-300' : 'border-gray-300'
                   }`}
-                  placeholder="Enter your email"
+                  placeholder={language === 'hi' ? 'अपना ईमेल दर्ज करें' : 'Enter your email'}
                 />
-                <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                </div>
               </div>
               {errors.email && (
-                <div className="mt-2 flex items-center gap-2 text-red-600 text-sm">
-                  <AlertCircle className="w-4 h-4" />
-                  {errors.email}
-                </div>
+                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
               )}
             </div>
 
             {/* Password Field */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                {language === 'hi' ? 'पासवर्ड' : 'Password'}
               </label>
-              <div className="mt-1 relative">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
                 <input
                   id="password"
                   name="password"
@@ -240,10 +160,10 @@ const Login = () => {
                   required
                   value={formData.password}
                   onChange={(e) => handleInputChange('password', e.target.value)}
-                  className={`appearance-none block w-full px-3 py-2 pr-10 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-transparent transition-colors duration-200 ${
+                  className={`block w-full pl-10 pr-12 py-3 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-colors duration-200 ${
                     errors.password ? 'border-red-300' : 'border-gray-300'
                   }`}
-                  placeholder="Enter your password"
+                  placeholder={language === 'hi' ? 'अपना पासवर्ड दर्ज करें' : 'Enter your password'}
                 />
                 <button
                   type="button"
@@ -258,10 +178,7 @@ const Login = () => {
                 </button>
               </div>
               {errors.password && (
-                <div className="mt-2 flex items-center gap-2 text-red-600 text-sm">
-                  <AlertCircle className="w-4 h-4" />
-                  {errors.password}
-                </div>
+                <p className="mt-1 text-sm text-red-600">{errors.password}</p>
               )}
             </div>
 
@@ -272,46 +189,56 @@ const Login = () => {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  checked={formData.rememberMe}
-                  onChange={(e) => handleInputChange('rememberMe', e.target.checked)}
                   className="h-4 w-4 text-primary-green focus:ring-primary-green border-gray-300 rounded"
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                  Remember me
+                  {language === 'hi' ? 'मुझे याद रखें' : 'Remember me'}
                 </label>
               </div>
-
-              <div className="text-sm">
-                <button className="font-medium text-primary-green hover:text-green-500 transition-colors duration-200">
-                  Forgot your password?
-                </button>
-              </div>
+                              <div className="text-sm">
+                  <button type="button" className="font-medium text-primary-green hover:text-primary-green-dark">
+                    {language === 'hi' ? 'पासवर्ड भूल गए?' : 'Forgot your password?'}
+                  </button>
+                </div>
             </div>
+
+            {/* General Error */}
+            {errors.general && (
+              <div className="text-sm text-red-600 text-center bg-red-50 py-2 px-3 rounded-md">
+                {errors.general}
+              </div>
+            )}
 
             {/* Submit Button */}
             <div>
               <button
                 type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-green hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-green transition-colors duration-200"
+                disabled={isLoading}
+                className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-green hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-green disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               >
-                <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                  <Lock className="h-5 w-5 text-green-500 group-hover:text-green-400" />
-                </span>
-                Sign in
+                {isLoading ? (
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                ) : (
+                  language === 'hi' ? 'साइन इन करें' : 'Sign in'
+                )}
               </button>
             </div>
           </form>
 
-          {/* Demo Accounts Info */}
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <h3 className="text-sm font-medium text-gray-700 mb-2">Demo Accounts:</h3>
-            <div className="space-y-1 text-xs text-gray-600">
-              <p><strong>Driver:</strong> driver@demo.com / password123</p>
-              <p><strong>Business:</strong> business@demo.com / password123</p>
-            </div>
+          {/* Sign Up Link */}
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              {language === 'hi' ? 'क्या आपका पहले से खाता नहीं है?' : "Don't have an account?"}{' '}
+              <Link
+                to="/signup"
+                className="font-medium text-primary-green hover:text-primary-green-dark transition-colors duration-200"
+              >
+                {language === 'hi' ? 'साइन अप करें' : 'Sign up'}
+              </Link>
+            </p>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 };

@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Link, useNavigate } from 'react-router-dom';
+import { useUser } from '../context/UserContext';
 import { 
   User, 
-  Mail, 
   Lock, 
+  Mail, 
+  Phone, 
+  Building, 
+  Truck, 
   Eye, 
   EyeOff, 
-  Truck, 
-  Building,
-  ArrowRight,
-  AlertCircle,
+  ArrowLeft,
   CheckCircle
 } from 'lucide-react';
 
 const Signup = () => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -24,17 +24,30 @@ const Signup = () => {
     password: '',
     confirmPassword: '',
     userType: '',
-    company: '',
-    acceptTerms: false,
-    acceptMarketing: false
+    companyName: '',
+    acceptTerms: false
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const navigate = useNavigate();
+  const { login, language } = useUser();
 
   const userTypes = [
-    { id: 'business', label: 'Business Owner', icon: <Building className="w-5 h-5" />, description: 'I need to transport goods' },
-    { id: 'driver', label: 'Driver', icon: <Truck className="w-5 h-5" />, description: 'I want to provide transport services' }
+    { 
+      id: 'business', 
+      label: language === 'hi' ? 'व्यवसाय मालिक' : 'Business Owner',
+      icon: <Building className="w-5 h-5" />, 
+      description: language === 'hi' ? 'मुझे सामान परिवहन की आवश्यकता है' : 'I need to transport goods'
+    },
+    { 
+      id: 'driver', 
+      label: language === 'hi' ? 'ड्राइवर' : 'Driver',
+      icon: <Truck className="w-5 h-5" />, 
+      description: language === 'hi' ? 'मैं परिवहन सेवाएं प्रदान करता हूं' : 'I provide transport services'
+    }
   ];
 
   const handleInputChange = (field, value) => {
@@ -53,147 +66,135 @@ const Signup = () => {
 
   const validateForm = () => {
     const newErrors = {};
-
+    
     if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
+      newErrors.firstName = language === 'hi' ? 'पहला नाम आवश्यक है' : 'First name is required';
     }
-
+    
     if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
+      newErrors.lastName = language === 'hi' ? 'अंतिम नाम आवश्यक है' : 'Last name is required';
     }
-
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
+    
+    if (!formData.email.trim()) {
+      newErrors.email = language === 'hi' ? 'ईमेल आवश्यक है' : 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = language === 'hi' ? 'कृपया एक वैध ईमेल पता दर्ज करें' : 'Please enter a valid email address';
     }
-
+    
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
-    } else if (!/^\+?[\d\s\-()]+$/.test(formData.phone)) {
-      newErrors.phone = 'Please enter a valid phone number';
+      newErrors.phone = language === 'hi' ? 'फोन नंबर आवश्यक है' : 'Phone number is required';
     }
-
+    
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = language === 'hi' ? 'पासवर्ड आवश्यक है' : 'Password is required';
     } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
-    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      newErrors.password = 'Password must contain at least one uppercase letter, one lowercase letter, and one number';
+      newErrors.password = language === 'hi' ? 'पासवर्ड कम से कम 8 अक्षर का होना चाहिए' : 'Password must be at least 8 characters';
     }
-
+    
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Please confirm your password';
+      newErrors.confirmPassword = language === 'hi' ? 'पासवर्ड की पुष्टि आवश्यक है' : 'Password confirmation is required';
     } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+      newErrors.confirmPassword = language === 'hi' ? 'पासवर्ड मेल नहीं खाते' : 'Passwords do not match';
     }
-
+    
     if (!formData.userType) {
-      newErrors.userType = 'Please select your user type';
+      newErrors.userType = language === 'hi' ? 'कृपया अपना उपयोगकर्ता प्रकार चुनें' : 'Please select your user type';
     }
-
-    if (formData.userType === 'business' && !formData.company.trim()) {
-      newErrors.company = 'Company name is required for business accounts';
+    
+    if (formData.userType === 'business' && !formData.companyName.trim()) {
+      newErrors.companyName = language === 'hi' ? 'कंपनी का नाम आवश्यक है' : 'Company name is required for business accounts';
     }
-
+    
     if (!formData.acceptTerms) {
-      newErrors.acceptTerms = 'You must accept the terms and conditions';
+      newErrors.acceptTerms = language === 'hi' ? 'आपको नियम और शर्तें स्वीकार करनी होंगी' : 'You must accept the terms and conditions';
     }
-
+    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      // Handle signup logic here
-      console.log('Signup form submitted:', formData);
+    
+    if (!validateForm()) return;
+    
+    setIsLoading(true);
+    
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Redirect based on user type
-      if (formData.userType === 'driver') {
-        navigate('/driver-dashboard');
-      } else if (formData.userType === 'business') {
-        navigate('/client-dashboard');
-      }
+      // For demo purposes, create a mock user
+      const mockUser = {
+        id: Date.now().toString(),
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        userType: formData.userType,
+        companyName: formData.companyName,
+        name: `${formData.firstName} ${formData.lastName}`
+      };
       
-      alert('Account created successfully! Please check your email to verify your account.');
+      login(mockUser);
+      navigate('/');
+    } catch (error) {
+      console.error('Signup failed:', error);
+      setErrors({ general: language === 'hi' ? 'साइन अप विफल हुआ' : 'Signup failed' });
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  const getPasswordStrength = (password) => {
-    if (!password) return { strength: 0, color: 'bg-gray-200', text: '' };
-    
-    let strength = 0;
-    if (password.length >= 8) strength++;
-    if (/[a-z]/.test(password)) strength++;
-    if (/[A-Z]/.test(password)) strength++;
-    if (/\d/.test(password)) strength++;
-    if (/[^A-Za-z0-9]/.test(password)) strength++;
-
-    const colors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-blue-500', 'bg-green-500'];
-    const texts = ['Very Weak', 'Weak', 'Fair', 'Good', 'Strong'];
-    
-    return {
-      strength: Math.min(strength, 5),
-      color: colors[strength - 1] || 'bg-gray-200',
-      text: texts[strength - 1] || ''
-    };
-  };
-
-  const passwordStrength = getPasswordStrength(formData.password);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        {/* Back Button */}
+        <div className="mb-6">
+          <Link
+            to="/"
+            className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors duration-200"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            {language === 'hi' ? 'वापस जाएँ' : 'Back to Home'}
+          </Link>
+        </div>
+
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: -50 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="flex justify-center"
+          className="text-center"
         >
-          <div className="w-12 h-12 bg-gradient-to-r from-primary-green to-primary-orange rounded-lg flex items-center justify-center">
-            <Truck className="w-6 h-6 text-white" />
-          </div>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">
+            {language === 'hi' ? 'TranspoLink में शामिल हों' : 'Join TranspoLink'}
+          </h2>
+          <p className="text-gray-600">
+            {language === 'hi' ? 'नया खाता बनाएं' : 'Create your account'}
+          </p>
         </motion.div>
-        <motion.h2
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="mt-6 text-center text-3xl font-bold text-gray-900"
-        >
-          Join TranspoLink
-        </motion.h2>
-        <motion.p
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="mt-2 text-center text-sm text-gray-600"
-        >
-          Create your account to start connecting with reliable transport services
-        </motion.p>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.3 }}
-        className="mt-8 sm:mx-auto sm:w-full sm:max-w-md"
-      >
-        <div className="bg-white py-8 px-4 shadow-xl rounded-lg sm:px-10">
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-2xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-white py-8 px-6 shadow-lg rounded-lg"
+        >
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* User Type Selection */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-3">
-                I am a... *
+                {language === 'hi' ? 'मैं हूं...' : 'I am a...'}
               </label>
-              <div className="grid grid-cols-1 gap-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {userTypes.map((type) => (
                   <label
                     key={type.id}
-                    className={`relative flex items-center p-4 border rounded-lg cursor-pointer transition-colors duration-200 ${
+                    className={`relative flex cursor-pointer rounded-lg border p-4 shadow-sm focus:outline-none transition-all duration-200 ${
                       formData.userType === type.id
-                        ? 'border-primary-green bg-green-50'
+                        ? 'border-primary-green ring-2 ring-primary-green ring-opacity-50 bg-green-50'
                         : 'border-gray-300 hover:border-gray-400'
                     }`}
                   >
@@ -205,44 +206,47 @@ const Signup = () => {
                       onChange={(e) => handleInputChange('userType', e.target.value)}
                       className="sr-only"
                     />
-                    <div className="flex items-center space-x-3">
-                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                        formData.userType === type.id
-                          ? 'border-primary-green bg-primary-green'
-                          : 'border-gray-300'
-                      }`}>
-                        {formData.userType === type.id && (
-                          <CheckCircle className="w-4 h-4 text-white" />
-                        )}
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0">
+                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
+                          formData.userType === type.id
+                            ? 'border-primary-green bg-primary-green'
+                            : 'border-gray-300'
+                        }`}>
+                          {formData.userType === type.id && (
+                            <div className="w-2 h-2 rounded-full bg-white"></div>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="text-primary-green">
-                          {type.icon}
-                        </div>
-                        <div>
-                          <div className="font-medium text-gray-900">{type.label}</div>
-                          <div className="text-sm text-gray-500">{type.description}</div>
-                        </div>
+                      <div className="ml-3 flex flex-col">
+                        <span className={`block text-sm font-medium ${
+                          formData.userType === type.id ? 'text-primary-green' : 'text-gray-900'
+                        }`}>
+                          {type.label}
+                        </span>
+                        <span className="block text-sm text-gray-500">
+                          {type.description}
+                        </span>
                       </div>
                     </div>
+                    {formData.userType === type.id && (
+                      <CheckCircle className="absolute top-4 right-4 h-5 w-5 text-primary-green" />
+                    )}
                   </label>
                 ))}
               </div>
               {errors.userType && (
-                <div className="mt-1 flex items-center text-sm text-red-600">
-                  <AlertCircle className="w-4 h-4 mr-1" />
-                  {errors.userType}
-                </div>
+                <p className="mt-2 text-sm text-red-600">{errors.userType}</p>
               )}
             </div>
 
             {/* Name Fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                  First Name *
+                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+                  {language === 'hi' ? 'पहला नाम' : 'First Name'}
                 </label>
-                <div className="mt-1 relative">
+                <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <User className="h-5 w-5 text-gray-400" />
                   </div>
@@ -254,25 +258,22 @@ const Signup = () => {
                     required
                     value={formData.firstName}
                     onChange={(e) => handleInputChange('firstName', e.target.value)}
-                    className={`appearance-none block w-full pl-10 pr-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-transparent transition-colors duration-200 ${
+                    className={`block w-full pl-10 pr-3 py-3 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-colors duration-200 ${
                       errors.firstName ? 'border-red-300' : 'border-gray-300'
                     }`}
-                    placeholder="First name"
+                    placeholder={language === 'hi' ? 'पहला नाम' : 'First name'}
                   />
                 </div>
                 {errors.firstName && (
-                  <div className="mt-1 flex items-center text-sm text-red-600">
-                    <AlertCircle className="w-4 h-4 mr-1" />
-                    {errors.firstName}
-                  </div>
+                  <p className="mt-1 text-sm text-red-600">{errors.firstName}</p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                  Last Name *
+                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+                  {language === 'hi' ? 'अंतिम नाम' : 'Last Name'}
                 </label>
-                <div className="mt-1 relative">
+                <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <User className="h-5 w-5 text-gray-400" />
                   </div>
@@ -284,269 +285,225 @@ const Signup = () => {
                     required
                     value={formData.lastName}
                     onChange={(e) => handleInputChange('lastName', e.target.value)}
-                    className={`appearance-none block w-full pl-10 pr-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-transparent transition-colors duration-200 ${
+                    className={`block w-full pl-10 pr-3 py-3 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-colors duration-200 ${
                       errors.lastName ? 'border-red-300' : 'border-gray-300'
                     }`}
-                    placeholder="Last name"
+                    placeholder={language === 'hi' ? 'अंतिम नाम' : 'Last name'}
                   />
                 </div>
                 {errors.lastName && (
-                  <div className="mt-1 flex items-center text-sm text-red-600">
-                    <AlertCircle className="w-4 h-4 mr-1" />
-                    {errors.lastName}
-                  </div>
+                  <p className="mt-1 text-sm text-red-600">{errors.lastName}</p>
                 )}
               </div>
             </div>
 
-            {/* Company Field (for business users) */}
+            {/* Company Name (for business users) */}
             {formData.userType === 'business' && (
               <div>
-                <label htmlFor="company" className="block text-sm font-medium text-gray-700">
-                  Company Name *
+                <label htmlFor="companyName" className="block text-sm font-medium text-gray-700 mb-2">
+                  {language === 'hi' ? 'कंपनी का नाम' : 'Company Name'}
                 </label>
-                <div className="mt-1 relative">
+                <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <Building className="h-5 w-5 text-gray-400" />
                   </div>
                   <input
-                    id="company"
-                    name="company"
+                    id="companyName"
+                    name="companyName"
                     type="text"
                     autoComplete="organization"
                     required
-                    value={formData.company}
-                    onChange={(e) => handleInputChange('company', e.target.value)}
-                    className={`appearance-none block w-full pl-10 pr-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-transparent transition-colors duration-200 ${
-                      errors.company ? 'border-red-300' : 'border-gray-300'
+                    value={formData.companyName}
+                    onChange={(e) => handleInputChange('companyName', e.target.value)}
+                    className={`block w-full pl-10 pr-3 py-3 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-colors duration-200 ${
+                      errors.companyName ? 'border-red-300' : 'border-gray-300'
                     }`}
-                    placeholder="Company name"
+                    placeholder={language === 'hi' ? 'कंपनी का नाम' : 'Company name'}
                   />
                 </div>
-                {errors.company && (
-                  <div className="mt-1 flex items-center text-sm text-red-600">
-                    <AlertCircle className="w-4 h-4 mr-1" />
-                    {errors.company}
-                  </div>
+                {errors.companyName && (
+                  <p className="mt-1 text-sm text-red-600">{errors.companyName}</p>
                 )}
               </div>
             )}
 
-            {/* Email Field */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email Address *
-              </label>
-              <div className="mt-1 relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
-                  className={`appearance-none block w-full pl-10 pr-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-transparent transition-colors duration-200 ${
-                    errors.email ? 'border-red-300' : 'border-gray-300'
-                  }`}
-                  placeholder="Enter your email"
-                />
-              </div>
-              {errors.email && (
-                <div className="mt-1 flex items-center text-sm text-red-600">
-                  <AlertCircle className="w-4 h-4 mr-1" />
-                  {errors.email}
-                </div>
-              )}
-            </div>
-
-            {/* Phone Field */}
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                Phone Number *
-              </label>
-              <div className="mt-1 relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  autoComplete="tel"
-                  required
-                  value={formData.phone}
-                  onChange={(e) => handleInputChange('phone', e.target.value)}
-                  className={`appearance-none block w-full pl-10 pr-3 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-transparent transition-colors duration-200 ${
-                    errors.phone ? 'border-red-300' : 'border-gray-300'
-                  }`}
-                  placeholder="+1 (555) 123-4567"
-                />
-              </div>
-              {errors.phone && (
-                <div className="mt-1 flex items-center text-sm text-red-600">
-                  <AlertCircle className="w-4 h-4 mr-1" />
-                  {errors.phone}
-                </div>
-              )}
-            </div>
-
-            {/* Password Field */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password *
-              </label>
-              <div className="mt-1 relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete="new-password"
-                  required
-                  value={formData.password}
-                  onChange={(e) => handleInputChange('password', e.target.value)}
-                  className={`appearance-none block w-full pl-10 pr-10 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-transparent transition-colors duration-200 ${
-                    errors.password ? 'border-red-300' : 'border-gray-300'
-                  }`}
-                  placeholder="Create a password"
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  )}
-                </button>
-              </div>
-              {formData.password && (
-                <div className="mt-2">
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">Password strength:</span>
-                    <span className="font-medium">{passwordStrength.text}</span>
+            {/* Contact Fields */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  {language === 'hi' ? 'ईमेल पता' : 'Email Address'}
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Mail className="h-5 w-5 text-gray-400" />
                   </div>
-                  <div className="mt-1 w-full bg-gray-200 rounded-full h-2">
-                    <div
-                      className={`h-2 rounded-full transition-all duration-300 ${passwordStrength.color}`}
-                      style={{ width: `${(passwordStrength.strength / 5) * 100}%` }}
-                    />
-                  </div>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    className={`block w-full pl-10 pr-3 py-3 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-colors duration-200 ${
+                      errors.email ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                    placeholder={language === 'hi' ? 'अपना ईमेल दर्ज करें' : 'Enter your email'}
+                  />
                 </div>
-              )}
-              {errors.password && (
-                <div className="mt-1 flex items-center text-sm text-red-600">
-                  <AlertCircle className="w-4 h-4 mr-1" />
-                  {errors.password}
-                </div>
-              )}
-            </div>
-
-            {/* Confirm Password Field */}
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm Password *
-              </label>
-              <div className="mt-1 relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  autoComplete="new-password"
-                  required
-                  value={formData.confirmPassword}
-                  onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                  className={`appearance-none block w-full pl-10 pr-10 py-3 border rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-transparent transition-colors duration-200 ${
-                    errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
-                  }`}
-                  placeholder="Confirm your password"
-                />
-                <button
-                  type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  ) : (
-                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                  )}
-                </button>
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                )}
               </div>
-              {errors.confirmPassword && (
-                <div className="mt-1 flex items-center text-sm text-red-600">
-                  <AlertCircle className="w-4 h-4 mr-1" />
-                  {errors.confirmPassword}
+
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                  {language === 'hi' ? 'फोन नंबर' : 'Phone Number'}
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Phone className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    autoComplete="tel"
+                    required
+                    value={formData.phone}
+                    onChange={(e) => handleInputChange('phone', e.target.value)}
+                    className={`block w-full pl-10 pr-3 py-3 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-colors duration-200 ${
+                      errors.phone ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                    placeholder={language === 'hi' ? '+91 (987) 654-3210' : '+1 (555) 123-4567'}
+                  />
                 </div>
-              )}
+                {errors.phone && (
+                  <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
+                )}
+              </div>
             </div>
 
-            {/* Terms and Marketing */}
-            <div className="space-y-4">
-              <div className="flex items-start">
+            {/* Password Fields */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                  {language === 'hi' ? 'पासवर्ड' : 'Password'}
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Lock className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="new-password"
+                    required
+                    value={formData.password}
+                    onChange={(e) => handleInputChange('password', e.target.value)}
+                    className={`block w-full pl-10 pr-12 py-3 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-colors duration-200 ${
+                      errors.password ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                    placeholder={language === 'hi' ? 'पासवर्ड बनाएं' : 'Create a password'}
+                  />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    ) : (
+                      <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    )}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                  {language === 'hi' ? 'पासवर्ड की पुष्टि करें' : 'Confirm Password'}
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Lock className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type={showConfirmPassword ? 'text' : 'password'}
+                    autoComplete="new-password"
+                    required
+                    value={formData.confirmPassword}
+                    onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                    className={`block w-full pl-10 pr-12 py-3 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-green focus:border-primary-green transition-colors duration-200 ${
+                      errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                    placeholder={language === 'hi' ? 'अपना पासवर्ड पुष्टि करें' : 'Confirm your password'}
+                  />
+                  <button
+                    type="button"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    ) : (
+                      <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    )}
+                  </button>
+                </div>
+                {errors.confirmPassword && (
+                  <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Terms and Conditions */}
+            <div className="flex items-start">
+              <div className="flex items-center h-5">
                 <input
                   id="acceptTerms"
                   name="acceptTerms"
                   type="checkbox"
                   checked={formData.acceptTerms}
                   onChange={(e) => handleInputChange('acceptTerms', e.target.checked)}
-                  className="h-4 w-4 text-primary-green focus:ring-primary-green border-gray-300 rounded mt-1"
+                  className="h-4 w-4 text-primary-green focus:ring-primary-green border-gray-300 rounded"
                 />
-                <label htmlFor="acceptTerms" className="ml-2 block text-sm text-gray-900">
-                  I agree to the{' '}
-                  <Link to="/terms" className="text-primary-green hover:text-primary-orange">
-                    Terms of Service
-                  </Link>{' '}
-                  and{' '}
-                  <Link to="/privacy" className="text-primary-green hover:text-primary-orange">
-                    Privacy Policy
-                  </Link> *
-                </label>
               </div>
-              {errors.acceptTerms && (
-                <div className="flex items-center text-sm text-red-600">
-                  <AlertCircle className="w-4 h-4 mr-1" />
-                  {errors.acceptTerms}
-                </div>
-              )}
-
-              <div className="flex items-start">
-                <input
-                  id="acceptMarketing"
-                  name="acceptMarketing"
-                  type="checkbox"
-                  checked={formData.acceptMarketing}
-                  onChange={(e) => handleInputChange('acceptMarketing', e.target.checked)}
-                  className="h-4 w-4 text-primary-green focus:ring-primary-green border-gray-300 rounded mt-1"
-                />
-                <label htmlFor="acceptMarketing" className="ml-2 block text-sm text-gray-900">
-                  I would like to receive updates and marketing communications from TranspoLink
+              <div className="ml-3 text-sm">
+                <label htmlFor="acceptTerms" className="text-gray-700">
+                  {language === 'hi' ? 'मैं सेवा की शर्तें और गोपनीयता नीति से सहमत हूं' : 'I agree to the Terms of Service and Privacy Policy'}
                 </label>
+                {errors.acceptTerms && (
+                  <p className="mt-1 text-sm text-red-600">{errors.acceptTerms}</p>
+                )}
               </div>
             </div>
+
+            {/* General Error */}
+            {errors.general && (
+              <div className="text-sm text-red-600 text-center bg-red-50 py-2 px-3 rounded-md">
+                {errors.general}
+              </div>
+            )}
 
             {/* Submit Button */}
             <div>
               <button
                 type="submit"
-                className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-primary-green hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-green transition-colors duration-200"
+                disabled={isLoading}
+                className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary-green hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-green disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               >
-                <span className="absolute left-0 inset-y-0 flex items-center pl-3">
-                  <User className="h-5 w-5 text-green-500 group-hover:text-green-400" />
-                </span>
-                Create Account
-                <ArrowRight className="ml-2 h-4 w-4" />
+                {isLoading ? (
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                ) : (
+                  language === 'hi' ? 'खाता बनाएं' : 'Create Account'
+                )}
               </button>
             </div>
           </form>
@@ -554,17 +511,17 @@ const Signup = () => {
           {/* Sign In Link */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Already have an account?{' '}
+              {language === 'hi' ? 'क्या आपका पहले से खाता है?' : 'Already have an account?'}{' '}
               <Link
                 to="/login"
-                className="font-medium text-primary-green hover:text-primary-orange transition-colors duration-200"
+                className="font-medium text-primary-green hover:text-primary-green-dark transition-colors duration-200"
               >
-                Sign in here
+                {language === 'hi' ? 'साइन इन करें' : 'Sign in'}
               </Link>
             </p>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 };

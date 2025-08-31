@@ -14,7 +14,9 @@ import {
   CheckCircle,
   Globe,
   Box,
-  Navigation
+  Navigation,
+  Mail,
+  Phone
 } from 'lucide-react';
 
 const Home = () => {
@@ -115,15 +117,15 @@ const Home = () => {
     if (isAuthenticated && userType === 'driver') {
       return (
         <>
-          {language === 'hi' ? 'अपने मार्ग पर जा रहा माल खोजें' : 'Find goods going'}
-          <span className="block text-primary-orange">{language === 'hi' ? 'आपके रास्ते' : 'your way'}</span>
+          {language === 'en' ? 'Find goods going your way' : 'अपने दिशा में वस्तुओं का खोजें'}
+          <span className="block text-primary-orange">{language === 'en' ? 'your way' : 'अपने दिशा में'}</span>
         </>
       );
     } else {
       return (
         <>
-          {language === 'hi' ? 'अपने मार्ग पर जा रहे ट्रक खोजें' : 'Find trucks going'}
-          <span className="block text-primary-orange">{language === 'hi' ? 'आपके रास्ते' : 'your way'}</span>
+          {language === 'en' ? 'Find trucks going your way' : 'अपने दिशा में ट्रकों का खोजें'}
+          <span className="block text-primary-orange">{language === 'en' ? 'your way' : 'अपने दिशा में'}</span>
         </>
       );
     }
@@ -131,33 +133,33 @@ const Home = () => {
 
   const getHeroDescription = () => {
     if (isAuthenticated && userType === 'driver') {
-      return language === 'hi' ? 'व्यवसाय अपने सामान पोस्ट करते हैं, आप अपने मार्ग पर उपलब्ध कार्गो ढूंढते हैं। अब खाली वापसी यात्राएँ नहीं - व्यवसायों से जुड़ें और कमाई करें।' : "Businesses post their goods, you find available cargo along your route. No more empty return trips - connect with businesses and earn money.";
+      return language === 'en' ? 'Post your goods and find drivers to transport them.' : 'अपनी वस्तुओं को पोस्ट करें और उन्हें वाहनों से भेजने वाले व्यापारी को खोजें।';
     } else {
-      return language === 'hi' ? 'ड्राइवर अपने मार्ग पोस्ट करते हैं, आप उपलब्ध स्थान बुक करते हैं। अब खाली वापसी यात्राएँ नहीं - अपने शहर से गंतव्य तक जाने वाले ट्रकों से जुड़ें।' : "Drivers post their routes, you book available space. No more empty return trips - connect with trucks traveling from your city to your destination.";
+      return language === 'en' ? 'Post your truck and find goods to transport.' : 'अपने ट्रक को पोस्ट करें और उन्हें वाहनों से वस्तुओं को भेजने वाले व्यापारी को खोजें।';
     }
   };
 
   const getSearchButtonText = () => {
     if (isAuthenticated && userType === 'driver') {
-      return language === 'hi' ? 'सामान खोजें' : "Find Goods";
+      return language === 'en' ? 'Find Goods' : 'वस्तुओं का खोजें';
     } else {
-      return language === 'hi' ? 'ट्रक खोजें' : "Find Trucks";
+      return language === 'en' ? 'Find Trucks' : 'ट्रकों का खोजें';
     }
   };
 
   const getSearchPlaceholder = () => {
     if (isAuthenticated && userType === 'driver') {
-      return language === 'hi' ? 'पिकअप शहर दर्ज करें' : "Enter pickup city";
+      return language === 'en' ? 'Enter pickup city' : 'उठाने का शहर दर्ज करें';
     } else {
-      return language === 'hi' ? 'पिकअप शहर दर्ज करें' : "Enter pickup city";
+      return language === 'en' ? 'Enter pickup city' : 'उठाने का शहर दर्ज करें';
     }
   };
 
   const getDestinationPlaceholder = () => {
     if (isAuthenticated && userType === 'driver') {
-      return language === 'hi' ? 'डिलीवरी शहर दर्ज करें' : "Enter delivery city";
+      return language === 'en' ? 'Enter delivery city' : 'विधान का शहर दर्ज करें';
     } else {
-      return language === 'hi' ? 'डिलीवरी शहर दर्ज करें' : "Enter delivery city";
+      return language === 'en' ? 'Enter delivery city' : 'विधान का शहर दर्ज करें';
     }
   };
 
@@ -166,36 +168,36 @@ const Home = () => {
       return [
         {
           icon: <Navigation className="w-12 h-12" />,
-          title: language === 'hi' ? 'अपने मार्ग पर सामान खोजें' : "Find goods on your route",
-          description: language === 'hi' ? 'देखें किन व्यवसायों को आपके मार्ग पर सामान ले जाने की आवश्यकता है। वापसी यात्राओं में कार्गो उठाएँ और कमाई करें।' : "See which businesses need goods transported along your planned route. Pick up cargo and earn money on your return trips."
+          title: language === 'en' ? 'Find goods on route' : 'अपने दिशा में वस्तुओं का देखें',
+          description: language === 'en' ? 'See which businesses need goods' : 'देखें कि कौन से व्यापारी वस्तुओं की जरूरत है'
         },
         {
           icon: <Shield className="w-12 h-12" />,
-          title: language === 'hi' ? 'सत्यापित व्यवसायों पर भरोसा' : "Trust verified businesses",
-          description: language === 'hi' ? 'सभी व्यवसाय बीमा, भुगतान गारंटी और ग्राहक समीक्षाओं के साथ सत्यापित हैं। आपकी कमाई सुरक्षित है।' : "All businesses are verified with insurance, payment guarantees, and customer reviews. Your earnings are secure."
+          title: language === 'en' ? 'Trust verified businesses' : 'विश्वसनीय व्यापारी',
+          description: language === 'en' ? 'All businesses verified' : 'सभी व्यापारी सत्यापित हैं'
         },
         {
           icon: <Search className="w-12 h-12" />,
-          title: language === 'hi' ? 'खोजें, बुक करें और कमाएँ!' : "Search, book and earn!",
-          description: language === 'hi' ? 'कुछ ही मिनटों में अपने मार्ग पर उपलब्ध सामान खोजें। अब खाली वापसी यात्राएँ नहीं - सभी को फायदा!' : "Find available goods on your route in minutes. No more empty return trips - everyone wins!"
+          title: language === 'en' ? 'Search, book & earn' : 'खोजें, बुक करें और कमाएं',
+          description: language === 'en' ? 'Find available goods in minutes' : 'मिनटों में उपलब्ध वस्तुओं का खोजें'
         }
       ];
     } else {
       return [
         {
           icon: <Navigation className="w-12 h-12" />,
-          title: language === 'hi' ? 'अपने रास्ते जा रहे ट्रक खोजें' : "Find trucks going your way",
-          description: language === 'hi' ? 'देखें कौन से ट्रक आपके शहर से आपके गंतव्य तक जा रहे हैं। उपलब्ध स्थान बुक करें और परिवहन लागत बचाएँ।' : "See which trucks are traveling from your city to your destination. Book available space and save on transport costs."
+          title: language === 'en' ? 'Find trucks going your way' : 'अपने दिशा में ट्रकों का देखें',
+          description: language === 'en' ? 'See which trucks traveling' : 'देखें कि कौन से ट्रक यात्रा कर रहे हैं'
         },
         {
           icon: <Shield className="w-12 h-12" />,
-          title: language === 'hi' ? 'सत्यापित ड्राइवरों पर भरोसा' : "Trust verified drivers",
-          description: language === 'hi' ? 'सभी ड्राइवर बीमा, सुरक्षा रिकॉर्ड और ग्राहक समीक्षाओं के साथ सत्यापित हैं। आपका सामान सुरक्षित हाथों में है।' : "All drivers are verified with insurance, safety records, and customer reviews. Your goods are in safe hands."
+          title: language === 'en' ? 'Trust verified drivers' : 'विश्वसनीय वाहन चालक',
+          description: language === 'en' ? 'All drivers verified' : 'सभी वाहन चालक सत्यापित हैं'
         },
         {
           icon: <Search className="w-12 h-12" />,
-          title: language === 'hi' ? 'खोजें, बुक करें और शिप करें!' : "Search, book and ship!",
-          description: language === 'hi' ? 'कुछ ही मिनटों में अपने मार्ग पर उपलब्ध ट्रक खोजें। अब खाली वापसी यात्राएँ नहीं - सभी को फायदा!' : "Find available trucks on your route in minutes. No more empty return trips - everyone wins!"
+          title: language === 'en' ? 'Search, book & ship' : 'खोजें, बुक करें और भेजें',
+          description: language === 'en' ? 'Find available trucks in minutes' : 'मिनटों में उपलब्ध ट्रकों का खोजें'
         }
       ];
     }
@@ -204,21 +206,21 @@ const Home = () => {
   const features = getFeatures();
 
   const stats = [
-    { number: "0+", label: language === 'hi' ? 'सत्यापित ड्राइवर' : "Verified Drivers", icon: <Truck className="w-6 h-6" /> },
-    { number: "0+", label: language === 'hi' ? 'सफल डिलीवरी' : "Successful Deliveries", icon: <CheckCircle className="w-6 h-6" /> },
-    { number: "0", label: language === 'hi' ? 'औसत रेटिंग' : "Average Rating", icon: <Star className="w-6 h-6" /> },
-    { number: "0+", label: language === 'hi' ? 'कवर किए गए शहर' : "Cities Covered", icon: <Globe className="w-6 h-6" /> }
+    { number: "0+", label: language === 'en' ? 'verified drivers' : 'सत्यापित वाहन चालक', icon: <Truck className="w-6 h-6" /> },
+    { number: "0+", label: language === 'en' ? 'successful deliveries' : 'सफल विधान', icon: <CheckCircle className="w-6 h-6" /> },
+    { number: "0", label: language === 'en' ? 'average rating' : 'औसत रेटिंग', icon: <Star className="w-6 h-6" /> },
+    { number: "0+", label: language === 'en' ? 'cities covered' : 'शहरों का कवर', icon: <Globe className="w-6 h-6" /> }
   ];
 
   const cargoTypes = [
-    language === 'hi' ? 'सामान्य कार्गो' : "General Cargo",
-    language === 'hi' ? 'भारी मशीनरी' : "Heavy Machinery", 
-    language === 'hi' ? 'फर्नीचर' : "Furniture",
-    language === 'hi' ? 'इलेक्ट्रॉनिक्स' : "Electronics",
-    language === 'hi' ? 'निर्माण सामग्री' : "Construction Materials",
-    language === 'hi' ? 'कृषि उत्पाद' : "Agricultural Products",
-    language === 'hi' ? 'औद्योगिक उपकरण' : "Industrial Equipment",
-    language === 'hi' ? 'खुदरा सामान' : "Retail Goods"
+    language === 'en' ? 'general cargo' : 'सामान्य वस्तु',
+    language === 'en' ? 'heavy machinery' : 'भारी मशीनरी', 
+    language === 'en' ? 'furniture' : 'फर्नीचर',
+    language === 'en' ? 'electronics' : 'इलेक्ट्रॉनिक्स',
+    language === 'en' ? 'construction materials' : 'निर्माण सामग्री',
+    language === 'en' ? 'agricultural products' : 'कृषि उत्पाद',
+    language === 'en' ? 'industrial equipment' : 'औद्योगिक उपकरण',
+    language === 'en' ? 'retail goods' : 'व्यापारिक वस्तु'
   ];
 
 
@@ -281,7 +283,7 @@ const Home = () => {
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 flex items-center">
                       <MapPin className="w-4 h-4 mr-2 text-primary-green" />
-                      {language === 'hi' ? 'पिकअप स्थान' : 'Pickup Location'}
+                      {language === 'en' ? 'Pickup Location' : 'उठाने का स्थान'}
                     </label>
                     <div className="relative">
                       <input
@@ -311,7 +313,7 @@ const Home = () => {
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 flex items-center">
                       <MapPin className="w-4 h-4 mr-2 text-primary-green" />
-                      {language === 'hi' ? 'ड्रॉप स्थान' : 'Drop Location'}
+                      {language === 'en' ? 'Drop Location' : 'विधान का स्थान'}
                     </label>
                     <div className="relative">
                       <input
@@ -341,14 +343,14 @@ const Home = () => {
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 flex items-center">
                       <Package className="w-4 h-4 mr-2 text-primary-green" />
-                      {language === 'hi' ? 'कार्गो प्रकार' : 'Cargo Type'}
+                      {language === 'en' ? 'Cargo Type' : 'वस्तु का प्रकार'}
                     </label>
                     <select
                       value={searchData.cargoType}
                       onChange={(e) => handleSearchChange('cargoType', e.target.value)}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-transparent transition-colors duration-200"
                     >
-                      <option value="">{language === 'hi' ? 'कार्गो प्रकार चुनें' : 'Select cargo type'}</option>
+                      <option value="">{language === 'en' ? 'Select Cargo Type' : 'वस्तु का प्रकार चुनें'}</option>
                       {cargoTypes.map((type, index) => (
                         <option key={index} value={type}>{type}</option>
                       ))}
@@ -359,7 +361,7 @@ const Home = () => {
                   <div className="space-y-2">
                     <label className="text-sm font-medium text-gray-700 flex items-center">
                       <Calendar className="w-4 h-4 mr-2 text-primary-green" />
-                      {isAuthenticated && userType === 'driver' ? (language === 'hi' ? 'पिकअप तिथि' : 'Pickup Date') : (language === 'hi' ? 'लोडिंग तिथि' : 'Loading Date')}
+                      {isAuthenticated && userType === 'driver' ? (language === 'en' ? 'Pickup Date' : 'उठाने का तारीख') : (language === 'en' ? 'Loading Date' : 'तारीख लोडिंग हो रही है')}
                     </label>
                     <input
                       type="date"
@@ -457,13 +459,13 @@ const Home = () => {
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
               {isAuthenticated && userType === 'driver' 
-                ? (language === 'hi' ? 'क्या आप अपना अगला कार्गो खोजने के लिए तैयार हैं?' : 'Ready to find your next cargo?')
-                : (language === 'hi' ? 'क्या आप अपना सामान भेजने के लिए तैयार हैं?' : 'Ready to ship your goods?')}
+                ? (language === 'en' ? 'Ready to find next cargo?' : 'अगली वस्तु खोजने के लिए तैयार?')
+                : (language === 'en' ? 'Ready to ship goods?' : 'वस्तुओं को भेजने के लिए तैयार?')}
             </h2>
             <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
               {isAuthenticated && userType === 'driver'
-                ? (language === 'hi' ? 'हजारों ड्राइवरों से जुड़ें जो अपने मार्ग पर सामान ले जाकर पहले से ही कमाई कर रहे हैं।' : 'Join thousands of drivers who are already earning money by transporting goods along their routes.')
-                : (language === 'hi' ? 'हजारों व्यवसायों से जुड़ें जो परिवहन लागत पर पहले से ही बचत कर रहे हैं।' : 'Join thousands of businesses who are already saving money on transportation costs.')}
+                ? (language === 'en' ? 'Join thousands of drivers earning' : 'हजारों वाहन चालकों को कमाने के लिए जुड़ें')
+                : (language === 'en' ? 'Join thousands of businesses saving' : 'हजारों व्यापारी बचाने के लिए जुड़ें')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {!isAuthenticated ? (
@@ -472,20 +474,20 @@ const Home = () => {
                     to="/auth"
                     className="bg-primary-green text-white px-8 py-4 rounded-lg hover:bg-green-700 transition-colors duration-200 font-semibold text-lg flex items-center justify-center gap-2"
                   >
-                    {language === 'hi' ? 'शुरू करें' : 'Get Started'}
+                    {language === 'en' ? 'Get Started' : 'शुरू करें'}
                     <ArrowRight className="w-5 h-5" />
                   </Link>
                   <Link
                     to="/auth"
                     className="bg-white text-primary-green border-2 border-primary-green px-8 py-4 rounded-lg hover:bg-primary-green hover:text-white transition-all duration-200 font-semibold text-lg"
                   >
-                    {language === 'hi' ? 'साइन इन' : 'Sign In'}
+                    {language === 'en' ? 'Sign In' : 'साइन इन करें'}
                   </Link>
                   <Link
                     to="/tracking?id=DEMO123"
                     className="bg-primary-orange text-white px-8 py-4 rounded-lg hover:bg-orange-600 transition-colors duration-200 font-semibold text-lg"
                   >
-                    {language === 'hi' ? 'ट्रैकिंग देखें' : 'View Tracking'}
+                    {language === 'en' ? 'View Tracking' : 'ट्रैकिंग देखें'}
                   </Link>
                 </>
               ) : (
@@ -493,10 +495,57 @@ const Home = () => {
                   to={userType === 'driver' ? '/driver-dashboard' : '/client-dashboard'}
                   className="bg-primary-green text-white px-8 py-4 rounded-lg hover:bg-green-700 transition-colors duration-200 font-semibold text-lg flex items-center justify-center gap-2"
                 >
-                  {language === 'hi' ? 'डैशबोर्ड पर जाएँ' : 'Go to Dashboard'}
+                  {language === 'en' ? 'Go to Dashboard' : 'डैशबोर्ड पर जाएं'}
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               )}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+              {language === 'en' ? 'Need Help?' : 'मदद चाहिए?'}
+            </h2>
+            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+              {language === 'en' ? 'Our team is here to assist you with any questions or concerns.' : 'हमारी टीम आपकी किसी भी प्रश्न या चिंता में मदद करने के लिए यहां है।'}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+              <div className="flex items-center space-x-3">
+                <Mail className="w-6 h-6 text-primary-green" />
+                <a 
+                  href="mailto:transpolinkbharat@gmail.com" 
+                  className="text-lg font-medium text-primary-green hover:text-primary-orange hover:underline transition-all duration-200 cursor-pointer"
+                >
+                  transpolinkbharat@gmail.com
+                </a>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Phone className="w-6 h-6 text-primary-green" />
+                <a 
+                  href="tel:+919931082500" 
+                  className="text-lg font-medium text-primary-green hover:text-primary-orange hover:underline transition-all duration-200 cursor-pointer"
+                >
+                  +91 99310 82500
+                </a>
+              </div>
+            </div>
+            <div className="mt-8">
+              <Link
+                to="/contact"
+                className="bg-primary-green text-white px-8 py-4 rounded-lg hover:bg-green-700 transition-colors duration-200 font-semibold text-lg"
+              >
+                {language === 'en' ? 'Contact Us' : 'संपर्क करें'}
+              </Link>
             </div>
           </motion.div>
         </div>

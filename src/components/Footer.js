@@ -22,24 +22,24 @@ const Footer = () => {
               <div className="w-8 h-8 bg-primary-orange rounded-lg flex items-center justify-center">
                 <Truck className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold">TranspoLink</span>
+              <span className="text-xl font-bold">TranspoLink Bharat</span>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
-              Smart moves for your business — fast, reliable, nationwide transport at your fingertips
+             Smart moves for your business — fast, reliable, nationwide transport at your fingertips
             </p>
             <div className="flex space-x-4">
-              <button className="text-gray-300 hover:text-primary-orange transition-colors duration-200">
+              <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-primary-orange transition-colors duration-200" aria-label="Facebook">
                 <Facebook className="w-5 h-5" />
-              </button>
-              <button className="text-gray-300 hover:text-primary-orange transition-colors duration-200">
+              </a>
+              <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-primary-orange transition-colors duration-200" aria-label="Twitter">
                 <Twitter className="w-5 h-5" />
-              </button>
-              <button className="text-gray-300 hover:text-primary-orange transition-colors duration-200">
+              </a>
+              <a href="https://www.instagram.com/transpolink_bharat?utm_source=qr&igsh=cXFvdW81eHBueW54" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-primary-orange transition-colors duration-200" aria-label="Instagram">
                 <Instagram className="w-5 h-5" />
-              </button>
-              <button className="text-gray-300 hover:text-primary-orange transition-colors duration-200">
+              </a>
+              <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-primary-orange transition-colors duration-200" aria-label="LinkedIn">
                 <Linkedin className="w-5 h-5" />
-              </button>
+              </a>
             </div>
           </div>
 
@@ -67,7 +67,6 @@ const Footer = () => {
                   Driver Dashboard
                 </Link>
               </li>
-              
             </ul>
           </div>
 
@@ -98,7 +97,9 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-4 h-4 text-primary-orange" />
-                <span className="text-gray-300 text-sm">vanshrattan2006@gmail.com</span>
+                <a href="mailto:transpolinkbharat@gmail.com" className="text-gray-300 text-sm hover:text-primary-orange transition-colors duration-200 cursor-pointer font-medium hover:underline">
+                  transpolinkbharat@gmail.com
+                </a>
               </div>
             </div>
           </div>

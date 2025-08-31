@@ -48,4 +48,26 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+  
+  /* Auth component specific styles */
+  .auth-tab-button {
+    @apply w-1/2 py-4 px-6 rounded-lg text-sm font-semibold transition-all duration-200;
+  }
+  
+  .auth-tab-button.active {
+    @apply bg-primary-green text-white shadow-md;
+  }
+  
+  .auth-tab-button.inactive {
+    @apply text-gray-700 hover:text-gray-900 hover:bg-gray-50;
+  }
+  
+  /* Ensure buttons are visible */
+  .auth-container {
+    @apply bg-white rounded-xl shadow-lg p-1 flex border border-gray-200;
+  }
+  
+  .auth-content {
+    @apply bg-white rounded-xl shadow-lg p-4 border border-gray-200;
+  }
 } 

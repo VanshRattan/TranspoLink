@@ -12,6 +12,8 @@ import DriverDashboard from './pages/DriverDashboard';
 import ClientDashboard from './pages/ClientDashboard';
 import Contact from './pages/Contact';
 import Auth from './pages/Auth';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 import LiveTracking from './pages/LiveTracking';
 
 function App() {
@@ -30,9 +32,9 @@ function App() {
               <Route path="/client-dashboard" element={<ClientDashboard />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
               <Route path="/tracking" element={<LiveTracking />} />
-              <Route path="/login" element={<Auth />} />
-              <Route path="/signup" element={<Auth />} />
             </Routes>
           </AnimatePresence>
           <Footer />

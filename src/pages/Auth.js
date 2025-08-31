@@ -14,17 +14,17 @@ const Auth = () => {
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-xl shadow p-1 flex"
+          className="auth-container"
         >
           <button
             onClick={() => setTab('login')}
-            className={`w-1/2 py-3 rounded-lg text-sm font-medium transition-colors ${tab === 'login' ? 'bg-primary-green text-white' : 'text-gray-700'}`}
+            className={`auth-tab-button ${tab === 'login' ? 'active' : 'inactive'}`}
           >
             {language === 'hi' ? 'साइन इन' : 'Sign In'}
           </button>
           <button
             onClick={() => setTab('signup')}
-            className={`w-1/2 py-3 rounded-lg text-sm font-medium transition-colors ${tab === 'signup' ? 'bg-primary-green text-white' : 'text-gray-700'}`}
+            className={`auth-tab-button ${tab === 'signup' ? 'active' : 'inactive'}`}
           >
             {language === 'hi' ? 'साइन अप' : 'Sign Up'}
           </button>
@@ -32,7 +32,7 @@ const Auth = () => {
       </div>
 
       <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-2xl">
-        <div className="bg-white rounded-xl shadow p-4">
+        <div className="auth-content">
           {tab === 'login' ? <Login /> : <Signup />}
         </div>
       </div>

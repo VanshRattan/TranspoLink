@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
   Mail, 
   Phone, 
   MapPin, 
-  Clock, 
   Send, 
   MessageCircle,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  Loader
 } from 'lucide-react';
+import emailjs from 'emailjs-com';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -20,26 +21,108 @@ const Contact = () => {
     message: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  // Initialize EmailJS
+  useEffect(() => {
+    try {
+      // EmailJS API Key
+      emailjs.init("2fMfEdV1W1q1ppGO-");
+      console.log("EmailJS initialized successfully with API key");
+    } catch (error) {
+      console.error("EmailJS initialization failed:", error);
+    }
+  }, []);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
+    // Clear error when user starts typing
+    if (error) setError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Implement actual form submission logic here (API, email, etc.)
-    console.log('Contact form submitted:', formData);
-    setIsSubmitted(true);
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      subject: '',
-      message: ''
-    });
+    console.log("Form submitted with data:", formData);
+    setIsLoading(true);
+    setError('');
+
+    // Check if EmailJS is available
+    if (!emailjs) {
+      setError('EmailJS is not loaded. Please refresh the page and try again.');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      // EmailJS template parameters
+      const templateParams = {
+        to_email: 'transpolinkbharat@gmail.com',
+        from_name: formData.name,
+        from_email: formData.email,
+        from_phone: formData.phone,
+        subject: formData.subject,
+        message: formData.message,
+        reply_to: formData.email
+      };
+
+      console.log("Sending email with template params:", templateParams);
+      console.log("EmailJS object:", emailjs);
+
+      // Send email using EmailJS
+      const response = await emailjs.send(
+        'service_q2z0fp6',
+        'template_97xp7qn',
+        templateParams
+      );
+
+      console.log("EmailJS response:", response);
+
+      if (response.status === 200) {
+        console.log("Email sent successfully!");
+        setIsSubmitted(true);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+      }
+    } catch (err) {
+      console.error('Email sending failed:', err);
+      console.error('Error details:', {
+        message: err.message,
+        stack: err.stack,
+        response: err.response,
+        error: err
+      });
+      
+      // Better error message handling
+      let errorMessage = 'Failed to send message. ';
+      if (err.message) {
+        errorMessage += err.message;
+      } else if (err.text) {
+        errorMessage += err.text;
+      } else if (err.status) {
+        errorMessage += `Status: ${err.status}`;
+      } else {
+        errorMessage += 'Unknown error occurred.';
+      }
+      
+      // Add helpful guidance for template ID errors
+      if (err.message && err.message.includes('template')) {
+        errorMessage += '\n\nTo fix this: Go to https://dashboard.emailjs.com/admin/templates and create a template, then update the template ID in the code.';
+      }
+      
+      errorMessage += ' Please try again or contact us directly.';
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const contactInfo = [
@@ -47,8 +130,9 @@ const Contact = () => {
       icon: <Phone className="w-6 h-6" />,
       title: "Phone",
       details: [
-        "+91 91234 567800",
-        "+91 98765 432100"
+        <a key="phone1" href="tel:+919931082500" className="text-primary-green hover:underline">+91 99310 82500</a>,
+        // Changed below to desired new number
+        <a key="phone2" href="tel:+919876543210" className="text-primary-green hover:underline">+91 98765 43210</a>
       ],
       description: "Call us Monday to Friday, 9 AM - 6 PM IST"
     },
@@ -56,8 +140,9 @@ const Contact = () => {
       icon: <Mail className="w-6 h-6" />,
       title: "Email",
       details: [
-        "info@transpolink.in",
-        "support@transpolink.in"
+        <a key="email" href="mailto:transpolinkbharat@gmail.com" className="text-primary-green hover:underline hover:text-primary-orange transition-colors duration-200 cursor-pointer font-medium">
+          transpolinkbharat@gmail.com
+        </a>
       ],
       description: "We'll respond within 24 hours"
     },
@@ -65,19 +150,9 @@ const Contact = () => {
       icon: <MapPin className="w-6 h-6" />,
       title: "Office",
       details: [
-        "Office 101, ABC Tech Park",
-        "Bangalore, Karnataka, 560001"
+        "Hostel A, Thapar University, 147004"
       ],
       description: "Visit us during business hours"
-    },
-    {
-      icon: <Clock className="w-6 h-6" />,
-      title: "Business Hours",
-      details: [
-        "Monday - Friday: 9:00 AM - 6:00 PM IST",
-        "Saturday: 10:00 AM - 2:00 PM IST"
-      ],
-      description: "24/7 emergency support available"
     }
   ];
 
@@ -139,7 +214,7 @@ const Contact = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {contactInfo.map((info, index) => (
               <motion.div
                 key={index}
@@ -159,9 +234,9 @@ const Contact = () => {
                 </h3>
                 <div className="space-y-1 mb-3">
                   {info.details.map((detail, idx) => (
-                    <p key={idx} className="text-gray-600 font-medium">
+                    <div key={idx} className="text-gray-600 font-medium">
                       {detail}
-                    </p>
+                    </div>
                   ))}
                 </div>
                 <p className="text-sm text-gray-500">
@@ -188,6 +263,8 @@ const Contact = () => {
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
                   Send us a Message
                 </h2>
+
+
 
                 {isSubmitted ? (
                   <motion.div
@@ -296,16 +373,34 @@ const Contact = () => {
                     <button
                       type="submit"
                       className="w-full btn-secondary flex items-center justify-center space-x-2"
+                      disabled={isLoading}
                     >
-                      <Send className="w-4 h-4" />
-                      <span>Send Message</span>
+                      {isLoading ? (
+                        <>
+                          <Loader className="w-4 h-4 animate-spin" />
+                          <span>Sending...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          <span>Send Message</span>
+                        </>
+                      )}
                     </button>
+                    {error && (
+                      <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                        <div className="flex items-center space-x-2 text-red-700">
+                          <AlertCircle className="w-4 h-4" />
+                          <span className="text-sm">{error}</span>
+                        </div>
+                      </div>
+                    )}
                   </form>
                 )}
               </div>
             </motion.div>
 
-            {/* Location & Office Info */}
+            {/* Location & Office Info with updated Google Maps Satellite View */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -313,47 +408,25 @@ const Contact = () => {
               viewport={{ once: true }}
               className="space-y-8"
             >
-              {/* Map Placeholder */}
               <div className="card">
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">
                   Our Office Location
                 </h3>
-                <div className="bg-gray-200 rounded-lg h-64 flex items-center justify-center">
-                  <div className="text-center">
-                    <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-600">Interactive Map</p>
-                    <p className="text-sm text-gray-500">Office 101, ABC Tech Park, Bangalore, Karnataka 560001</p>
-                  </div>
+                <div className="rounded-lg overflow-hidden h-64 shadow-lg">
+                  <iframe
+                    title="Thapar University Satellite View"
+                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7080.2342971762975!2d76.364528!3d30.351305!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fedb46635cc9f%3A0x32d69678ce5d7825!2sThapar%20University!5e0!3m2!1sen!2sin!4v1704000000000!5m2!1sen!2sin&layer=c"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
                 </div>
-              </div>
-
-              {/* Office Hours */}
-              <div className="card">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  Office Hours
-                </h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="font-medium">Monday - Friday</span>
-                    <span className="text-gray-600">9:00 AM - 6:00 PM IST</span>
-                  </div>
-                  <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                    <span className="font-medium">Saturday</span>
-                    <span className="text-gray-600">10:00 AM - 2:00 PM IST</span>
-                  </div>
-                  <div className="flex justify-between items-center py-2">
-                    <span className="font-medium">Sunday</span>
-                    <span className="text-gray-600">Closed</span>
-                  </div>
-                </div>
-                <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                  <div className="flex items-center space-x-2">
-                    <AlertCircle className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm text-blue-800">
-                      24/7 emergency support available for active shipments
-                    </span>
-                  </div>
-                </div>
+                <p className="text-sm text-gray-500 mt-2">
+                  Hostel A, Thapar University, 147004
+                </p>
               </div>
             </motion.div>
           </div>
