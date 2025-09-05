@@ -119,25 +119,33 @@ const Signup = () => {
     if (!validateForm()) return;
     
     setIsLoading(true);
-    
+
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // For demo purposes, create a mock user
-      const mockUser = {
-        id: Date.now().toString(),
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        phone: formData.phone,
-        userType: formData.userType,
-        companyName: formData.companyName,
-        name: `${formData.firstName} ${formData.lastName}`
-      };
-      
-      login(mockUser);
-      navigate('/');
+      const res = await fetch('http://localhost:5000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          password: formData.password,
+          role: formData.userType === 'business' ? 'business_owner' : 'driver', // Map userType to role
+          phone: formData.phone, // Assuming backend User model can handle phone
+          companyName: formData.userType === 'business' ? formData.companyName : undefined, // Only send if business
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        // Assuming the backend returns a token on successful registration
+        // You might want to automatically log in the user or redirect to login page
+        // For now, let's redirect to login
+        navigate('/login');
+      } else {
+        setErrors({ general: data.errors ? data.errors[0].msg : (language === 'hi' ? 'साइन अप विफल हुआ' : 'Signup failed') });
+      }
     } catch (error) {
       console.error('Signup failed:', error);
       setErrors({ general: language === 'hi' ? 'साइन अप विफल हुआ' : 'Signup failed' });
@@ -526,4 +534,4 @@ const Signup = () => {
   );
 };
 
-export default Signup; 
+export default Signup;

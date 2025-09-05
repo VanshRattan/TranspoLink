@@ -20,7 +20,8 @@ const Navbar = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { isAuthenticated, userType, logout, toggleLanguage, language, t } = useUser();
+  const { isAuthenticated, user, logout, toggleLanguage, language, t } = useUser();
+  const userType = user?.role; // Access role from user object
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,14 +31,28 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navItems = [
+  const baseNavItems = [
     { name: t('home'), path: '/', icon: <Truck className="w-5 h-5" /> },
-    { name: t('trucks'), path: '/trucks', icon: <Package className="w-5 h-5" /> },
-    { name: t('goods'), path: '/goods', icon: <Package className="w-5 h-5" /> },
-    { name: t('postGoods'), path: '/post-goods', icon: <Package className="w-5 h-5" /> },
-    { name: t('liveTracking'), path: '/tracking', icon: <Navigation className="w-5 h-5" /> },
     { name: t('contact'), path: '/contact', icon: <Phone className="w-5 h-5" /> },
   ];
+
+  let dynamicNavItems = [];
+  if (isAuthenticated) {
+    if (userType === 'client') {
+      dynamicNavItems = [
+        { name: t('trucks'), path: '/available-trucks', icon: <Truck className="w-5 h-5" /> },
+        { name: 'My Shipments', path: '/client-dashboard?tab=shipments', icon: <Package className="w-5 h-5" /> },
+        { name: t('postGoods'), path: '/post-goods', icon: <Package className="w-5 h-5" /> },
+      ];
+    } else if (userType === 'driver') {
+      dynamicNavItems = [
+        { name: t('goods'), path: '/available-goods', icon: <Package className="w-5 h-5" /> },
+        // Add driver specific items here if needed
+      ];
+    }
+  }
+
+  const navItems = [...baseNavItems, ...dynamicNavItems];
 
   const handleProfileClick = () => setIsProfileOpen(!isProfileOpen);
 
@@ -79,42 +94,52 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden xl:flex items-center space-x-3">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={
-                  `flex items-center space-x-2 px-4 py-2 rounded-md font-medium text-base transition-colors duration-150
-                  ${location.pathname === item.path
-                    ? 'text-primary-green border-b-2 border-primary-green bg-green-50'
-                    : 'text-gray-600 hover:text-primary-green hover:bg-green-50'
-                  }`
-                }
-              >
-                {item.icon}
-                <span>{item.name}</span>
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const isActive = item.path.includes('dashboard') 
+                ? location.pathname.startsWith('/client-dashboard') && location.search.includes('tab=shipments')
+                : location.pathname === item.path;
+              return (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className={
+                    `flex items-center space-x-2 px-4 py-2 rounded-md font-medium text-base transition-colors duration-150
+                    ${isActive
+                      ? 'text-primary-green border-b-2 border-primary-green bg-green-50'
+                      : 'text-gray-600 hover:text-primary-green hover:bg-green-50'
+                    }`
+                  }
+                >
+                  {item.icon}
+                  <span>{item.name}</span>
+                </Link>
+              );
+            })}
           </div>
 
           {/* Medium Navigation */}
           <div className="hidden lg:flex xl:hidden items-center space-x-2">
-            {navItems.slice(0, 4).map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={
-                  `flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-semibold transition duration-150
-                  ${location.pathname === item.path
-                    ? 'text-primary-green border-b-2 border-primary-green bg-green-50'
-                    : 'text-gray-600 hover:text-primary-green hover:bg-green-50'
-                  }`
-                }
-              >
-                {item.icon}
-                <span className="hidden sm:inline">{item.name}</span>
-              </Link>
-            ))}
+            {navItems.slice(0, 4).map((item) => {
+              const isActive = item.path.includes('dashboard') 
+                ? location.pathname.startsWith('/client-dashboard') && location.search.includes('tab=shipments')
+                : location.pathname === item.path;
+              return (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className={
+                    `flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-semibold transition duration-150
+                    ${isActive
+                      ? 'text-primary-green border-b-2 border-primary-green bg-green-50'
+                      : 'text-gray-600 hover:text-primary-green hover:bg-green-50'
+                    }`
+                  }
+                >
+                  {item.icon}
+                  <span className="hidden sm:inline">{item.name}</span>
+                </Link>
+              );
+            })}
           </div>
 
           {/* Profile and Language */}
@@ -216,21 +241,26 @@ const Navbar = () => {
             className="md:hidden bg-white border-t border-gray-200 shadow"
           >
             <div className="px-4 py-4 space-y-2">
-              {navItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  onClick={() => setIsOpen(false)}
-                  className={`flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium transition-colors duration-150 ${
-                    location.pathname === item.path
-                      ? 'text-primary-green border-b-2 border-primary-green bg-green-50'
-                      : 'text-gray-700 hover:text-green-700 hover:bg-green-50'
-                  }`}
-                >
-                  {item.icon}
-                  <span>{item.name}</span>
-                </Link>
-              ))}
+              {navItems.map((item) => {
+                const isActive = item.path.includes('dashboard') 
+                  ? location.pathname.startsWith('/client-dashboard') && location.search.includes('tab=shipments')
+                  : location.pathname === item.path;
+                return (
+                  <Link
+                    key={item.name}
+                    to={item.path}
+                    onClick={() => setIsOpen(false)}
+                    className={`flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium transition-colors duration-150 ${
+                      isActive
+                        ? 'text-primary-green border-b-2 border-primary-green bg-green-50'
+                        : 'text-gray-700 hover:text-green-700 hover:bg-green-50'
+                    }`}
+                  >
+                    {item.icon}
+                    <span>{item.name}</span>
+                  </Link>
+                );
+              })}
             </div>
           </motion.div>
         )}

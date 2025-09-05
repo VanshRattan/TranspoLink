@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 import { User, Lock, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -55,21 +56,38 @@ const Login = () => {
     if (!validateForm()) return;
     
     setIsLoading(true);
-    
+
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // For demo purposes, create a mock user
-      const mockUser = {
-        id: '1',
-        email: formData.email,
-        userType: 'business', // Default to business for demo
-        name: 'Demo User'
-      };
-      
-      login(mockUser);
-      navigate('/');
+      const res = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        // Assuming the backend returns a token and user data on successful login
+        // You'll need to store the token (e.g., in localStorage) and user data
+        // For now, let's just log in the user with mock data based on the response
+        const decodedToken = jwtDecode(data.token); // You'll need to install jwt-decode
+        const mockUser = {
+          id: decodedToken.user.id,
+          email: formData.email,
+          // You might fetch user details from another endpoint or include them in the login response
+          name: 'Logged In User', // Placeholder
+          userType: 'unknown', // Placeholder
+        };
+        login(mockUser);
+        navigate('/');
+      } else {
+        setErrors({ general: data.errors ? data.errors[0].msg : (language === 'hi' ? 'लॉगिन विफल हुआ' : 'Login failed') });
+      }
     } catch (error) {
       console.error('Login failed:', error);
       setErrors({ general: language === 'hi' ? 'लॉगिन विफल हुआ' : 'Login failed' });
@@ -243,4 +261,4 @@ const Login = () => {
   );
 };
 
-export default Login; 
+export default Login;
