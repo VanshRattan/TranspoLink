@@ -73,7 +73,7 @@ const Navbar = () => {
               <Truck className="w-6 h-6 text-white" />
             </div>
             <span className="text-xl font-extrabold text-gray-900">
-              TranspoLink <span className="text-primary-green font-semibold">Bharat</span>
+              {t('transpoLinkBharat')}
             </span>
           </Link>
 
@@ -81,7 +81,7 @@ const Navbar = () => {
           <div className="hidden xl:flex items-center space-x-3">
             {navItems.map((item) => (
               <Link
-                key={item.name}
+                key={item.path}
                 to={item.path}
                 className={
                   `flex items-center space-x-2 px-4 py-2 rounded-md font-medium text-base transition-colors duration-150
@@ -101,7 +101,7 @@ const Navbar = () => {
           <div className="hidden lg:flex xl:hidden items-center space-x-2">
             {navItems.slice(0, 4).map((item) => (
               <Link
-                key={item.name}
+                key={item.path}
                 to={item.path}
                 className={
                   `flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-semibold transition duration-150
@@ -172,7 +172,7 @@ const Navbar = () => {
                           className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-green-50 flex items-center space-x-2 border-b border-gray-100"
                         >
                           <User className="w-4 h-4 text-green-600" />
-                          <span className="font-medium">Sign In</span>
+                          <span className="font-medium">{t('signInButtonNavbar')}</span>
                         </button>
                         <button
                           onClick={() => {
@@ -182,7 +182,7 @@ const Navbar = () => {
                           className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 flex items-center space-x-2"
                         >
                           <User className="w-4 h-4 text-blue-600" />
-                          <span className="font-medium">Sign Up</span>
+                          <span className="font-medium">{t('signUpButtonNavbar')}</span>
                         </button>
                       </>
                     )}
@@ -218,7 +218,7 @@ const Navbar = () => {
             <div className="px-4 py-4 space-y-2">
               {navItems.map((item) => (
                 <Link
-                  key={item.name}
+                  key={item.path}
                   to={item.path}
                   onClick={() => setIsOpen(false)}
                   className={`flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium transition-colors duration-150 ${

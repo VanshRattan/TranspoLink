@@ -16,6 +16,7 @@ import {
   DollarSign,
   Navigation,
 } from "lucide-react";
+import { useUser } from '../context/UserContext';
 
 const AvailableTrucks = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,6 +24,7 @@ const AvailableTrucks = () => {
   const [selectedType, setSelectedType] = useState("all");
   const [selectedLocation, setSelectedLocation] = useState("all");
   const [sortBy, setSortBy] = useState("price-low");
+  const { t } = useUser();
 
   // Get search parameters from URL (from homepage search)
   const fromLocation = searchParams.get("from") || "";
@@ -31,45 +33,45 @@ const AvailableTrucks = () => {
   const searchCargoType = searchParams.get("cargoType") || "";
 
   const truckTypes = [
-    { id: "all", name: "All Types" },
-    { id: "box", name: "Box Truck" },
-    { id: "flatbed", name: "Flatbed" },
-    { id: "refrigerated", name: "Refrigerated" },
-    { id: "tanker", name: "Tanker" },
-    { id: "container", name: "Container" },
+    { id: "all", name: t('allTypes') },
+    { id: "box", name: t('boxTruck') },
+    { id: "flatbed", name: t('flatbed') },
+    { id: "refrigerated", name: t('refrigerated') },
+    { id: "tanker", name: t('tanker') },
+    { id: "container", name: t('container') },
   ];
   const locations = [
-    { id: "all", name: "All Locations" },
-    { id: "mumbai", name: "Mumbai" },
-    { id: "delhi", name: "Delhi" },
-    { id: "chennai", name: "Chennai" },
-    { id: "bangalore", name: "Bengaluru" },
-    { id: "hyderabad", name: "Hyderabad" },
+    { id: "all", name: t('allLocations') },
+    { id: "mumbai", name: t('mumbai') },
+    { id: "delhi", name: t('delhi') },
+    { id: "chennai", name: t('chennai') },
+    { id: "bangalore", name: t('bangalore') },
+    { id: "hyderabad", name: t('hyderabad') },
   ];
   const sortOptions = [
     {
       id: "price-low",
-      name: "Price: Low to High",
+      name: t('priceLowToHigh'),
       icon: <DollarSign className="w-4 h-4" />,
     },
     {
       id: "price-high",
-      name: "Price: High to Low",
+      name: t('priceHighToLow'),
       icon: <DollarSign className="w-4 h-4" />,
     },
     {
       id: "date-earliest",
-      name: "Date: Earliest First",
+      name: t('dateEarliestFirst'),
       icon: <Calendar className="w-4 h-4" />,
     },
     {
       id: "date-latest",
-      name: "Date: Latest First",
+      name: t('dateLatestFirst'),
       icon: <Calendar className="w-4 h-4" />,
     },
     {
       id: "rating",
-      name: "Highest Rating",
+      name: t('highestRating'),
       icon: <Star className="w-4 h-4" />,
     },
   ];
@@ -79,11 +81,11 @@ const AvailableTrucks = () => {
       id: 1,
       driver: "Ravi Kumar",
       company: "Kumar Transport Pvt. Ltd.",
-      type: "Box Truck",
+      type: t('boxTruck'),
       capacity: "10,000 kgs",
       dimensions: "24' x 8' x 8'",
-      location: "Mumbai, Maharashtra",
-      destination: "Delhi, Delhi",
+      location: t('mumbai') + ", Maharashtra",
+      destination: t('delhi') + ", Delhi",
       availableDate: "2024-01-15",
       price: 45000,
       priceDisplay: "₹45,000",
@@ -100,11 +102,11 @@ const AvailableTrucks = () => {
       id: 2,
       driver: "Anita Singh",
       company: "Singh Refrigerated Logistics",
-      type: "Refrigerated",
+      type: t('refrigerated'),
       capacity: "15,000 kgs",
       dimensions: "26' x 8' x 8'",
-      location: "Chennai, Tamil Nadu",
-      destination: "Bengaluru, Karnataka",
+      location: t('chennai') + ", Tamil Nadu",
+      destination: t('bangalore') + ", Karnataka",
       availableDate: "2024-01-18",
       price: 51000,
       priceDisplay: "₹51,000",
@@ -121,7 +123,7 @@ const AvailableTrucks = () => {
       id: 3,
       driver: "Sunil Patel",
       company: "Patel Hauling Services",
-      type: "Flatbed",
+      type: t('flatbed'),
       capacity: "20,000 kgs",
       dimensions: "48' x 8.5'",
       location: "Ahmedabad, Gujarat",
@@ -142,11 +144,11 @@ const AvailableTrucks = () => {
       id: 4,
       driver: "Priya Sharma",
       company: "Sharma Container Freight",
-      type: "Container",
+      type: t('container'),
       capacity: "25,000 kgs",
       dimensions: "40' x 8' x 8.5'",
-      location: "Kolkata, West Bengal",
-      destination: "Hyderabad, Telangana",
+      location: t('kolkata') + ", West Bengal",
+      destination: t('hyderabad') + ", Telangana",
       availableDate: "2024-01-22",
       price: 53000,
       priceDisplay: "₹53,000",
@@ -163,7 +165,7 @@ const AvailableTrucks = () => {
       id: 5,
       driver: "Rohit Verma",
       company: "Verma Tanker Services",
-      type: "Tanker",
+      type: t('tanker'),
       capacity: "30,000 kgs",
       dimensions: "32' x 8' x 8'",
       location: "Jaipur, Rajasthan",
@@ -184,7 +186,7 @@ const AvailableTrucks = () => {
       id: 6,
       driver: "Neha Desai",
       company: "Desai Transport Services",
-      type: "Box Truck",
+      type: t('boxTruck'),
       capacity: "12,000 kgs",
       dimensions: "26' x 8' x 8'",
       location: "Lucknow, Uttar Pradesh",
@@ -294,11 +296,10 @@ const AvailableTrucks = () => {
             className="text-center"
           >
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Available Trucks
+              {t('availableTrucks')}
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Find the perfect truck for your cargo. All drivers are verified
-              and insured.
+              {t('findTrucksDescription')}
             </p>
           </motion.div>
         </div>
@@ -311,13 +312,13 @@ const AvailableTrucks = () => {
             {/* Search Term */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">
-                Search
+                {t('search')}
               </label>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <input
                   type="text"
-                  placeholder="Search drivers, companies..."
+                  placeholder={t('searchDriversCompanies')}
                   value={searchTerm}
                   onChange={(e) =>
                     handleSearchChange("searchTerm", e.target.value)
@@ -329,7 +330,7 @@ const AvailableTrucks = () => {
             {/* Truck Type Filter */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">
-                Truck Type
+                {t('truckType')}
               </label>
               <select
                 value={selectedType}
@@ -348,7 +349,7 @@ const AvailableTrucks = () => {
             {/* Location Filter */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">
-                Location
+                {t('location')}
               </label>
               <select
                 value={selectedLocation}
@@ -367,7 +368,7 @@ const AvailableTrucks = () => {
             {/* Sort By */}
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">
-                Sort By
+                {t('sortBy')}
               </label>
               <select
                 value={sortBy}
@@ -387,7 +388,7 @@ const AvailableTrucks = () => {
                 onClick={clearFilters}
                 className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200"
               >
-                Clear Filters
+                {t('clearFilters')}
               </button>
             </div>
           </div>
@@ -400,27 +401,27 @@ const AvailableTrucks = () => {
             >
               <div className="flex items-center gap-2 text-primary-green font-medium">
                 <Filter className="w-4 h-4" />
-                <span>Search Results for:</span>
+                <span>{t('searchResultsFor')}</span>
               </div>
               <div className="mt-2 flex flex-wrap gap-4 text-sm">
                 {fromLocation && (
                   <span className="bg-white px-3 py-1 rounded-full border">
-                    From: {fromLocation}
+                    {t('from')}: {fromLocation}
                   </span>
                 )}
                 {toLocation && (
                   <span className="bg-white px-3 py-1 rounded-full border">
-                    To: {toLocation}
+                    {t('to')}: {toLocation}
                   </span>
                 )}
                 {searchDate && (
                   <span className="bg-white px-3 py-1 rounded-full border">
-                    Date: {searchDate}
+                    {t('date')}: {searchDate}
                   </span>
                 )}
                 {searchCargoType && (
                   <span className="bg-white px-3 py-1 rounded-full border">
-                    Cargo: {searchCargoType}
+                    {t('cargoType')}: {searchCargoType}
                   </span>
                 )}
               </div>
@@ -435,11 +436,12 @@ const AvailableTrucks = () => {
           {/* Results Count */}
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-semibold text-gray-900">
-              {sortedTrucks.length} Truck{sortedTrucks.length !== 1 ? "s" : ""}{" "}
-              Available
+              {sortedTrucks.length} {t('trucksAvailable')}
             </h2>
             <div className="text-gray-600">
-              Showing {sortedTrucks.length} of {trucks.length} results
+              {t('showingResults')
+                .replace('{count}', sortedTrucks.length)
+                .replace('{total}', trucks.length)}
             </div>
           </div>
           {/* Trucks Grid */}
@@ -463,7 +465,7 @@ const AvailableTrucks = () => {
                     {truck.verified && (
                       <div className="absolute top-3 right-3 bg-primary-green text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
                         <Shield className="w-3 h-3" />
-                        Verified
+                        {t('verified')}
                       </div>
                     )}
                   </div>
@@ -480,10 +482,10 @@ const AvailableTrucks = () => {
                     <div className="mb-4 p-3 bg-gray-50 rounded-lg border-l-4 border-primary-green">
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-medium text-gray-700">
-                          Route
+                          {t('route')}
                         </span>
                         <span className="text-xs text-gray-500">
-                          Available: {truck.availableDate}
+                          {t('available')}: {truck.availableDate}
                         </span>
                       </div>
                       <div className="flex items-center gap-2 text-gray-900">
@@ -529,18 +531,18 @@ const AvailableTrucks = () => {
                         <div className="text-2xl font-bold text-primary-green">
                           {truck.priceDisplay}
                         </div>
-                        <div className="text-xs text-gray-500">Total Price</div>
+                        <div className="text-xs text-gray-500">{t('totalPrice')}</div>
                       </div>
                     </div>
                     {/* Contact Buttons */}
                     <div className="flex gap-2">
                       <button className="flex-1 bg-primary-green text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center justify-center gap-2">
                         <Phone className="w-4 h-4" />
-                        Call
+                        {t('call')}
                       </button>
                       <button className="flex-1 bg-primary-orange text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors duration-200 flex items-center justify-center gap-2">
                         <Mail className="w-4 h-4" />
-                        Email
+                        {t('email')}
                       </button>
                     </div>
                     {/* Navigation Button */}
@@ -559,7 +561,7 @@ const AvailableTrucks = () => {
                         className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2"
                       >
                         <Navigation className="w-4 h-4" />
-                        Get Directions
+                        {t('getDirections')}
                       </button>
                     </div>
                   </div>
@@ -575,17 +577,16 @@ const AvailableTrucks = () => {
             >
               <Truck className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                No trucks found
+                {t('noTrucksFound')}
               </h3>
               <p className="text-gray-600 mb-6">
-                Try adjusting your search criteria or check back later for new
-                listings.
+                {t('noTrucksFoundDescription')}
               </p>
               <button
                 onClick={clearFilters}
                 className="bg-primary-green text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors duration-200"
               >
-                Clear All Filters
+                {t('clearAllFilters')}
               </button>
             </motion.div>
           )}

@@ -16,6 +16,7 @@ import {
   DollarSign,
   Navigation
 } from 'lucide-react';
+import { useUser } from '../context/UserContext';
 
 const AvailableGoods = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,6 +24,7 @@ const AvailableGoods = () => {
   const [selectedCargoType, setSelectedCargoType] = useState('all');
   const [selectedLocation, setSelectedLocation] = useState('all');
   const [sortBy, setSortBy] = useState('date-earliest');
+  const { t } = useUser();
 
   // URL search params (from another page)
   const fromLocation = searchParams.get('from') || '';
@@ -30,32 +32,32 @@ const AvailableGoods = () => {
   const searchDate = searchParams.get('date') || '';
 
   const cargoTypes = [
-    { id: 'all', name: 'All Types' },
-    { id: 'general', name: 'General Cargo' },
-    { id: 'heavy', name: 'Heavy Machinery' },
-    { id: 'furniture', name: 'Furniture' },
-    { id: 'electronics', name: 'Electronics' },
-    { id: 'construction', name: 'Construction Materials' },
-    { id: 'agricultural', name: 'Agricultural Products' },
-    { id: 'industrial', name: 'Industrial Equipment' },
-    { id: 'retail', name: 'Retail Goods' }
+    { id: 'all', name: t('allTypes') },
+    { id: 'general', name: t('generalCargo') },
+    { id: 'heavy', name: t('heavyMachinery') },
+    { id: 'furniture', name: t('furniture') },
+    { id: 'electronics', name: t('electronics') },
+    { id: 'construction', name: t('constructionMaterials') },
+    { id: 'agricultural', name: t('agriculturalProducts') },
+    { id: 'industrial', name: t('industrialEquipment') },
+    { id: 'retail', name: t('retailGoods') }
   ];
 
   const locations = [
-    { id: 'all', name: 'All Locations' },
-    { id: 'mumbai', name: 'Mumbai' },
-    { id: 'delhi', name: 'Delhi' },
-    { id: 'bangalore', name: 'Bangalore' },
-    { id: 'chennai', name: 'Chennai' },
-    { id: 'kolkata', name: 'Kolkata' }
+    { id: 'all', name: t('allLocations') },
+    { id: 'mumbai', name: t('mumbai') },
+    { id: 'delhi', name: t('delhi') },
+    { id: 'bangalore', name: t('bangalore') },
+    { id: 'chennai', name: t('chennai') },
+    { id: 'kolkata', name: t('kolkata') }
   ];
 
   const sortOptions = [
-    { id: 'date-earliest', name: 'Date: Earliest First', icon: <Calendar className="w-4 h-4" /> },
-    { id: 'date-latest', name: 'Date: Latest First', icon: <Calendar className="w-4 h-4" /> },
-    { id: 'weight-low', name: 'Weight: Low to High', icon: <Scale className="w-4 h-4" /> },
-    { id: 'weight-high', name: 'Weight: High to Low', icon: <Scale className="w-4 h-4" /> },
-    { id: 'price-high', name: 'Price: High to Low', icon: <DollarSign className="w-4 h-4" /> }
+    { id: 'date-earliest', name: t('dateEarliestFirst'), icon: <Calendar className="w-4 h-4" /> },
+    { id: 'date-latest', name: t('dateLatestFirst'), icon: <Calendar className="w-4 h-4" /> },
+    { id: 'weight-low', name: t('weightLowToHigh'), icon: <Scale className="w-4 h-4" /> },
+    { id: 'weight-high', name: t('weightHighToLow'), icon: <Scale className="w-4 h-4" /> },
+    { id: 'price-high', name: t('priceHighToLow'), icon: <DollarSign className="w-4 h-4" /> }
   ];
 
   const goods = [
@@ -63,11 +65,11 @@ const AvailableGoods = () => {
       id: 1,
       business: "Mumbai Electronics Co.",
       contact: "Rajesh Kumar",
-      cargoType: "Electronics",
+      cargoType: t('electronics'),
       weight: "2,500 kg",
       dimensions: "8' x 6' x 4'",
-      pickupLocation: "Mumbai, Maharashtra",
-      deliveryLocation: "Delhi, Delhi",
+      pickupLocation: t('mumbai') + ", Maharashtra",
+      deliveryLocation: t('delhi') + ", Delhi",
       pickupDate: "2025-09-15",
       deliveryDate: "2025-09-18",
       price: 18000,
@@ -85,11 +87,11 @@ const AvailableGoods = () => {
       id: 2,
       business: "Bangalore Furniture Works",
       contact: "Anita Sharma",
-      cargoType: "Furniture",
+      cargoType: t('furniture'),
       weight: "3,200 kg",
       dimensions: "12' x 8' x 6'",
-      pickupLocation: "Bangalore, Karnataka",
-      deliveryLocation: "Chennai, Tamil Nadu",
+      pickupLocation: t('bangalore') + ", Karnataka",
+      deliveryLocation: t('chennai') + ", Tamil Nadu",
       pickupDate: "2025-09-18",
       deliveryDate: "2025-09-22",
       price: 22000,
@@ -107,11 +109,11 @@ const AvailableGoods = () => {
       id: 3,
       business: "Delhi Construction Materials",
       contact: "Vikram Singh",
-      cargoType: "Construction Materials",
+      cargoType: t('constructionMaterials'),
       weight: "15,000 kg",
       dimensions: "20' x 8' x 8'",
-      pickupLocation: "Delhi, Delhi",
-      deliveryLocation: "Kolkata, West Bengal",
+      pickupLocation: t('delhi') + ", Delhi",
+      deliveryLocation: t('kolkata') + ", West Bengal",
       pickupDate: "2025-09-20",
       deliveryDate: "2025-09-25",
       price: 35000,
@@ -129,11 +131,11 @@ const AvailableGoods = () => {
       id: 4,
       business: "Chennai AgriFresh Farms",
       contact: "Lakshmi Menon",
-      cargoType: "Agricultural Products",
+      cargoType: t('agriculturalProducts'),
       weight: "8,500 kg",
       dimensions: "16' x 8' x 8'",
-      pickupLocation: "Chennai, Tamil Nadu",
-      deliveryLocation: "Mumbai, Maharashtra",
+      pickupLocation: t('chennai') + ", Tamil Nadu",
+      deliveryLocation: t('mumbai') + ", Maharashtra",
       pickupDate: "2025-09-22",
       deliveryDate: "2025-09-26",
       price: 28000,
@@ -151,11 +153,11 @@ const AvailableGoods = () => {
       id: 5,
       business: "Kolkata Industrial Machinery",
       contact: "Rohan Das",
-      cargoType: "Heavy Machinery",
+      cargoType: t('heavyMachinery'),
       weight: "25,000 kg",
       dimensions: "40' x 10' x 12'",
-      pickupLocation: "Kolkata, West Bengal",
-      deliveryLocation: "Bangalore, Karnataka",
+      pickupLocation: t('kolkata') + ", West Bengal",
+      deliveryLocation: t('bangalore') + ", Karnataka",
       pickupDate: "2025-09-25",
       deliveryDate: "2025-09-30",
       price: 52000,
@@ -173,11 +175,11 @@ const AvailableGoods = () => {
       id: 6,
       business: "Delhi Retail Express",
       contact: "Sunita Rao",
-      cargoType: "Retail Goods",
+      cargoType: t('retailGoods'),
       weight: "4,800 kg",
       dimensions: "14' x 8' x 6'",
-      pickupLocation: "Delhi, Delhi",
-      deliveryLocation: "Chennai, Tamil Nadu",
+      pickupLocation: t('delhi') + ", Delhi",
+      deliveryLocation: t('chennai') + ", Tamil Nadu",
       pickupDate: "2025-09-28",
       deliveryDate: "2025-10-02",
       price: 32000,
@@ -277,10 +279,10 @@ const AvailableGoods = () => {
             className="text-center"
           >
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Available Goods
+              {t('availableGoods')}
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Find goods that need transportation along your route. Connect with businesses and earn money.
+              {t('findGoodsDescription')}
             </p>
           </motion.div>
         </div>
@@ -293,12 +295,12 @@ const AvailableGoods = () => {
 
             {/* Search Term */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Search</label>
+              <label className="text-sm font-medium text-gray-700">{t('search')}</label>
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <input
                   type="text"
-                  placeholder="Search businesses, contacts..."
+                  placeholder={t('searchBusinessesContacts')}
                   value={searchTerm}
                   onChange={(e) => handleSearchChange('searchTerm', e.target.value)}
                   className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-green focus:border-transparent"
@@ -308,7 +310,7 @@ const AvailableGoods = () => {
 
             {/* Cargo Type Filter */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Cargo Type</label>
+              <label className="text-sm font-medium text-gray-700">{t('cargoType')}</label>
               <select
                 value={selectedCargoType}
                 onChange={(e) => handleSearchChange('selectedCargoType', e.target.value)}
@@ -324,7 +326,7 @@ const AvailableGoods = () => {
 
             {/* Location Filter */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Location</label>
+              <label className="text-sm font-medium text-gray-700">{t('location')}</label>
               <select
                 value={selectedLocation}
                 onChange={(e) => handleSearchChange('selectedLocation', e.target.value)}
@@ -340,7 +342,7 @@ const AvailableGoods = () => {
 
             {/* Sort By */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">Sort By</label>
+              <label className="text-sm font-medium text-gray-700">{t('sortBy')}</label>
               <select
                 value={sortBy}
                 onChange={(e) => handleSearchChange('sortBy', e.target.value)}
@@ -360,7 +362,7 @@ const AvailableGoods = () => {
                 onClick={clearFilters}
                 className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200"
               >
-                Clear Filters
+                {t('clearFilters')}
               </button>
             </div>
           </div>
@@ -375,22 +377,22 @@ const AvailableGoods = () => {
             >
               <div className="flex items-center gap-2 text-primary-green font-medium">
                 <Filter className="w-4 h-4" />
-                <span>Search Results for:</span>
+                <span>{t('searchResultsFor')}</span>
               </div>
               <div className="mt-2 flex flex-wrap gap-4 text-sm">
                 {fromLocation && (
                   <span className="bg-white px-3 py-1 rounded-full border">
-                    From: {fromLocation}
+                    {t('from')}: {fromLocation}
                   </span>
                 )}
                 {toLocation && (
                   <span className="bg-white px-3 py-1 rounded-full border">
-                    To: {toLocation}
+                    {t('to')}: {toLocation}
                   </span>
                 )}
                 {searchDate && (
                   <span className="bg-white px-3 py-1 rounded-full border">
-                    Date: {searchDate}
+                    {t('date')}: {searchDate}
                   </span>
                 )}
               </div>
@@ -406,10 +408,12 @@ const AvailableGoods = () => {
           {/* Results Count */}
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-2xl font-semibold text-gray-900">
-              {sortedGoods.length} Good{sortedGoods.length !== 1 ? 's' : ''} Available
+              {sortedGoods.length} {t('goodsAvailable')}
             </h2>
             <div className="text-gray-600">
-              Showing {sortedGoods.length} of {goods.length} results
+              {t('showingResults')
+                .replace('{count}', sortedGoods.length)
+                .replace('{total}', goods.length)}
             </div>
           </div>
 
@@ -434,7 +438,7 @@ const AvailableGoods = () => {
                     {item.verified && (
                       <div className="absolute top-3 right-3 bg-primary-green text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
                         <Shield className="w-3 h-3" />
-                        Verified
+                        {t('verified')}
                       </div>
                     )}
                   </div>
@@ -452,8 +456,8 @@ const AvailableGoods = () => {
                     {/* Route Information */}
                     <div className="mb-4 p-3 bg-gray-50 rounded-lg border-l-4 border-primary-green">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium text-gray-700">Route</span>
-                        <span className="text-xs text-gray-500">Pickup: {item.pickupDate}</span>
+                        <span className="text-sm font-medium text-gray-700">{t('route')}</span>
+                        <span className="text-xs text-gray-500">{t('pickup')}: {item.pickupDate}</span>
                       </div>
                       <div className="flex items-center gap-2 text-gray-900">
                         <MapPin className="w-4 h-4 text-primary-green" />
@@ -475,7 +479,7 @@ const AvailableGoods = () => {
                       </div>
                       {item.specialRequirements && (
                         <div className="text-sm text-gray-500 bg-yellow-50 p-2 rounded border-l-2 border-yellow-400">
-                          <strong>Special:</strong> {item.specialRequirements}
+                          <strong>{t('special')}:</strong> {item.specialRequirements}
                         </div>
                       )}
                     </div>
@@ -503,7 +507,7 @@ const AvailableGoods = () => {
                         <div className="text-2xl font-bold text-primary-green">
                           {item.priceDisplay}
                         </div>
-                        <div className="text-xs text-gray-500">Transport Fee</div>
+                        <div className="text-xs text-gray-500">{t('transportFee')}</div>
                       </div>
                     </div>
 
@@ -511,11 +515,11 @@ const AvailableGoods = () => {
                     <div className="flex gap-2">
                       <button className="flex-1 bg-primary-green text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors duration-200 flex items-center justify-center gap-2">
                         <Phone className="w-4 h-4" />
-                        Call
+                        {t('call')}
                       </button>
                       <button className="flex-1 bg-primary-orange text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors duration-200 flex items-center justify-center gap-2">
                         <Mail className="w-4 h-4" />
-                        Email
+                        {t('email')}
                       </button>
                     </div>
 
@@ -531,7 +535,7 @@ const AvailableGoods = () => {
                         className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2"
                       >
                         <Navigation className="w-4 h-4" />
-                        Get Directions
+                        {t('getDirections')}
                       </button>
                     </div>
 
@@ -548,16 +552,16 @@ const AvailableGoods = () => {
             >
               <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                No goods found
+                {t('noGoodsFound')}
               </h3>
               <p className="text-gray-600 mb-6">
-                Try adjusting your search criteria or check back later for new listings.
+                {t('noGoodsFoundDescription')}
               </p>
               <button
                 onClick={clearFilters}
                 className="bg-primary-green text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors duration-200"
               >
-                Clear All Filters
+                {t('clearAllFilters')}
               </button>
             </motion.div>
           )}

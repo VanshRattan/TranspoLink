@@ -11,8 +11,10 @@ import {
   CheckCircle,
   AlertCircle
 } from 'lucide-react';
+import { useUser } from '../context/UserContext';
 
 const PostGoods = () => {
+  const { t } = useUser();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     // Step 1: Basic Information
@@ -44,39 +46,39 @@ const PostGoods = () => {
   });
 
   const categories = [
-    'Electronics',
-    'Furniture',
-    'Machinery',
-    'Food & Beverages',
-    'Construction Materials',
-    'Automotive Parts',
-    'Textiles',
-    'Chemicals',
-    'Other'
+    t('electronics'),
+    t('furniture'),
+    t('heavyMachinery'),
+    t('foodBeverages'),
+    t('constructionMaterials'),
+    t('automotiveParts'),
+    t('textiles'),
+    t('chemicals'),
+    t('other')
   ];
 
   const truckTypes = [
-    'Box Truck',
-    'Flatbed',
-    'Refrigerated',
-    'Tanker',
-    'Container',
-    'Any Type'
+    t('boxTruck'),
+    t('flatbed'),
+    t('refrigerated'),
+    t('tanker'),
+    t('container'),
+    t('anyType')
   ];
 
   const paymentTerms = [
-    'Immediate Payment',
-    'Net 30',
-    'Net 60',
-    'Upon Delivery',
-    'Negotiable'
+    t('immediatePayment'),
+    t('net30'),
+    t('net60'),
+    t('uponDelivery'),
+    t('negotiable')
   ];
 
   const steps = [
-    { number: 1, title: 'Goods Information', icon: <Package className="w-5 h-5" /> },
-    { number: 2, title: 'Location & Timing', icon: <MapPin className="w-5 h-5" /> },
-    { number: 3, title: 'Requirements & Budget', icon: <DollarSign className="w-5 h-5" /> },
-    { number: 4, title: 'Contact Details', icon: <FileText className="w-5 h-5" /> }
+    { number: 1, title: t('goodsInformation'), icon: <Package className="w-5 h-5" /> },
+    { number: 2, title: t('locationTiming'), icon: <MapPin className="w-5 h-5" /> },
+    { number: 3, title: t('requirementsBudget'), icon: <DollarSign className="w-5 h-5" /> },
+    { number: 4, title: t('contactDetails'), icon: <FileText className="w-5 h-5" /> }
   ];
 
   const handleInputChange = (field, value) => {
@@ -102,20 +104,20 @@ const PostGoods = () => {
     e.preventDefault();
     // Here you would integrate with backend to post the data
     console.log('Form submitted:', formData);
-    alert('Your transport request has been posted successfully!');
+    alert(t('postRequestSuccess'));
   };
 
   const renderStep1 = () => (
     <div className="space-y-6">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Request Title *
+          {t('requestTitle')} *
         </label>
         <input
           type="text"
           value={formData.title}
           onChange={(e) => handleInputChange('title', e.target.value)}
-          placeholder="e.g., Electronics shipment from Mumbai to Delhi"
+          placeholder={t('requestTitlePlaceholder')}
           className="input-field"
           required
         />
@@ -123,12 +125,12 @@ const PostGoods = () => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Description *
+          {t('description')} *
         </label>
         <textarea
           value={formData.description}
           onChange={(e) => handleInputChange('description', e.target.value)}
-          placeholder="Describe your goods in detail..."
+          placeholder={t('descriptionPlaceholder')}
           rows={4}
           className="input-field"
           required
@@ -138,7 +140,7 @@ const PostGoods = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Category *
+            {t('category')} *
           </label>
           <select
             value={formData.category}
@@ -146,7 +148,7 @@ const PostGoods = () => {
             className="input-field"
             required
           >
-            <option value="">Select Category</option>
+            <option value="">{t('selectCategory')}</option>
             {categories.map(category => (
               <option key={category} value={category}>{category}</option>
             ))}
@@ -155,13 +157,13 @@ const PostGoods = () => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Weight (kg) *
+            {t('weightKg')} *
           </label>
           <input
             type="number"
             value={formData.weight}
             onChange={(e) => handleInputChange('weight', e.target.value)}
-            placeholder="e.g., 5000"
+            placeholder={t('weightPlaceholder')}
             className="input-field"
             required
             min={1}
@@ -171,13 +173,13 @@ const PostGoods = () => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Dimensions (L x W x H) (in feet)
+          {t('dimensionsFeet')}
         </label>
         <input
           type="text"
           value={formData.dimensions}
           onChange={(e) => handleInputChange('dimensions', e.target.value)}
-          placeholder="e.g., 20' x 8' x 8'"
+          placeholder={t('dimensionsPlaceholder')}
           className="input-field"
         />
       </div>
@@ -189,13 +191,13 @@ const PostGoods = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Pickup Location *
+            {t('pickupLocation')} *
           </label>
           <input
             type="text"
             value={formData.pickupLocation}
             onChange={(e) => handleInputChange('pickupLocation', e.target.value)}
-            placeholder="e.g., Mumbai, Maharashtra"
+            placeholder={t('pickupLocationPlaceholder')}
             className="input-field"
             required
           />
@@ -203,13 +205,13 @@ const PostGoods = () => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Delivery Location *
+            {t('deliveryLocation')} *
           </label>
           <input
             type="text"
             value={formData.deliveryLocation}
             onChange={(e) => handleInputChange('deliveryLocation', e.target.value)}
-            placeholder="e.g., Delhi, Delhi"
+            placeholder={t('deliveryLocationPlaceholder')}
             className="input-field"
             required
           />
@@ -219,7 +221,7 @@ const PostGoods = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Pickup Date *
+            {t('pickupDate')} *
           </label>
           <input
             type="date"
@@ -232,7 +234,7 @@ const PostGoods = () => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Delivery Date
+            {t('deliveryDate')}
           </label>
           <input
             type="date"
@@ -252,7 +254,7 @@ const PostGoods = () => {
           className="w-4 h-4 text-primary-green focus:ring-primary-green border-gray-300 rounded"
         />
         <label htmlFor="isUrgent" className="text-sm font-medium text-gray-700">
-          Urgent delivery required
+          {t('urgentDeliveryRequired')}
         </label>
       </div>
     </div>
@@ -262,14 +264,14 @@ const PostGoods = () => {
     <div className="space-y-6">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Preferred Truck Type
+          {t('preferredTruckType')}
         </label>
         <select
           value={formData.truckType}
           onChange={(e) => handleInputChange('truckType', e.target.value)}
           className="input-field"
         >
-          <option value="">Select Truck Type</option>
+          <option value="">{t('selectTruckType')}</option>
           {truckTypes.map(type => (
             <option key={type} value={type}>{type}</option>
           ))}
@@ -278,12 +280,12 @@ const PostGoods = () => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Special Requirements
+          {t('specialRequirements')}
         </label>
         <textarea
           value={formData.specialRequirements}
           onChange={(e) => handleInputChange('specialRequirements', e.target.value)}
-          placeholder="e.g., Temperature control, fragile handling, etc."
+          placeholder={t('specialRequirementsPlaceholder')}
           rows={3}
           className="input-field"
         />
@@ -292,27 +294,27 @@ const PostGoods = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Budget Range (₹ INR)
+            {t('budgetRange')}
           </label>
           <input
             type="text"
             value={formData.budget}
             onChange={(e) => handleInputChange('budget', e.target.value)}
-            placeholder="e.g., ₹20,000 - ₹30,000"
+            placeholder={t('budgetPlaceholder')}
             className="input-field"
           />
         </div>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Payment Terms
+            {t('paymentTerms')}
           </label>
           <select
             value={formData.paymentTerms}
             onChange={(e) => handleInputChange('paymentTerms', e.target.value)}
             className="input-field"
           >
-            <option value="">Select Payment Terms</option>
+            <option value="">{t('selectPaymentTerms')}</option>
             {paymentTerms.map(term => (
               <option key={term} value={term}>{term}</option>
             ))}
@@ -327,13 +329,13 @@ const PostGoods = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Contact Name *
+            {t('contactName')} *
           </label>
           <input
             type="text"
             value={formData.contactName}
             onChange={(e) => handleInputChange('contactName', e.target.value)}
-            placeholder="Your full name"
+            placeholder={t('yourFullName')}
             className="input-field"
             required
           />
@@ -341,13 +343,13 @@ const PostGoods = () => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Company Name
+            {t('companyName')}
           </label>
           <input
             type="text"
             value={formData.company}
             onChange={(e) => handleInputChange('company', e.target.value)}
-            placeholder="Your company name"
+            placeholder={t('yourCompanyName')}
             className="input-field"
           />
         </div>
@@ -356,13 +358,13 @@ const PostGoods = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Email Address *
+            {t('emailAddress')} *
           </label>
           <input
             type="email"
             value={formData.email}
             onChange={(e) => handleInputChange('email', e.target.value)}
-            placeholder="your.email@example.com"
+            placeholder={t('yourEmailExample')}
             className="input-field"
             required
           />
@@ -370,13 +372,13 @@ const PostGoods = () => {
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Phone Number *
+            {t('phoneNumber')} *
           </label>
           <input
             type="tel"
             value={formData.phone}
             onChange={(e) => handleInputChange('phone', e.target.value)}
-            placeholder="+91 98765 43210"
+            placeholder={t('phonePlaceholder')}
             className="input-field"
             required
           />
@@ -385,12 +387,12 @@ const PostGoods = () => {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Additional Notes
+          {t('additionalNotes')}
         </label>
         <textarea
           value={formData.additionalNotes}
           onChange={(e) => handleInputChange('additionalNotes', e.target.value)}
-          placeholder="Any additional information or special instructions..."
+          placeholder={t('additionalNotesPlaceholder')}
           rows={3}
           className="input-field"
         />
@@ -420,11 +422,10 @@ const PostGoods = () => {
             className="text-center"
           >
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Post Your Goods
+              {t('postYourGoods')}
             </h1>
             <p className="text-xl text-gray-200 max-w-3xl mx-auto">
-              Connect with reliable drivers by posting your transport request. 
-              Get competitive quotes and choose the best option for your needs.
+              {t('postGoodsDescription')}
             </p>
           </motion.div>
         </div>
@@ -488,7 +489,7 @@ const PostGoods = () => {
                   }`}
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  <span>Previous</span>
+                  <span>{t('previous')}</span>
                 </button>
 
                 {currentStep < 4 ? (
@@ -497,7 +498,7 @@ const PostGoods = () => {
                     onClick={nextStep}
                     className="btn-primary flex items-center space-x-2"
                   >
-                    <span>Next</span>
+                    <span>{t('next')}</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 ) : (
@@ -505,7 +506,7 @@ const PostGoods = () => {
                     type="submit"
                     className="btn-secondary flex items-center space-x-2"
                   >
-                    <span>Post Request</span>
+                    <span>{t('postRequest')}</span>
                     <Upload className="w-4 h-4" />
                   </button>
                 )}
@@ -524,14 +525,14 @@ const PostGoods = () => {
               <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
               <div>
                 <h3 className="text-lg font-semibold text-blue-900 mb-2">
-                  Tips for Better Responses
+                  {t('tipsForBetterResponses')}
                 </h3>
                 <ul className="text-blue-800 space-y-1 text-sm list-disc list-inside">
-                  <li>Provide detailed descriptions of your goods</li>
-                  <li>Include accurate weight and dimensions (in kg and feet)</li>
-                  <li>Be specific about pickup and delivery locations</li>
-                  <li>Set a realistic budget range in Indian Rupees (₹)</li>
-                  <li>Respond promptly to driver inquiries</li>
+                  <li>{t('tip1')}</li>
+                  <li>{t('tip2')}</li>
+                  <li>{t('tip3')}</li>
+                  <li>{t('tip4')}</li>
+                  <li>{t('tip5')}</li>
                 </ul>
               </div>
             </div>

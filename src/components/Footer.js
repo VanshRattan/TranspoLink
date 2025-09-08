@@ -10,8 +10,10 @@ import {
   Phone, 
   MapPin 
 } from 'lucide-react';
+import { useUser } from '../context/UserContext';
 
 const Footer = () => {
+  const { t } = useUser();
   return (
     <footer className="bg-primary-green text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -22,10 +24,10 @@ const Footer = () => {
               <div className="w-8 h-8 bg-primary-orange rounded-lg flex items-center justify-center">
                 <Truck className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold">TranspoLink Bharat</span>
+              <span className="text-xl font-bold">{t('transpoLinkBharat')}</span>
             </div>
             <p className="text-gray-300 text-sm leading-relaxed">
-             Smart moves for your business — fast, reliable, nationwide transport at your fingertips
+              {t('smartMoves')}
             </p>
             <div className="flex space-x-4">
               <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-primary-orange transition-colors duration-200" aria-label="Facebook">
@@ -45,26 +47,26 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Quick Links</h3>
+            <h3 className="text-lg font-semibold">{t('quickLinks')}</h3>
             <ul className="space-y-2">
               <li>
                 <Link to="/" className="text-gray-300 hover:text-primary-orange transition-colors duration-200 text-sm">
-                  Home
+                  {t('home')}
                 </Link>
               </li>
               <li>
                 <Link to="/trucks" className="text-gray-300 hover:text-primary-orange transition-colors duration-200 text-sm">
-                  Available Trucks
+                  {t('trucks')}
                 </Link>
               </li>
               <li>
                 <Link to="/post-goods" className="text-gray-300 hover:text-primary-orange transition-colors duration-200 text-sm">
-                  Post Goods
+                  {t('postGoods')}
                 </Link>
               </li>
               <li>
                 <Link to="/driver-dashboard" className="text-gray-300 hover:text-primary-orange transition-colors duration-200 text-sm">
-                  Driver Dashboard
+                  {t('driverDashboard')}
                 </Link>
               </li>
             </ul>
@@ -72,24 +74,24 @@ const Footer = () => {
 
           {/* Services */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Services</h3>
+            <h3 className="text-lg font-semibold">{t('services')}</h3>
             <ul className="space-y-2">
-              <li className="text-gray-300 text-sm">Express Delivery</li>
-              <li className="text-gray-300 text-sm">Bulk Transport</li>
-              <li className="text-gray-300 text-sm">Refrigerated Transport</li>
-              <li className="text-gray-300 text-sm">Heavy Equipment</li>
-              <li className="text-gray-300 text-sm">Cross-Country Shipping</li>
-              <li className="text-gray-300 text-sm">Real-time Tracking</li>
+              <li className="text-gray-300 text-sm">{t('expressDelivery')}</li>
+              <li className="text-gray-300 text-sm">{t('bulkTransport')}</li>
+              <li className="text-gray-300 text-sm">{t('refrigeratedTransport')}</li>
+              <li className="text-gray-300 text-sm">{t('heavyEquipment')}</li>
+              <li className="text-gray-300 text-sm">{t('crossCountryShipping')}</li>
+              <li className="text-gray-300 text-sm">{t('realtimeTracking')}</li>
             </ul>
           </div>
 
           {/* Contact Info */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Contact Us</h3>
+            <h3 className="text-lg font-semibold">{t('contactUs')}</h3>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <MapPin className="w-4 h-4 text-primary-orange" />
-                <span className="text-gray-300 text-sm">Hostel A, Thapar University, 147004</span>
+                <span className="text-gray-300 text-sm">{t('address')}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Phone className="w-4 h-4 text-primary-orange" />

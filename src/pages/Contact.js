@@ -11,8 +11,10 @@ import {
   Loader
 } from 'lucide-react';
 import emailjs from 'emailjs-com';
+import { useUser } from '../context/UserContext';
 
 const Contact = () => {
+  const { t } = useUser();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -128,50 +130,50 @@ const Contact = () => {
   const contactInfo = [
     {
       icon: <Phone className="w-6 h-6" />,
-      title: "Phone",
+      title: t('phone'),
       details: [
         <a key="phone1" href="tel:+919931082500" className="text-primary-green hover:underline">+91 99310 82500</a>,
         // Changed below to desired new number
         <a key="phone2" href="tel:+919876543210" className="text-primary-green hover:underline">+91 98765 43210</a>
       ],
-      description: "Call us Monday to Friday, 9 AM - 6 PM IST"
+      description: t('phoneDescription')
     },
     {
       icon: <Mail className="w-6 h-6" />,
-      title: "Email",
+      title: t('email'),
       details: [
         <a key="email" href="mailto:transpolinkbharat@gmail.com" className="text-primary-green hover:underline hover:text-primary-orange transition-colors duration-200 cursor-pointer font-medium">
           transpolinkbharat@gmail.com
         </a>
       ],
-      description: "We'll respond within 24 hours"
+      description: t('emailResponseTime')
     },
     {
       icon: <MapPin className="w-6 h-6" />,
-      title: "Office",
+      title: t('office'),
       details: [
-        "Hostel A, Thapar University, 147004"
+        t('officeAddress')
       ],
-      description: "Visit us during business hours"
+      description: t('officeVisitHours')
     }
   ];
 
   const faqs = [
     {
-      question: "How do I become a verified driver?",
-      answer: "Complete our registration process with required documentation and background checks. Visit the driver registration page for full details."
+      question: t('faq1Question'),
+      answer: t('faq1Answer')
     },
     {
-      question: "What goods can I transport?",
-      answer: "We support electronics, furniture, machinery, food & beverages, construction materials, and more. Hazardous goods have restrictions."
+      question: t('faq2Question'),
+      answer: t('faq2Answer')
     },
     {
-      question: "How is payment processed?",
-      answer: "Secure payments through credit cards, bank transfer, and UPI. All transactions are insured."
+      question: t('faq3Question'),
+      answer: t('faq3Answer')
     },
     {
-      question: "What if there's delay or damage?",
-      answer: "We have insurance coverage and a support team dedicated to resolving shipment issues promptly."
+      question: t('faq4Question'),
+      answer: t('faq4Answer')
     }
   ];
 
@@ -187,10 +189,10 @@ const Contact = () => {
             className="text-center"
           >
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
-              Contact Us
+              {t('contactUs')}
             </h1>
             <p className="text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
-              Have questions or need assistance? We're here to help! Reach out to our team and we'll get back to you as soon as possible.
+              {t('contactUsDescription')}
             </p>
           </motion.div>
         </div>
@@ -207,10 +209,10 @@ const Contact = () => {
             className="text-center mb-16"
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Get in Touch
+              {t('getInTouch')}
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Choose the best way to reach us. Our team is ready to assist you with any questions about our services.
+              {t('getInTouchDescription')}
             </p>
           </motion.div>
 
