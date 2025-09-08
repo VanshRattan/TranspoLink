@@ -14,6 +14,7 @@ import Contact from './pages/Contact';
 import Auth from './pages/Auth';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import LiveTracking from './pages/LiveTracking';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
               <Route path="/auth" element={<Auth />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/tracking" element={<LiveTracking />} />
             </Routes>
           </AnimatePresence>
           <Footer />
@@ -42,4 +44,4 @@ function App() {
   );
 }
 
-export default App;
+export default App; 

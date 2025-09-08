@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
 import { 
   Package, 
   Truck, 
@@ -9,48 +8,12 @@ import {
   Star, 
   TrendingUp,
   FileText,
-  MessageSquare,
-  MapPin,
-  Weight,
-  Truck as TruckIcon // Renamed to avoid conflict with existing Truck import
+  MessageSquare
 } from 'lucide-react';
 
 
 const ClientDashboard = () => {
   const [activeTab, setActiveTab] = useState('overview');
-  const [postedGoods, setPostedGoods] = useState([]);
-  const [loadingGoods, setLoadingGoods] = useState(false);
-  const [goodsError, setGoodsError] = useState(null);
-
-  useEffect(() => {
-    if (activeTab === 'shipments') {
-      fetchPostedGoods();
-    }
-  }, [activeTab]);
-
-  const fetchPostedGoods = async () => {
-    setLoadingGoods(true);
-    setGoodsError(null);
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('No authentication token found. Please log in.');
-      }
-
-      const config = {
-        headers: {
-          'x-auth-token': token,
-        },
-      };
-      const res = await axios.get('/api/goods/my-shipments', config);
-      setPostedGoods(res.data);
-    } catch (err) {
-      console.error('Error fetching posted goods:', err);
-      setGoodsError(err.response?.data?.msg || 'Failed to fetch shipments.');
-    } finally {
-      setLoadingGoods(false);
-    }
-  };
 
   const stats = [
     { 
@@ -345,71 +308,12 @@ const ClientDashboard = () => {
           </motion.div>
         )}
 
-        {/* My Shipments Tab */}
+        {/* Empty states for other tabs */}
         {activeTab === 'shipments' && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="bg-white rounded-xl shadow-sm border border-gray-200 p-6"
-          >
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">My Shipments</h3>
-            {loadingGoods && <p className="text-gray-600">Loading your shipments...</p>}
-            {goodsError && <p className="text-red-500">Error: {goodsError}</p>}
-            {!loadingGoods && postedGoods.length === 0 && !goodsError && (
-              <p className="text-gray-500">You haven't posted any goods yet. Post a new request to see it here!</p>
-            )}
-            {!loadingGoods && postedGoods.length > 0 && (
-              <div className="divide-y divide-gray-200">
-                {postedGoods.map((good, index) => (
-                  <motion.div
-                    key={good._id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                    className="px-6 py-4 hover:bg-gray-50 transition-colors duration-200"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-10 h-10 bg-primary-green rounded-full flex items-center justify-center">
-                          <Package className="w-5 h-5 text-white" />
-                        </div>
-                        <div>
-                          <div className="flex items-center space-x-2">
-                            <p className="font-medium text-gray-900">
-                              {good.pickupLocation} → {good.deliveryLocation}
-                            </p>
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor('Scheduled')}`}>
-                              Scheduled
-                            </span>
-                          </div>
-                          <div className="flex items-center space-x-4 mt-1 text-sm text-gray-500">
-                            <span className="flex items-center space-x-1">
-                              <Calendar className="w-4 h-4" />
-                              <span>{new Date(good.pickupDate).toLocaleDateString()}</span>
-                            </span>
-                            <span className="flex items-center space-x-1">
-                              <Weight className="w-4 h-4" />
-                              <span>{good.weight} kg</span>
-                            </span>
-                            <span className="flex items-center space-x-1">
-                              <TruckIcon className="w-4 h-4" />
-                              <span>{good.truckType || 'Any Type'}</span>
-                            </span>
-                          </div>
-                          <p className="text-sm text-gray-600 mt-1">{good.title}</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-semibold text-gray-900">{good.category}</p>
-                        <p className="text-sm text-gray-500">Posted: {new Date(good.date).toLocaleDateString()}</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            )}
-          </motion.div>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">All Shipments</h3>
+            <p className="text-gray-500">Shipment history and tracking within India will be displayed here.</p>
+          </div>
         )}
 
         {activeTab === 'bookings' && (

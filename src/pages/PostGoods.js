@@ -1,29 +1,19 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { 
   Package, 
   MapPin, 
+  DollarSign, 
   FileText, 
   Upload,
   ArrowRight,
   ArrowLeft,
   CheckCircle,
-  AlertCircle,
-  Globe,
-  Map,
-  Home,
-  Hash
+  AlertCircle
 } from 'lucide-react';
-import indianStatesAndDistricts from '../data/indianStatesAndDistricts.json';
 
 const PostGoods = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     // Step 1: Basic Information
     title: '',
@@ -33,24 +23,17 @@ const PostGoods = () => {
     dimensions: '',
     
     // Step 2: Location & Timing
-    pickupLocation: {
-      state: '',
-      district: '',
-      city: '',
-      pincode: ''
-    },
-    deliveryLocation: {
-      state: '',
-      district: '',
-      city: '',
-      pincode: ''
-    },
+    pickupLocation: '',
+    deliveryLocation: '',
     pickupDate: '',
+    deliveryDate: '',
     isUrgent: false,
     
     // Step 3: Requirements & Budget
     truckType: '',
     specialRequirements: '',
+    budget: '',
+    paymentTerms: '',
     
     // Step 4: Contact Information
     contactName: '',
@@ -73,44 +56,34 @@ const PostGoods = () => {
   ];
 
   const truckTypes = [
-    'Tempo/Van (Tata Ace, Mahindra Jeeto)',
-    'Mini Truck (Tata 407, Eicher Pro 1049)',
-    'Light Commercial Vehicle (LCV)',
-    'Medium Commercial Vehicle (MCV)',
-    'Heavy Commercial Vehicle (HCV)',
-    'Multi-Axle Truck',
-    'Trailer (Flatbed, Semi-Low Bed, Low Bed)',
-    'Container Truck',
-    'Tipper Truck',
-    'Tanker Truck',
-    'Refrigerated Truck',
-    'Open Truck',
+    'Box Truck',
+    'Flatbed',
+    'Refrigerated',
+    'Tanker',
+    'Container',
     'Any Type'
   ];
 
+  const paymentTerms = [
+    'Immediate Payment',
+    'Net 30',
+    'Net 60',
+    'Upon Delivery',
+    'Negotiable'
+  ];
 
   const steps = [
     { number: 1, title: 'Goods Information', icon: <Package className="w-5 h-5" /> },
     { number: 2, title: 'Location & Timing', icon: <MapPin className="w-5 h-5" /> },
-    { number: 3, title: 'Requirements', icon: <FileText className="w-5 h-5" /> },
+    { number: 3, title: 'Requirements & Budget', icon: <DollarSign className="w-5 h-5" /> },
     { number: 4, title: 'Contact Details', icon: <FileText className="w-5 h-5" /> }
   ];
 
-  const handleInputChange = (field, value, locationType = null) => {
-    if (locationType) {
-      setFormData(prev => ({
-        ...prev,
-        [locationType]: {
-          ...prev[locationType],
-          [field]: value
-        }
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [field]: value
-      }));
-    }
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
   };
 
   const nextStep = () => {
@@ -125,39 +98,11 @@ const PostGoods = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('No authentication token found. Please log in.');
-      }
-
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          'x-auth-token': token,
-        },
-      };
-
-      const res = await axios.post('/api/goods', {
-        ...formData,
-        pickupLocation: `${formData.pickupLocation.city}, ${formData.pickupLocation.district}, ${formData.pickupLocation.state} - ${formData.pickupLocation.pincode}`,
-        deliveryLocation: `${formData.deliveryLocation.city}, ${formData.deliveryLocation.district}, ${formData.deliveryLocation.state} - ${formData.deliveryLocation.pincode}`,
-      }, config);
-      console.log('Goods posted successfully:', res.data);
-      alert('Your transport request has been posted successfully! A confirmation email has been sent.');
-      navigate('/client-dashboard'); // Redirect to client dashboard after successful post
-    } catch (err) {
-      console.error('Error posting goods:', err);
-      setError(err.response?.data?.errors?.[0]?.msg || 'Failed to post goods. Please try again.');
-      alert('Failed to post goods. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+    // Here you would integrate with backend to post the data
+    console.log('Form submitted:', formData);
+    alert('Your transport request has been posted successfully!');
   };
 
   const renderStep1 = () => (
@@ -239,229 +184,85 @@ const PostGoods = () => {
     </div>
   );
 
-  const renderStep2 = () => {
-    const states = indianStatesAndDistricts.map(item => item.state);
-    const pickupDistricts = formData.pickupLocation.state
-      ? indianStatesAndDistricts.find(item => item.state === formData.pickupLocation.state)?.districts || []
-      : [];
-    const deliveryDistricts = formData.deliveryLocation.state
-      ? indianStatesAndDistricts.find(item => item.state === formData.deliveryLocation.state)?.districts || []
-      : [];
-
-    const handlePincodeLookup = async (pincode, locationType) => {
-      if (pincode.length === 6) {
-        // This is a simplified lookup. In a real app, you'd call an external API.
-        // For now, we'll try to find a matching state/district from our local data.
-        let foundState = '';
-        let foundDistrict = '';
-        // This is a very basic lookup and won't be accurate for all pincodes.
-        // A real implementation would use a pincode API.
-        for (const stateData of indianStatesAndDistricts) {
-          if (stateData.districts.some(d => d.toLowerCase().includes(pincode.substring(0,2)))) { // Very crude example
-            foundState = stateData.state;
-            // Just pick the first district for simplicity in this demo
-            foundDistrict = stateData.districts[0]; 
-            break;
-          }
-        }
-
-        setFormData(prev => ({
-          ...prev,
-          [locationType]: {
-            ...prev[locationType],
-            state: foundState,
-            district: foundDistrict,
-            city: '', // City cannot be reliably determined from local data
-            pincode: pincode
-          }
-        }));
-      }
-    };
-
-    return (
-      <div className="space-y-6">
-        {/* Pickup Location */}
-        <div className="border p-4 rounded-lg shadow-sm bg-gray-50">
-          <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center space-x-2">
-            <MapPin className="w-5 h-5 text-primary-green" />
-            <span>Pickup Location *</span>
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                State
-              </label>
-              <select
-                value={formData.pickupLocation.state}
-                onChange={(e) => handleInputChange('state', e.target.value, 'pickupLocation')}
-                className="input-field"
-                required
-              >
-                <option value="">Select State</option>
-                {states.map(state => (
-                  <option key={state} value={state}>{state}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                District
-              </label>
-              <select
-                value={formData.pickupLocation.district}
-                onChange={(e) => handleInputChange('district', e.target.value, 'pickupLocation')}
-                className="input-field"
-                required
-                disabled={!formData.pickupLocation.state}
-              >
-                <option value="">Select District</option>
-                {pickupDistricts.map(district => (
-                  <option key={district} value={district}>{district}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                City
-              </label>
-              <input
-                type="text"
-                value={formData.pickupLocation.city}
-                onChange={(e) => handleInputChange('city', e.target.value, 'pickupLocation')}
-                placeholder="e.g., Mumbai"
-                className="input-field"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Pincode
-              </label>
-              <input
-                type="text"
-                value={formData.pickupLocation.pincode}
-                onChange={(e) => {
-                  handleInputChange('pincode', e.target.value, 'pickupLocation');
-                  handlePincodeLookup(e.target.value, 'pickupLocation');
-                }}
-                placeholder="e.g., 400001"
-                className="input-field"
-                maxLength={6}
-                required
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Delivery Location */}
-        <div className="border p-4 rounded-lg shadow-sm bg-gray-50">
-          <h4 className="text-lg font-semibold text-gray-800 mb-4 flex items-center space-x-2">
-            <MapPin className="w-5 h-5 text-primary-green" />
-            <span>Delivery Location *</span>
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                State
-              </label>
-              <select
-                value={formData.deliveryLocation.state}
-                onChange={(e) => handleInputChange('state', e.target.value, 'deliveryLocation')}
-                className="input-field"
-                required
-              >
-                <option value="">Select State</option>
-                {states.map(state => (
-                  <option key={state} value={state}>{state}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                District
-              </label>
-              <select
-                value={formData.deliveryLocation.district}
-                onChange={(e) => handleInputChange('district', e.target.value, 'deliveryLocation')}
-                className="input-field"
-                required
-                disabled={!formData.deliveryLocation.state}
-              >
-                <option value="">Select District</option>
-                {deliveryDistricts.map(district => (
-                  <option key={district} value={district}>{district}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                City
-              </label>
-              <input
-                type="text"
-                value={formData.deliveryLocation.city}
-                onChange={(e) => handleInputChange('city', e.target.value, 'deliveryLocation')}
-                placeholder="e.g., Delhi"
-                className="input-field"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Pincode
-              </label>
-              <input
-                type="text"
-                value={formData.deliveryLocation.pincode}
-                onChange={(e) => {
-                  handleInputChange('pincode', e.target.value, 'deliveryLocation');
-                  handlePincodeLookup(e.target.value, 'deliveryLocation');
-                }}
-                placeholder="e.g., 110001"
-                className="input-field"
-                maxLength={6}
-                required
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Pickup Date *
-            </label>
-            <input
-              type="date"
-              value={formData.pickupDate}
-              onChange={(e) => handleInputChange('pickupDate', e.target.value)}
-              className="input-field"
-              required
-            />
-          </div>
-        </div>
-
-        <div className="flex items-center space-x-3">
-          <input
-            type="checkbox"
-            id="isUrgent"
-            checked={formData.isUrgent}
-            onChange={(e) => handleInputChange('isUrgent', e.target.checked)}
-            className="w-4 h-4 text-primary-green focus:ring-primary-green border-gray-300 rounded"
-          />
-          <label htmlFor="isUrgent" className="text-sm font-medium text-gray-700">
-            Urgent delivery required
+  const renderStep2 = () => (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Pickup Location *
           </label>
+          <input
+            type="text"
+            value={formData.pickupLocation}
+            onChange={(e) => handleInputChange('pickupLocation', e.target.value)}
+            placeholder="e.g., Mumbai, Maharashtra"
+            className="input-field"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Delivery Location *
+          </label>
+          <input
+            type="text"
+            value={formData.deliveryLocation}
+            onChange={(e) => handleInputChange('deliveryLocation', e.target.value)}
+            placeholder="e.g., Delhi, Delhi"
+            className="input-field"
+            required
+          />
         </div>
       </div>
-    );
-  };
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Pickup Date *
+          </label>
+          <input
+            type="date"
+            value={formData.pickupDate}
+            onChange={(e) => handleInputChange('pickupDate', e.target.value)}
+            className="input-field"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Delivery Date
+          </label>
+          <input
+            type="date"
+            value={formData.deliveryDate}
+            onChange={(e) => handleInputChange('deliveryDate', e.target.value)}
+            className="input-field"
+          />
+        </div>
+      </div>
+
+      <div className="flex items-center space-x-3">
+        <input
+          type="checkbox"
+          id="isUrgent"
+          checked={formData.isUrgent}
+          onChange={(e) => handleInputChange('isUrgent', e.target.checked)}
+          className="w-4 h-4 text-primary-green focus:ring-primary-green border-gray-300 rounded"
+        />
+        <label htmlFor="isUrgent" className="text-sm font-medium text-gray-700">
+          Urgent delivery required
+        </label>
+      </div>
+    </div>
+  );
 
   const renderStep3 = () => (
     <div className="space-y-6">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Preferred Indian Truck Type
+          Preferred Truck Type
         </label>
         <select
           value={formData.truckType}
@@ -488,6 +289,36 @@ const PostGoods = () => {
         />
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Budget Range (₹ INR)
+          </label>
+          <input
+            type="text"
+            value={formData.budget}
+            onChange={(e) => handleInputChange('budget', e.target.value)}
+            placeholder="e.g., ₹20,000 - ₹30,000"
+            className="input-field"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Payment Terms
+          </label>
+          <select
+            value={formData.paymentTerms}
+            onChange={(e) => handleInputChange('paymentTerms', e.target.value)}
+            className="input-field"
+          >
+            <option value="">Select Payment Terms</option>
+            {paymentTerms.map(term => (
+              <option key={term} value={term}>{term}</option>
+            ))}
+          </select>
+        </div>
+      </div>
     </div>
   );
 
@@ -699,6 +530,7 @@ const PostGoods = () => {
                   <li>Provide detailed descriptions of your goods</li>
                   <li>Include accurate weight and dimensions (in kg and feet)</li>
                   <li>Be specific about pickup and delivery locations</li>
+                  <li>Set a realistic budget range in Indian Rupees (₹)</li>
                   <li>Respond promptly to driver inquiries</li>
                 </ul>
               </div>
