@@ -41,9 +41,3 @@
 
 ---
 
-## 🛠️ Technology Stack
-
-* **Frontend:** React.js, HTML5, CSS3
-* **Backend:** Node.js, Express.js
-* **Database:** MongoDB Atlas
-* **Languages:** JavaScript, C++
